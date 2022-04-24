@@ -13,6 +13,10 @@ public class Mode {
     public Mode() {
     }
 
+    public Mode(String name) {
+        this.name = name;
+    }
+
     public Mode(String name, ArrayList<Situation> situations) {
         this.name = name;
         this.situations = situations;
