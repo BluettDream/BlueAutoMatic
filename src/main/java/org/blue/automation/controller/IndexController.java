@@ -1,11 +1,18 @@
 package org.blue.automation.controller;
 
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,13 +21,19 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.blue.automation.Main;
 import org.blue.automation.entities.Mode;
+import org.blue.automation.entities.ModeCallable;
 import org.blue.automation.services.ModeService;
 import org.blue.automation.services.impl.ModeServiceImpl;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * name: MengHao Tian
@@ -40,8 +53,10 @@ public class IndexController implements Initializable {
     @FXML
     private Button BUTTON_SWITCH;
 
+    private final ExecutorService THREAD_POOL = Main.THREAD_POOL;
     private ModeService modeService;
     private SimpleObjectProperty<Mode> currentMode;
+    private Future<Boolean> runningMode;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,6 +65,8 @@ public class IndexController implements Initializable {
         currentMode = initChoiceModeList(modeArrayList);
         //将当前可观察模式与模式列表中被选中的模式进行单向绑定
         currentMode.bind(CHOICE_MODE_LIST.getSelectionModel().selectedItemProperty());
+        initButtonSwitch();
+
     }
 
     @FXML
@@ -58,15 +75,18 @@ public class IndexController implements Initializable {
     }
 
     @FXML
-    void switchOnAndOff(ActionEvent event) {
+    void switchOnAndOff() {
         BUTTON_SWITCH.setDisable(true);
-        switch (BUTTON_SWITCH.getText()){
+        switch (BUTTON_SWITCH.getText()) {
             case "运行":
-                log.info("开始模式运行:{}",currentMode.get());
+                ModeCallable modeCallable = new ModeCallable(currentMode.get());
+                runningMode = THREAD_POOL.submit(modeCallable);
                 BUTTON_SWITCH.setText("结束");
                 break;
             case "结束":
-                log.info("结束模式运行:{}",currentMode.get());
+                if (!runningMode.isDone()) {
+                    runningMode.cancel(true);
+                }
                 BUTTON_SWITCH.setText("运行");
                 break;
         }
@@ -82,26 +102,47 @@ public class IndexController implements Initializable {
      * 初始化模式列表,并返回当前列表中选中的可观察模式对象(默认为第一个选中)
      *
      * @param modeArrayList 模式列表
-     * @return 列表大小大于0返回可观察的模式,否则创建一个新的可观察模式
+     * @return 列表大小大于0返回可观察的模式, 否则创建一个新的可观察模式
      **/
     private SimpleObjectProperty<Mode> initChoiceModeList(ArrayList<Mode> modeArrayList) {
         CHOICE_MODE_LIST.getItems().addAll(modeArrayList);
-        log.debug("模式列表为:{}",modeArrayList);
+        log.debug("模式列表为:{}", modeArrayList);
         CHOICE_MODE_LIST.setConverter(new StringConverter<Mode>() {
             @Override
             public String toString(Mode object) {
                 return object.getName();
             }
+
             @Override
             public Mode fromString(String string) {
                 return new Mode(string);
             }
         });
         SimpleObjectProperty<Mode> modeProperty = new SimpleObjectProperty<>();
-        if(modeArrayList.size() > 0) {
+        if (modeArrayList.size() > 0) {
             CHOICE_MODE_LIST.getSelectionModel().selectFirst();
             modeProperty.set(CHOICE_MODE_LIST.getValue());
         }
         return modeProperty;
     }
+
+    private void initButtonSwitch() {
+        BUTTON_SWITCH.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("结束")) {
+                THREAD_POOL.execute(() -> {
+                    log.debug("开始检测线程是否运行结束");
+                    try {
+                        if (runningMode.get()) {
+                            log.debug("线程检测完毕,结束按钮已自动更新");
+                            Platform.runLater(() -> BUTTON_SWITCH.setText("运行"));
+                        }
+                    } catch (InterruptedException | ExecutionException | CancellationException e) {
+                        log.warn("模式线程抛出异常:", e);
+                        Thread.currentThread().interrupt();
+                    }
+                });
+            }
+        });
+    }
+
 }
