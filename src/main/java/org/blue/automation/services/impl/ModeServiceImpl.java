@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.Mode;
-import org.blue.automation.entities.PathEnum;
+import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.ModeService;
 
 import java.io.*;

@@ -3,7 +3,7 @@ package org.blue.automation.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.AdbDevice;
-import org.blue.automation.entities.PathEnum;
+import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.impl.AdbServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

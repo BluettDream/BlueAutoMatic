@@ -1,4 +1,4 @@
-package org.blue.automation.entities;
+package org.blue.automation.entities.enums;
 
 public enum PathEnum {
     ROOT(System.getProperty("user.dir")),

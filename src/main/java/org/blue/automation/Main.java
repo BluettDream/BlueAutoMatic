@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 public class Main extends Application {
     private static final Logger log = LogManager.getLogger(Main.class);
     public static Stage PRIMARY_STAGE;
-    public static ExecutorService THREAD_POOL = new ThreadPoolExecutor(8, 12, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(50), new ThreadPoolExecutor.AbortPolicy());
+    public static ExecutorService THREAD_POOL = new ThreadPoolExecutor(10, 16, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(50), new ThreadPoolExecutor.AbortPolicy());
 
     @Override
     public void init() {
@@ -42,7 +42,7 @@ public class Main extends Application {
         log.info("程序启动完成");
 
         primaryStage.setOnCloseRequest(event -> {
-            log.info("程序结束运行");
+            log.info("程序运行结束");
             THREAD_POOL.shutdown();
             try {
                 if(THREAD_POOL.awaitTermination(3,TimeUnit.SECONDS)){
