@@ -48,6 +48,7 @@ public class IndexController implements Initializable {
         modeService = new ModeServiceImpl();
         ArrayList<Mode> modeArrayList = modeService.getAllModes();
         currentMode = initChoiceModeList(modeArrayList);
+        //将当前可观察模式与模式列表中被选中的模式进行单向绑定
         currentMode.bind(CHOICE_MODE_LIST.getSelectionModel().selectedItemProperty());
     }
 

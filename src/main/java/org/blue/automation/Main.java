@@ -28,7 +28,7 @@ public class Main extends Application {
         PRIMARY_STAGE = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/index.fxml"));
         Parent root = fxmlLoader.load();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("蓝色");
         primaryStage.setScene(new Scene(root, 300, 240));
         primaryStage.setResizable(false);
         primaryStage.setAlwaysOnTop(true);

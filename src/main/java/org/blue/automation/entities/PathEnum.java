@@ -3,7 +3,8 @@ package org.blue.automation.entities;
 public enum PathEnum {
     ROOT(System.getProperty("user.dir")),
     JSON(ROOT+"/confFiles/"),
-    IMAGE(ROOT+"/images/");
+    IMAGE(ROOT+"/images"),
+    IMAGE_OUTER(IMAGE+"/outer/");
 
     private final String path;
 
