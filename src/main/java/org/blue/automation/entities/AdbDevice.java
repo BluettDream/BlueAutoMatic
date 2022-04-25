@@ -6,9 +6,9 @@ package org.blue.automation.entities;
  */
 public class AdbDevice {
     private String name;
-    private Statue statue;
+    private State state;
 
-    public enum Statue{
+    public enum State{
         DEVICE,
         OFFLINE
     }
@@ -16,9 +16,9 @@ public class AdbDevice {
     public AdbDevice() {
     }
 
-    public AdbDevice(String name, Statue statue) {
+    public AdbDevice(String name, State state) {
         this.name = name;
-        this.statue = statue;
+        this.state = state;
     }
 
     public String getName() {
@@ -30,12 +30,12 @@ public class AdbDevice {
         return this;
     }
 
-    public Statue getStatue() {
-        return statue;
+    public State getState() {
+        return state;
     }
 
-    public AdbDevice setStatue(Statue statue) {
-        this.statue = statue;
+    public AdbDevice setState(State state) {
+        this.state = state;
         return this;
     }
 
@@ -43,7 +43,7 @@ public class AdbDevice {
     public String toString() {
         return "AdbDevice{" +
                 "name='" + name + '\'' +
-                ", statue=" + statue +
+                ", state=" + state +
                 '}';
     }
 }

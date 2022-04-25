@@ -33,10 +33,10 @@ public class AdbServiceImpl implements AdbService {
                     //选择设备的状态
                     switch (device[1]) {
                         case "device":
-                            deviceArrayList.add(new AdbDevice(device[0], AdbDevice.Statue.DEVICE));
+                            deviceArrayList.add(new AdbDevice(device[0], AdbDevice.State.DEVICE));
                             break;
                         case "offline":
-                            deviceArrayList.add(new AdbDevice(device[0], AdbDevice.Statue.OFFLINE));
+                            deviceArrayList.add(new AdbDevice(device[0], AdbDevice.State.OFFLINE));
                             break;
                     }
                 }
@@ -49,7 +49,7 @@ public class AdbServiceImpl implements AdbService {
 
     @Override
     public boolean isConnected(AdbDevice adbDevice) {
-        return adbDevice.getStatue() == AdbDevice.Statue.DEVICE;
+        return adbDevice.getState() == AdbDevice.State.DEVICE;
     }
 
     @Override
