@@ -11,12 +11,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opencv.core.Core;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.*;
 
 public class Main extends Application {
     private static final Logger log = LogManager.getLogger(Main.class);
-    public static Stage PRIMARY_STAGE;
+    public static HashMap<String, Stage> STAGE_MAP;
     public static ExecutorService THREAD_POOL = new ThreadPoolExecutor(10, 16, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(50), new ThreadPoolExecutor.AbortPolicy());
 
     @Override
@@ -24,20 +25,22 @@ public class Main extends Application {
         try {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
             log.info("opencv链接库加载完成");
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("opencv链接库加载失败");
         }
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        PRIMARY_STAGE = primaryStage;
+    public void start(Stage primaryStage) throws Exception {
+        STAGE_MAP = new HashMap<String, Stage>() {{
+            put("primaryStage", primaryStage);
+        }};
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/index.fxml"));
         Parent root = fxmlLoader.load();
         primaryStage.setTitle("蓝色");
-        primaryStage.setScene(new Scene(root, 300, 240));
+        primaryStage.setScene(new Scene(root, 400, 240));
         primaryStage.setResizable(false);
-        primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
         log.info("程序启动完成");
 
@@ -45,9 +48,9 @@ public class Main extends Application {
             log.info("程序运行结束");
             THREAD_POOL.shutdown();
             try {
-                if(THREAD_POOL.awaitTermination(3,TimeUnit.SECONDS)){
+                if (THREAD_POOL.awaitTermination(3, TimeUnit.SECONDS)) {
                     List<Runnable> runnableList = THREAD_POOL.shutdownNow();
-                    log.debug("强制关闭的线程为:{}",runnableList);
+                    log.debug("强制关闭的线程为:{}", runnableList);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

@@ -29,7 +29,7 @@ public class ModeServiceImpl implements ModeService {
             ), new TypeReference<ArrayList<Mode>>() {
             });
         } catch (IOException e) {
-            log.error("模式获取失败", e);
+            log.error("模式获取异常", e);
         }
         return new ArrayList<>();
     }
@@ -47,22 +47,23 @@ public class ModeServiceImpl implements ModeService {
 
     @Override
     public boolean addMode(Mode mode) {
+        if (mode == null) return false;
         try {
             //获取所有的模式
             ArrayList<Mode> modeArrayList = getAllModes();
             //添加新模式到列表中
             modeArrayList.add(mode);
             writeToFile(PathEnum.JSON + File_Name, modeArrayList);
-            log.debug("模式添加成功,新增模式:{}", mode);
             return true;
         } catch (IOException e) {
-            log.error("添加模式失败:", e);
+            log.error("添加模式异常:", e);
         }
         return false;
     }
 
     @Override
     public boolean updateMode(Mode mode) {
+        if (mode == null) return false;
         try {
             //获取所有的模式
             ArrayList<Mode> modeArrayList = getAllModes();
@@ -73,30 +74,26 @@ public class ModeServiceImpl implements ModeService {
                 }
             }
             writeToFile(PathEnum.JSON + File_Name, modeArrayList);
-            log.debug("模式更新成功:{}", mode);
             return true;
         } catch (IOException e) {
-            log.error("更新模式失败:", e);
+            log.error("更新模式异常:", e);
         }
         return false;
     }
 
     @Override
     public boolean deleteMode(Mode comparedMode) {
-        if(comparedMode == null) {
-            log.debug("模式不存在");
-            return false;
-        }
+        if (comparedMode == null) return false;
         try {
             //获取模式列表
             ArrayList<Mode> modeArrayList = getAllModes();
             //根据模式的名称删除对应的模式
             if (modeArrayList.removeIf(mode -> mode.getName().equals(comparedMode.getName()))) {
-                log.debug("模式删除成功:{}",comparedMode);
+                writeToFile(PathEnum.JSON + File_Name, modeArrayList);
+                return true;
             }
-            writeToFile(PathEnum.JSON + File_Name, modeArrayList);
         } catch (IOException e) {
-            log.error("模式删除失败:", e);
+            log.error("模式删除异常:", e);
         }
         return false;
     }
@@ -109,7 +106,7 @@ public class ModeServiceImpl implements ModeService {
     /**
      * 将模式列表写入文件
      *
-     * @param path 文件路径
+     * @param path          文件路径
      * @param modeArrayList 模式列表
      **/
     private void writeToFile(String path, ArrayList<Mode> modeArrayList) throws IOException {

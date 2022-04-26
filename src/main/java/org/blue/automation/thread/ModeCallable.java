@@ -26,13 +26,18 @@ public class ModeCallable implements Callable<Boolean> {
     @Override
     public Boolean call() {
         log.info("{}开始运行:{}", mode.getName(), mode);
-        CompletionService<Situation> completionService = new ExecutorCompletionService<>(THREAD_POOL);
         ArrayList<Situation> situationArrayList = mode.getSituations();
-        long millis = System.currentTimeMillis();
+        //如果没有情景列表,则直接返回false
+        if(situationArrayList == null || situationArrayList.size() <= 0) return false;
+        //创建接收完成任务的线程池
+        CompletionService<Situation> completionService = new ExecutorCompletionService<>(THREAD_POOL);
+        //接收任务的列表
         ArrayList<Future<Situation>> futureArrayList = new ArrayList<>();
+        //得到的最终情景
         Situation ans = new Situation();
+        long initMillis = System.currentTimeMillis();
         try {
-            while (!Thread.currentThread().isInterrupted() && System.currentTimeMillis() - millis < 15000) {
+            while (!Thread.currentThread().isInterrupted() && System.currentTimeMillis() - initMillis < 15000) {
                 futureArrayList.clear();
                 ans.setSimile(BigDecimal.valueOf(-1));
                 log.debug("开始进入循环");
