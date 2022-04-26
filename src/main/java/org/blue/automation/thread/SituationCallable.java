@@ -2,7 +2,6 @@ package org.blue.automation.thread;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.blue.automation.Main;
 import org.blue.automation.entities.Situation;
 
 import java.math.BigDecimal;

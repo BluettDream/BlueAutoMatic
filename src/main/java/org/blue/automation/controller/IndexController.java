@@ -2,11 +2,12 @@ package org.blue.automation.controller;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,32 +35,32 @@ public class IndexController implements Initializable {
     private ChoiceBox<Mode> CHOICE_MODE_LIST;
 
     @FXML
-    private Button BUTTON_ADD_MODE;
-
-    @FXML
-    private Button BUTTON_CHANGE_MODE;
+    private Button BUTTON_SETTING;
 
     @FXML
     private Button BUTTON_SWITCH;
 
+    @FXML
+    private MenuItem MENU_IMPORT;
+
+    @FXML
+    private MenuItem MENU_EXPORT;
+
+    @FXML
+    private Menu MENU_HELP;
+
     private final ExecutorService THREAD_POOL = Main.THREAD_POOL;
-    private ModeService modeService;
     private SimpleObjectProperty<Mode> currentMode;
     private Future<Boolean> runningMode;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        modeService = new ModeServiceImpl();
+        ModeService modeService = new ModeServiceImpl();
         ArrayList<Mode> modeArrayList = modeService.getAllModes();
         currentMode = initChoiceModeList(modeArrayList);
         //将当前可观察模式与模式列表中被选中的模式进行单向绑定
         currentMode.bind(CHOICE_MODE_LIST.getSelectionModel().selectedItemProperty());
         initButtonSwitch();
-    }
-
-    @FXML
-    void addMode() {
-
     }
 
     @FXML
@@ -82,8 +83,23 @@ public class IndexController implements Initializable {
     }
 
     @FXML
-    void updateMode() {
+    void configureMode() {
 
+    }
+
+    @FXML
+    void exportFile() {
+
+    }
+
+    @FXML
+    void importFile() {
+
+    }
+
+    @FXML
+    void openHelp() {
+        log.info("打开帮助界面");
     }
 
     /**
