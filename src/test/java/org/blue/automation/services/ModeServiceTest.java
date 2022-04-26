@@ -29,10 +29,14 @@ class ModeServiceTest {
     @Test
     void addMode() {
         Mode mode = new Mode();
-        mode.setName("测试模式3");
+        mode.setName("测试模式4");
         ArrayList<Situation> situations = new ArrayList<>();
         situations.add(new Situation("情形1"));
         situations.add(new Situation("清形2"));
+        situations.add(new Situation("情形3"));
+        situations.add(new Situation("清形4"));
+        situations.add(new Situation("情形5"));
+        situations.add(new Situation("清形6"));
         mode.setSituations(situations);
         modeService.addMode(mode);
     }

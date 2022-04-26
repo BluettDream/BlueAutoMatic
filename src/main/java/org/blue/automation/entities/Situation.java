@@ -2,7 +2,6 @@ package org.blue.automation.entities;
 
 import org.blue.automation.entities.enums.Action;
 
-import java.io.PipedReader;
 import java.math.BigDecimal;
 
 /**

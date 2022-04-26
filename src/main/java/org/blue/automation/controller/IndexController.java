@@ -55,11 +55,10 @@ public class IndexController implements Initializable {
         //将当前可观察模式与模式列表中被选中的模式进行单向绑定
         currentMode.bind(CHOICE_MODE_LIST.getSelectionModel().selectedItemProperty());
         initButtonSwitch();
-
     }
 
     @FXML
-    void addMode(ActionEvent event) {
+    void addMode() {
 
     }
 
@@ -83,7 +82,7 @@ public class IndexController implements Initializable {
     }
 
     @FXML
-    void updateMode(ActionEvent event) {
+    void updateMode() {
 
     }
 
@@ -115,6 +114,10 @@ public class IndexController implements Initializable {
         return modeProperty;
     }
 
+    /**
+     * 初始化运行按钮文本监听事件,自动监听按钮是否被点击"运行",如果开始运行则启动线程监听模式的运行状态,运行结束时自动将结束文本更改为运行
+     *
+     **/
     private void initButtonSwitch() {
         BUTTON_SWITCH.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("结束")) {

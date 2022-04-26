@@ -31,10 +31,10 @@ public class ModeCallable implements Callable<Boolean> {
         long millis = System.currentTimeMillis();
         ArrayList<Future<Situation>> futureArrayList = new ArrayList<>();
         Situation ans = new Situation();
-        ans.setSimile(BigDecimal.valueOf(-1));
         try {
             while (!Thread.currentThread().isInterrupted() && System.currentTimeMillis() - millis < 15000) {
                 futureArrayList.clear();
+                ans.setSimile(BigDecimal.valueOf(-1));
                 log.debug("开始进入循环");
                 for (Situation situation : situationArrayList) {
                     Future<Situation> res = completionService.submit(new SituationCallable(situation));
@@ -42,11 +42,10 @@ public class ModeCallable implements Callable<Boolean> {
                 }
                 for (int i = 0; i < futureArrayList.size(); ++i) {
                     Situation situation = completionService.take().get();
-                    //log.debug("相似度:{}",situation.getSimile());
+                    log.debug("{}的相似度为:{}",situation.getName(),situation.getSimile());
                     if(ans.getSimile().compareTo(situation.getSimile()) < 0) ans = situation;
                 }
                 log.info("最大相似度为:{},情形是:{}",ans.getSimile(),ans);
-                TimeUnit.SECONDS.sleep(2);
             }
         } catch (InterruptedException | ExecutionException e) {
             Thread.currentThread().interrupt();

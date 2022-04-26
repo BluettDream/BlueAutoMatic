@@ -1,36 +1,115 @@
 [ {
   "name" : "御魂模式",
   "situations" : [ {
-    "name" : "等待队友"
+    "name" : "等待队友",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   }, {
-    "name" : "进入游戏"
+    "name" : "进入游戏",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   } ]
 }, {
   "name" : "测试模式",
   "situations" : [ {
-    "name" : "情形1"
+    "name" : "情形1",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   }, {
-    "name" : "清形2"
+    "name" : "清形2",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   } ]
 }, {
   "name" : "测试模式1",
   "situations" : [ {
-    "name" : "情形1"
+    "name" : "情形1",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   }, {
-    "name" : "清形2"
+    "name" : "清形2",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   } ]
 }, {
   "name" : "测试模式2",
   "situations" : [ {
-    "name" : "情形1"
+    "name" : "情形1",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   }, {
-    "name" : "清形2"
+    "name" : "清形2",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   } ]
 }, {
   "name" : "测试模式3",
   "situations" : [ {
-    "name" : "情形1"
+    "name" : "情形1",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   }, {
-    "name" : "清形2"
+    "name" : "清形2",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
+  } ]
+}, {
+  "name" : "测试模式4",
+  "situations" : [ {
+    "name" : "情形1",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
+  }, {
+    "name" : "清形2",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
+  }, {
+    "name" : "情形3",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
+  }, {
+    "name" : "清形4",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
+  }, {
+    "name" : "情形5",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
+  }, {
+    "name" : "清形6",
+    "action" : null,
+    "click" : false,
+    "image" : null,
+    "simile" : null
   } ]
 } ]
