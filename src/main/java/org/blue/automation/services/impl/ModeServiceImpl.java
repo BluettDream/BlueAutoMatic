@@ -2,6 +2,7 @@ package org.blue.automation.services.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.Mode;
@@ -48,9 +49,13 @@ public class ModeServiceImpl implements ModeService {
     @Override
     public boolean addMode(Mode mode) {
         if (mode == null) return false;
+        if(StringUtils.isBlank(mode.getName()) || mode.getName().contains(" ")) return false;
         try {
             //获取所有的模式
             ArrayList<Mode> modeArrayList = getAllModes();
+            for (Mode temp : modeArrayList) {
+                if(temp.getName().equals(mode.getName())) return false;
+            }
             //添加新模式到列表中
             modeArrayList.add(mode);
             writeToFile(PathEnum.JSON + File_Name, modeArrayList);
@@ -71,10 +76,10 @@ public class ModeServiceImpl implements ModeService {
             for (int i = 0; i < modeArrayList.size(); ++i) {
                 if (modeArrayList.get(i).getName().equals(mode.getName())) {
                     modeArrayList.set(i, mode);
+                    writeToFile(PathEnum.JSON + File_Name, modeArrayList);
+                    return true;
                 }
             }
-            writeToFile(PathEnum.JSON + File_Name, modeArrayList);
-            return true;
         } catch (IOException e) {
             log.error("更新模式异常:", e);
         }

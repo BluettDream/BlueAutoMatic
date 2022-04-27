@@ -14,9 +14,16 @@
         <junit.version>5.8.2</junit.version>
         <log4j.version>2.17.1</log4j.version>
         <jackson.version>2.13.2.2</jackson.version>
+        <commons.lang3.version>3.12.0</commons.lang3.version>
     </properties>
 
     <dependencies>
+        <!--apache commons库-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang3.version}</version>
+        </dependency>
         <!--jackson解析库-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

@@ -1,6 +1,7 @@
 package org.blue.automation.entities;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * name: MengHao Tian
@@ -36,6 +37,19 @@ public class Mode {
 
     public void setSituations(ArrayList<Situation> situations) {
         this.situations = situations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mode mode = (Mode) o;
+        return Objects.equals(name, mode.name) && Objects.equals(situations, mode.situations);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, situations);
     }
 
     @Override

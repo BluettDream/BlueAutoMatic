@@ -15,6 +15,10 @@ public class SituationImage {
     public SituationImage() {
     }
 
+    public SituationImage(String path) {
+        this.path = path;
+    }
+
     public SituationImage(String path, Rect rect) {
         this.path = path;
         this.rect = rect;
@@ -34,5 +38,13 @@ public class SituationImage {
 
     public void setRect(Rect rect) {
         this.rect = rect;
+    }
+
+    @Override
+    public String toString() {
+        return "SituationImage{" +
+                "path='" + path + '\'' +
+                ", rect=" + rect +
+                '}';
     }
 }

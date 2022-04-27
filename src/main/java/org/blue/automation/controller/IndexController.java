@@ -3,7 +3,6 @@ package org.blue.automation.controller;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
 import org.blue.automation.entities.Mode;
-import org.blue.automation.factories.DialogFactory;
+import org.blue.automation.factories.UIControlFactory;
 import org.blue.automation.thread.ModeCallable;
 import org.blue.automation.services.ModeService;
 import org.blue.automation.services.impl.ModeServiceImpl;
@@ -43,29 +42,26 @@ public class IndexController implements Initializable {
     private Button BUTTON_SWITCH;
 
     private final ExecutorService THREAD_POOL = Main.THREAD_POOL;
-    private SimpleObjectProperty<Mode> currentMode;
+    private static final SimpleObjectProperty<Mode> CURRENT_MODE = new SimpleObjectProperty<>();
     private ModeService modeService;
     private Future<Boolean> runningMode;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         modeService = new ModeServiceImpl();
-        ArrayList<Mode> modeArrayList = modeService.getAllModes();
-        currentMode = initChoiceModeList(modeArrayList);
-        //将当前可观察模式与模式列表中被选中的模式进行单向绑定
-        currentMode.bind(CHOICE_MODE_LIST.getSelectionModel().selectedItemProperty());
+        initChoiceModeList(modeService.getAllModes());
         initButtonSwitch();
     }
 
     @FXML
     void addMode() {
-        TextInputDialog dialog = DialogFactory.createTestInputDialog(
+        TextInputDialog dialog = UIControlFactory.createTestInputDialog(
                 "添加模式", null, "请输入模式名称");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             if (modeService.addMode(new Mode(name, new ArrayList<>()))) {
                 log.debug("模式添加成功,新增模式:{}", name);
-                updateChoiceModeList();
+                updateChoiceModeList(modeService.getAllModes());
             } else {
                 log.info("{}添加失败", name);
             }
@@ -73,10 +69,29 @@ public class IndexController implements Initializable {
     }
 
     @FXML
+    void configureMode() {
+        Stage settingStage = Main.STAGE_MAP.get("settingStage");
+        if (settingStage == null) {
+            settingStage = new Stage();
+            settingStage.setTitle("模式配置");
+            settingStage.setResizable(false);
+            Main.STAGE_MAP.put("settingStage", settingStage);
+        }
+        try {
+            settingStage.setScene(new Scene(
+                    new FXMLLoader(getClass().getResource("/views/setting.fxml")).load(), 600, 400)
+            );
+            settingStage.show();
+        } catch (IOException e) {
+            log.error("创建settingStage异常:", e);
+        }
+    }
+
+    @FXML
     void deleteMode() {
-        if (modeService.deleteMode(currentMode.get())) {
-            log.info("{}删除成功", currentMode.get().getName());
-            updateChoiceModeList();
+        if (modeService.deleteMode(CURRENT_MODE.get())) {
+            log.info("{}删除成功", CURRENT_MODE.get().getName());
+            updateChoiceModeList(modeService.getAllModes());
         } else {
             log.info("模式删除失败");
         }
@@ -87,7 +102,7 @@ public class IndexController implements Initializable {
         BUTTON_SWITCH.setDisable(true);
         switch (BUTTON_SWITCH.getText()) {
             case "运行":
-                ModeCallable modeCallable = new ModeCallable(currentMode.get());
+                ModeCallable modeCallable = new ModeCallable(CURRENT_MODE.get());
                 runningMode = THREAD_POOL.submit(modeCallable);
                 BUTTON_SWITCH.setText("结束");
                 break;
@@ -99,25 +114,6 @@ public class IndexController implements Initializable {
                 break;
         }
         BUTTON_SWITCH.setDisable(false);
-    }
-
-    @FXML
-    void configureMode() {
-        Stage settingStage = Main.STAGE_MAP.get("settingStage");
-        if (settingStage == null) {
-            try {
-                settingStage = new Stage();
-                settingStage.setScene(new Scene(new FXMLLoader(getClass().getResource("/views/setting.fxml")).load(), 300, 300));
-                settingStage.setTitle("模式配置");
-                settingStage.setResizable(false);
-                settingStage.setAlwaysOnTop(true);
-
-                Main.STAGE_MAP.put("settingStage", settingStage);
-            } catch (IOException e) {
-                log.error("创建settingStage异常:", e);
-            }
-        }
-        settingStage.show();
     }
 
     @FXML
@@ -135,8 +131,8 @@ public class IndexController implements Initializable {
         log.info("打开帮助界面");
     }
 
-    private void updateChoiceModeList() {
-        CHOICE_MODE_LIST.setItems(FXCollections.observableArrayList(modeService.getAllModes()));
+    private void updateChoiceModeList(ArrayList<Mode> modeArrayList) {
+        CHOICE_MODE_LIST.setItems(FXCollections.observableArrayList(modeArrayList));
         CHOICE_MODE_LIST.getSelectionModel().selectFirst();
     }
 
@@ -144,10 +140,8 @@ public class IndexController implements Initializable {
      * 初始化模式列表,并返回当前列表中选中的可观察模式对象(默认为第一个选中)
      *
      * @param modeArrayList 模式列表
-     * @return 列表大小大于0返回可观察的模式, 否则创建一个新的可观察模式
      **/
-    private SimpleObjectProperty<Mode> initChoiceModeList(ArrayList<Mode> modeArrayList) {
-        updateChoiceModeList();
+    private void initChoiceModeList(ArrayList<Mode> modeArrayList) {
         CHOICE_MODE_LIST.setConverter(new StringConverter<Mode>() {
             @Override
             public String toString(Mode object) {
@@ -159,9 +153,11 @@ public class IndexController implements Initializable {
                 return new Mode(string);
             }
         });
-        SimpleObjectProperty<Mode> modeProperty = new SimpleObjectProperty<>();
-        if (modeArrayList.size() > 0) modeProperty.set(CHOICE_MODE_LIST.getValue());
-        return modeProperty;
+        CHOICE_MODE_LIST.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            //将当前可观察模式与模式列表中被选中的模式进行单向绑定
+            CURRENT_MODE.set(newValue);
+        });
+        updateChoiceModeList(modeArrayList);
     }
 
     /**
@@ -171,11 +167,11 @@ public class IndexController implements Initializable {
         BUTTON_SWITCH.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("结束")) {
                 THREAD_POOL.execute(() -> {
-                    log.debug("开始检测模式线程是否运行结束");
+                    log.debug("开始监听模式线程");
                     try {
                         //如果刚添加的模式或者模式不完整,则提示先设置再运行,如果模式正常运行结束,则自动跳转
                         if (!runningMode.get())
-                            Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, "请先设置模式再运行").showAndWait());
+                            Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, "请先将模式进行设置后再运行").showAndWait());
                         log.debug("线程检测完毕,结束按钮已自动更新");
                         Platform.runLater(() -> BUTTON_SWITCH.setText("运行"));
                     } catch (InterruptedException | ExecutionException | CancellationException e) {
@@ -187,4 +183,7 @@ public class IndexController implements Initializable {
         });
     }
 
+    public static SimpleObjectProperty<Mode> getCurrentModeProperty() {
+        return CURRENT_MODE;
+    }
 }

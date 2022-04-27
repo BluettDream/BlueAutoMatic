@@ -3,6 +3,7 @@ package org.blue.automation.entities;
 import org.blue.automation.entities.enums.Action;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * name: MengHao Tian
@@ -11,12 +12,12 @@ import java.math.BigDecimal;
 public class Situation {
     //情景名称
     private String name;
-    //情景动作
-    private Action action;
-    //情景是否需要点击
-    private boolean click;
     //情景图片
     private SituationImage image;
+    //情景是否需要点击
+    private boolean click;
+    //情景动作
+    private Action action;
     //情景相似度
     private BigDecimal simile;
 
@@ -27,17 +28,17 @@ public class Situation {
         this.name = name;
     }
 
-    public Situation(String name, boolean click, SituationImage image) {
+    public Situation(String name, SituationImage image, boolean click) {
         this.name = name;
-        this.click = click;
         this.image = image;
+        this.click = click;
     }
 
-    public Situation(String name, Action action, boolean click, SituationImage image) {
+    public Situation(String name, SituationImage image, boolean click, Action action) {
         this.name = name;
-        this.action = action;
-        this.click = click;
         this.image = image;
+        this.click = click;
+        this.action = action;
     }
 
     public String getName() {
@@ -81,12 +82,25 @@ public class Situation {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Situation situation = (Situation) o;
+        return click == situation.click && Objects.equals(name, situation.name) && Objects.equals(image, situation.image) && action == situation.action && Objects.equals(simile, situation.simile);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, image, click, action, simile);
+    }
+
+    @Override
     public String toString() {
         return "Situation{" +
                 "name='" + name + '\'' +
-                ", action=" + action +
-                ", click=" + click +
                 ", image=" + image +
+                ", click=" + click +
+                ", action=" + action +
                 ", simile=" + simile +
                 '}';
     }

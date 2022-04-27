@@ -4,8 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.Mode;
 import org.blue.automation.entities.Situation;
+import org.blue.automation.entities.SituationImage;
+import org.blue.automation.entities.enums.Action;
+import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.impl.ModeServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.opencv.core.Rect;
 
 import java.util.ArrayList;
 
@@ -29,14 +33,14 @@ class ModeServiceTest {
     @Test
     void addMode() {
         Mode mode = new Mode();
-        mode.setName("测试模式4");
+        mode.setName("测试10");
         ArrayList<Situation> situations = new ArrayList<>();
-        situations.add(new Situation("情形1"));
-        situations.add(new Situation("清形2"));
-        situations.add(new Situation("情形3"));
-        situations.add(new Situation("清形4"));
-        situations.add(new Situation("情形5"));
-        situations.add(new Situation("清形6"));
+        situations.add(new Situation("情景1",new SituationImage(PathEnum.IMAGE_OUTER+"test1.png",new Rect(new double[]{10,20,100,200})),true, Action.CLICK));
+        situations.add(new Situation("情景2",new SituationImage(PathEnum.IMAGE_OUTER+"test2.png",new Rect(new double[]{10,20,100,200})),false));
+        situations.add(new Situation("情景3",new SituationImage(PathEnum.IMAGE_OUTER+"test3.png",new Rect(new double[]{10,20,100,200})),true, Action.LONG_CLICK));
+        situations.add(new Situation("情景4",new SituationImage(PathEnum.IMAGE_OUTER+"test4.png",new Rect(new double[]{10,20,100,200})),true, Action.SLIDE));
+        situations.add(new Situation("情景5",new SituationImage(PathEnum.IMAGE_OUTER+"test5.png",new Rect(new double[]{10,20,100,200})),false));
+        situations.add(new Situation("情景6",new SituationImage(PathEnum.IMAGE_OUTER+"test6.png",new Rect(new double[]{10,20,100,200})),true, Action.RANDOM_CLICK));
         mode.setSituations(situations);
         modeService.addMode(mode);
     }

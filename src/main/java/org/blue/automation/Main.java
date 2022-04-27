@@ -17,8 +17,8 @@ import java.util.concurrent.*;
 
 public class Main extends Application {
     private static final Logger log = LogManager.getLogger(Main.class);
-    public static HashMap<String, Stage> STAGE_MAP;
     public static ExecutorService THREAD_POOL = new ThreadPoolExecutor(10, 16, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(50), new ThreadPoolExecutor.AbortPolicy());
+    public static HashMap<String, Stage> STAGE_MAP;
 
     @Override
     public void init() {

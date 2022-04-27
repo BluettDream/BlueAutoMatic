@@ -1,13 +1,414 @@
 [ {
-  "name" : "御魂(2人司机)",
-  "situations" : [ ]
+  "name" : "测试1",
+  "situations" : [ {
+    "name" : "情景1",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/情景1.png",
+      "rect" : {
+        "x" : 201,
+        "y" : 137,
+        "width" : 115,
+        "height" : 113
+      }
+    },
+    "click" : true,
+    "action" : "LONG_SLIDE",
+    "simile" : null
+  }, {
+    "name" : "情景2",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test2.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景3",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test3.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "LONG_CLICK",
+    "simile" : null
+  }, {
+    "name" : "正在结算",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/正在结算.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 48,
+        "height" : 50
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  } ]
 }, {
-  "name" : "御魂(2人打手)",
-  "situations" : [ ]
+  "name" : "测试2",
+  "situations" : [ {
+    "name" : "情景1",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test1.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景2",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test2.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景3",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test3.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "LONG_CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景4",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test4.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "SLIDE",
+    "simile" : null
+  }, {
+    "name" : "情景5",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test5.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景6",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test6.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "RANDOM_CLICK",
+    "simile" : null
+  }, {
+    "name" : "",
+    "image" : null,
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  } ]
 }, {
-  "name" : "御魂(3人司机)",
-  "situations" : [ ]
+  "name" : "测试3",
+  "situations" : [ {
+    "name" : "情景1",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test1.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景2",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test2.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景3",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test3.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "LONG_CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景4",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test4.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "SLIDE",
+    "simile" : null
+  }, {
+    "name" : "情景5",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test5.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景6",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test6.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "RANDOM_CLICK",
+    "simile" : null
+  } ]
 }, {
-  "name" : "御魂(3人打手)",
-  "situations" : [ ]
+  "name" : "测试5",
+  "situations" : [ {
+    "name" : "情景1",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test1.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景2",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test2.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景3",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test3.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "LONG_CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景4",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test4.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "SLIDE",
+    "simile" : null
+  }, {
+    "name" : "情景5",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test5.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景6",
+    "image" : {
+      "path" : "D:\\homework\\java\\Blue/images/outer/test6.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "RANDOM_CLICK",
+    "simile" : null
+  } ]
+}, {
+  "name" : "测试10",
+  "situations" : [ {
+    "name" : "情景1",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/outer/test1.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景2",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/outer/test2.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景3",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/outer/test3.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "LONG_CLICK",
+    "simile" : null
+  }, {
+    "name" : "情景4",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/outer/test4.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "SLIDE",
+    "simile" : null
+  }, {
+    "name" : "情景5",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/outer/test5.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "情景6",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/outer/test6.png",
+      "rect" : {
+        "x" : 10,
+        "y" : 20,
+        "width" : 100,
+        "height" : 200
+      }
+    },
+    "click" : true,
+    "action" : "RANDOM_CLICK",
+    "simile" : null
+  } ]
 } ]

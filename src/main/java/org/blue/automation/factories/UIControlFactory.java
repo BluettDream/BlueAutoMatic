@@ -1,19 +1,14 @@
 package org.blue.automation.factories;
 
-import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextInputDialog;
-
-import java.io.DataInput;
-import java.net.SocketTimeoutException;
+import javafx.stage.FileChooser;
 
 /**
  * name: MengHao Tian
  * date: 2022/4/26 11:23
  */
-public class DialogFactory {
+public class UIControlFactory {
 
     public static TextInputDialog createTestInputDialog(String title, String headerText, String contentText){
         TextInputDialog dialog = new TextInputDialog();
@@ -30,4 +25,16 @@ public class DialogFactory {
         return dialog;
     }
 
+    public static FileChooser createImageFileChooser(String title){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.getExtensionFilters().addAll(
+                //new FileChooser.ExtensionFilter("All Images", "*.*"),
+                //new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                //new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                //new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+        return fileChooser;
+    }
 }
