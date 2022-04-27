@@ -119,27 +119,25 @@ public class SettingController implements Initializable {
                 BufferedImage image = ImageIO.read(new FileInputStream(INPUT_IMAGE_PATH.getText()));
                 currentSituation.get().getImage().getRect().width = image.getWidth();
                 currentSituation.get().getImage().getRect().height = image.getHeight();
-                boolean res = ImageIO.write(image, "png", new FileOutputStream(PathEnum.IMAGE_INNER + currentSituation.get().getName()+".png"));
-                if (res)
-                    currentSituation.get().getImage().setPath(PathEnum.IMAGE_INNER + currentSituation.get().getName()+".png");
+                String imagePath = PathEnum.IMAGE_INNER + currentSituation.get().getName()+".png";
+                boolean res = ImageIO.write(image, "png", new FileOutputStream(imagePath));
+                if (res) currentSituation.get().getImage().setPath(imagePath);
                 else needSave = false;
             } catch (IOException e) {
+                needSave = false;
                 log.error("读取图片异常:", e);
                 new Alert(Alert.AlertType.ERROR, "图片读取异常");
-                needSave = false;
             }
         }
-        if (needSave) {
-            if (situationService.isExisted(currentSituation.get()) && situationService.updateSituation(currentSituation.get())) {
-                log.info("情景更新成功:{}", currentSituation.get());
-                new Alert(Alert.AlertType.INFORMATION, "更新成功").showAndWait();
-                return;
-            }
-            if (!situationService.isExisted(currentSituation.get()) && situationService.addSituation(currentSituation.get())) {
-                log.info("情景添加成功:{}", currentSituation.get());
-                new Alert(Alert.AlertType.INFORMATION, "保存成功").showAndWait();
-                return;
-            }
+        if (needSave && situationService.isExisted(currentSituation.get()) && situationService.updateSituation(currentSituation.get())) {
+            log.info("情景更新成功:{}", currentSituation.get());
+            new Alert(Alert.AlertType.INFORMATION, "更新成功").showAndWait();
+            return;
+        }
+        if (needSave && !situationService.isExisted(currentSituation.get()) && situationService.addSituation(currentSituation.get())) {
+            log.info("情景添加成功:{}", currentSituation.get());
+            new Alert(Alert.AlertType.INFORMATION, "保存成功").showAndWait();
+            return;
         }
         log.info("情景保存失败:{}", currentSituation.get());
         new Alert(Alert.AlertType.WARNING, "保存失败").showAndWait();
