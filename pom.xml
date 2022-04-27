@@ -15,6 +15,7 @@
         <log4j.version>2.17.1</log4j.version>
         <jackson.version>2.13.2.2</jackson.version>
         <commons.lang3.version>3.12.0</commons.lang3.version>
+        <py4j.version>1.0.0</py4j.version>
     </properties>
 
     <dependencies>

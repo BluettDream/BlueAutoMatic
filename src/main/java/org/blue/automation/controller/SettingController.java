@@ -16,7 +16,9 @@ import org.blue.automation.entities.SituationImage;
 import org.blue.automation.entities.enums.Action;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.factories.UIControlFactory;
+import org.blue.automation.services.AdbService;
 import org.blue.automation.services.SituationService;
+import org.blue.automation.services.impl.AdbServiceImpl;
 import org.blue.automation.services.impl.SituationServiceImpl;
 import org.opencv.core.Rect;
 
@@ -59,6 +61,8 @@ public class SettingController implements Initializable {
     private SimpleObjectProperty<Situation> currentSituation;
     private static SimpleObjectProperty<Mode> CURRENT_MODE;
     private SituationService situationService;
+    private static String PRE_DIRECTORY_PATH;
+    private AdbService adbService;
 
     @FXML
     void setSituationName() {
@@ -84,7 +88,8 @@ public class SettingController implements Initializable {
 
     @FXML
     void chooseImage() {
-        File file = UIControlFactory.createImageFileChooser("选择图片").showOpenDialog(Main.STAGE_MAP.get("settingStage"));
+        File file = UIControlFactory.createImageFileChooser("选择图片",PRE_DIRECTORY_PATH).showOpenDialog(Main.STAGE_MAP.get("settingStage"));
+        if(StringUtils.isBlank(PRE_DIRECTORY_PATH)) PRE_DIRECTORY_PATH = new File(file.getAbsolutePath()).getParent();
         currentSituation.get().getImage().setPath(file.getAbsolutePath());
         INPUT_IMAGE_PATH.setText(file.getAbsolutePath());
     }
@@ -92,6 +97,14 @@ public class SettingController implements Initializable {
     @FXML
     void setSituationIsClick() {
         currentSituation.get().setClick(CHECK_CLICK.isSelected());
+    }
+
+    @FXML
+    void captureSituationImage() {
+        adbService = adbService == null ? new AdbServiceImpl() : adbService;
+        File file = UIControlFactory.createImageFileChooser("保存图片","E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
+        adbService.captureAndSave("/sdcard/blue_main.png",file.getAbsolutePath());
+        new Alert(Alert.AlertType.INFORMATION,"截屏保存成功").showAndWait();
     }
 
     @FXML
@@ -104,7 +117,7 @@ public class SettingController implements Initializable {
             );
             CHOICE_SITUATION_LIST.getSelectionModel().clearSelection();
         } else {
-            new Alert(Alert.AlertType.ERROR, currentSituation.get().getName() + "删除失败");
+            new Alert(Alert.AlertType.ERROR, currentSituation.get().getName() + "删除失败").showAndWait();
             log.info("{}删除失败", currentSituation.get().getName());
         }
     }
@@ -126,7 +139,7 @@ public class SettingController implements Initializable {
             } catch (IOException e) {
                 needSave = false;
                 log.error("读取图片异常:", e);
-                new Alert(Alert.AlertType.ERROR, "图片读取异常");
+                new Alert(Alert.AlertType.ERROR, "图片读取异常").showAndWait();
             }
         }
         if (needSave && situationService.isExisted(currentSituation.get()) && situationService.updateSituation(currentSituation.get())) {

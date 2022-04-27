@@ -108,6 +108,12 @@ public class AdbServiceImpl implements AdbService {
         );
     }
 
+    @Override
+    public void captureAndSave(String phoneFile, String computerFile) {
+        screenCap(phoneFile);
+        pull(phoneFile,computerFile);
+    }
+
     private StringBuilder getAdb() {
         return new StringBuilder().append("adb").append(" ");
     }

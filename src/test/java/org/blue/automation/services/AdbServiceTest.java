@@ -22,7 +22,7 @@ class AdbServiceTest {
     @BeforeAll
     static void isConnected() {
         boolean connected = adbService.isConnected(adbService.getAllDevices().get(0));
-        log.debug(connected);
+        log.debug("设备是否连接:{}",connected);
     }
 
     @Test
@@ -66,4 +66,8 @@ class AdbServiceTest {
         adbService.pull("/sdcard/blue_test.png", PathEnum.IMAGE_OUTER+"test.png");
     }
 
+    @Test
+    void captureAndSave() {
+        adbService.captureAndSave("/sdcard/blue_main.png",PathEnum.IMAGE_OUTER+"main.png");
+    }
 }

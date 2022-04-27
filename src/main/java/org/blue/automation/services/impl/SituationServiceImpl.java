@@ -7,8 +7,6 @@ import org.blue.automation.services.ModeService;
 import org.blue.automation.services.SituationService;
 
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.function.Predicate;
 
 /**
  * name: MengHao Tian

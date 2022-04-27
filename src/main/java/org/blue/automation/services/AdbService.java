@@ -76,4 +76,12 @@ public interface AdbService {
      **/
     void screenCap(String phoneFile);
 
+    /**
+     * 截屏并保存图片到电脑
+     *
+     * @param phoneFile 手机图片路径
+     * @param computerFile 电脑图片路劲
+     **/
+    void captureAndSave(String phoneFile,String computerFile);
+
 }

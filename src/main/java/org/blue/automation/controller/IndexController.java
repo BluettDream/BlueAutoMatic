@@ -55,16 +55,15 @@ public class IndexController implements Initializable {
 
     @FXML
     void addMode() {
-        TextInputDialog dialog = UIControlFactory.createTestInputDialog(
-                "添加模式", null, "请输入模式名称");
+        TextInputDialog dialog = UIControlFactory.createTestInputDialog("添加模式", null, "请输入模式名称");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             if (modeService.addMode(new Mode(name, new ArrayList<>()))) {
-                log.debug("模式添加成功,新增模式:{}", name);
+                log.info("模式添加成功,新增模式:{}", name);
                 updateChoiceModeList(modeService.getAllModes());
-            } else {
-                log.info("{}添加失败", name);
+                return;
             }
+            log.info("{}添加失败", name);
         });
     }
 
@@ -75,12 +74,11 @@ public class IndexController implements Initializable {
             settingStage = new Stage();
             settingStage.setTitle("模式配置");
             settingStage.setResizable(false);
+            settingStage.setOnCloseRequest(event -> CURRENT_MODE.set(modeService.getModeByName(CURRENT_MODE.get().getName())));
             Main.STAGE_MAP.put("settingStage", settingStage);
         }
         try {
-            settingStage.setScene(new Scene(
-                    new FXMLLoader(getClass().getResource("/views/setting.fxml")).load(), 600, 400)
-            );
+            settingStage.setScene(new Scene(new FXMLLoader(getClass().getResource("/views/setting.fxml")).load(), 600, 400));
             settingStage.show();
         } catch (IOException e) {
             log.error("创建settingStage异常:", e);
@@ -92,9 +90,9 @@ public class IndexController implements Initializable {
         if (modeService.deleteMode(CURRENT_MODE.get())) {
             log.info("{}删除成功", CURRENT_MODE.get().getName());
             updateChoiceModeList(modeService.getAllModes());
-        } else {
-            log.info("模式删除失败");
+            return;
         }
+        log.info("模式删除失败");
     }
 
     @FXML
@@ -107,9 +105,7 @@ public class IndexController implements Initializable {
                 BUTTON_SWITCH.setText("结束");
                 break;
             case "结束":
-                if (!runningMode.isDone()) {
-                    runningMode.cancel(true);
-                }
+                if (!runningMode.isDone()) runningMode.cancel(true);
                 BUTTON_SWITCH.setText("运行");
                 break;
         }

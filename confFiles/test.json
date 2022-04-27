@@ -1,279 +1,103 @@
 [ {
-  "name" : "测试3",
-  "situations" : [ {
-    "name" : "情景1",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test1.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "CLICK",
-    "simile" : null
-  }, {
-    "name" : "情景2",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test2.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : false,
-    "action" : null,
-    "simile" : null
-  }, {
-    "name" : "情景3",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test3.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "LONG_CLICK",
-    "simile" : null
-  }, {
-    "name" : "情景4",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test4.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "SLIDE",
-    "simile" : null
-  }, {
-    "name" : "情景5",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test5.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : false,
-    "action" : null,
-    "simile" : null
-  }, {
-    "name" : "情景6",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test6.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "RANDOM_CLICK",
-    "simile" : null
-  } ]
-}, {
-  "name" : "测试5",
-  "situations" : [ {
-    "name" : "情景1",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test1.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "CLICK",
-    "simile" : null
-  }, {
-    "name" : "情景2",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test2.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : false,
-    "action" : null,
-    "simile" : null
-  }, {
-    "name" : "情景3",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test3.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "LONG_CLICK",
-    "simile" : null
-  }, {
-    "name" : "情景4",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test4.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "SLIDE",
-    "simile" : null
-  }, {
-    "name" : "情景5",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test5.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : false,
-    "action" : null,
-    "simile" : null
-  }, {
-    "name" : "情景6",
-    "image" : {
-      "path" : "D:\\homework\\java\\Blue/images/outer/test6.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "RANDOM_CLICK",
-    "simile" : null
-  } ]
-}, {
-  "name" : "测试10",
-  "situations" : [ {
-    "name" : "情景1",
-    "image" : {
-      "path" : "D:/homework/java/Blue/images/outer/test1.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "CLICK",
-    "simile" : null
-  }, {
-    "name" : "情景2",
-    "image" : {
-      "path" : "D:/homework/java/Blue/images/outer/test2.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : false,
-    "action" : null,
-    "simile" : null
-  }, {
-    "name" : "情景3",
-    "image" : {
-      "path" : "D:/homework/java/Blue/images/outer/test3.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "LONG_CLICK",
-    "simile" : null
-  }, {
-    "name" : "情景4",
-    "image" : {
-      "path" : "D:/homework/java/Blue/images/outer/test4.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "SLIDE",
-    "simile" : null
-  }, {
-    "name" : "情景5",
-    "image" : {
-      "path" : "D:/homework/java/Blue/images/outer/test5.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : false,
-    "action" : null,
-    "simile" : null
-  }, {
-    "name" : "情景6",
-    "image" : {
-      "path" : "D:/homework/java/Blue/images/outer/test6.png",
-      "rect" : {
-        "x" : 10,
-        "y" : 20,
-        "width" : 100,
-        "height" : 200
-      }
-    },
-    "click" : true,
-    "action" : "RANDOM_CLICK",
-    "simile" : null
-  } ]
-}, {
   "name" : "御魂(2人司机)",
   "situations" : [ {
-    "name" : "等待队友",
+    "name" : "等待队友(2号)",
     "image" : {
-      "path" : "D:/homework/java/Blue/images/inner/等待队友.png",
+      "path" : "D:/homework/java/Blue/images/inner/dengDaiDuiYou(2nd).png",
       "rect" : {
-        "x" : 20,
-        "y" : 15,
-        "width" : 150,
-        "height" : 136
+        "x" : 1136,
+        "y" : 343,
+        "width" : 79,
+        "height" : 78
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "开始游戏",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/kaiShiYouXi.png",
+      "rect" : {
+        "x" : 2056,
+        "y" : 938,
+        "width" : 157,
+        "height" : 92
+      }
+    },
+    "click" : true,
+    "action" : "CLICK",
+    "simile" : null
+  }, {
+    "name" : "正在游戏中",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/zhengZaiYouXiZhong.png",
+      "rect" : {
+        "x" : 148,
+        "y" : 25,
+        "width" : 46,
+        "height" : 49
+      }
+    },
+    "click" : false,
+    "action" : null,
+    "simile" : null
+  }, {
+    "name" : "正在准备",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/zhengZaiZhunBei.png",
+      "rect" : {
+        "x" : 1986,
+        "y" : 813,
+        "width" : 166,
+        "height" : 74
+      }
+    },
+    "click" : true,
+    "action" : "CLICK",
+    "simile" : null
+  }, {
+    "name" : "正在邀请队友",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/正在邀请队友.png",
+      "rect" : {
+        "x" : 1020,
+        "y" : 484,
+        "width" : 62,
+        "height" : 110
+      }
+    },
+    "click" : true,
+    "action" : "CLICK",
+    "simile" : null
+  } ]
+}, {
+  "name" : "御魂(2人打手)",
+  "situations" : [ ]
+}, {
+  "name" : "御魂(3人打手)",
+  "situations" : [ {
+    "name" : "等待队友(3号)",
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/dengDaiDuiYou(3rd).png",
+      "rect" : {
+        "x" : 1805,
+        "y" : 340,
+        "width" : 78,
+        "height" : 79
       }
     },
     "click" : false,
     "action" : null,
     "simile" : null
   } ]
+}, {
+  "name" : "御魂(3人司机)",
+  "situations" : [ ]
+}, {
+  "name" : "业原火",
+  "situations" : [ ]
+}, {
+  "name" : "御灵",
+  "situations" : [ ]
 } ]

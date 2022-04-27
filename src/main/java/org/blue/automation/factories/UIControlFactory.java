@@ -3,6 +3,10 @@ package org.blue.automation.factories;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.sql.Struct;
 
 /**
  * name: MengHao Tian
@@ -26,6 +30,10 @@ public class UIControlFactory {
     }
 
     public static FileChooser createImageFileChooser(String title){
+        return createImageFileChooser(title,null);
+    }
+
+    public static FileChooser createImageFileChooser(String title,String preDirectoryPath){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters().addAll(
@@ -35,6 +43,7 @@ public class UIControlFactory {
                 //new FileChooser.ExtensionFilter("BMP", "*.bmp"),
                 new FileChooser.ExtensionFilter("PNG", "*.png")
         );
+        if(!StringUtils.isBlank(preDirectoryPath)) fileChooser.setInitialDirectory(new File(preDirectoryPath));
         return fileChooser;
     }
 }
