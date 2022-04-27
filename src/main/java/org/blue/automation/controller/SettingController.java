@@ -133,15 +133,16 @@ public class SettingController implements Initializable {
             if (situationService.isExisted(currentSituation.get()) && situationService.updateSituation(currentSituation.get())) {
                 log.info("情景更新成功:{}", currentSituation.get());
                 new Alert(Alert.AlertType.INFORMATION, "更新成功").showAndWait();
+                return;
             }
             if (!situationService.isExisted(currentSituation.get()) && situationService.addSituation(currentSituation.get())) {
                 log.info("情景添加成功:{}", currentSituation.get());
                 new Alert(Alert.AlertType.INFORMATION, "保存成功").showAndWait();
+                return;
             }
-        } else {
-            log.info("情景保存失败:{}", currentSituation.get());
-            new Alert(Alert.AlertType.WARNING, "保存失败").showAndWait();
         }
+        log.info("情景保存失败:{}", currentSituation.get());
+        new Alert(Alert.AlertType.WARNING, "保存失败").showAndWait();
     }
 
     @FXML
@@ -163,20 +164,6 @@ public class SettingController implements Initializable {
     private void initCurrentSituation() {
         currentSituation.addListener((observable, oldValue, newValue) -> {
             CHOICE_SITUATION_LIST.getSelectionModel().select(newValue);
-            if (newValue != null) {
-                INPUT_SITUATION_NAME.setText(newValue.getName());
-                CHECK_CLICK.setSelected(newValue.isClick());
-                CHOICE_CLICK_TYPE_LIST.getSelectionModel().select(newValue.getAction());
-                if (newValue.getImage() != null) {
-                    INPUT_IMAGE_PATH.setText(newValue.getImage().getPath());
-                    INPUT_X.setText(String.valueOf(newValue.getImage().getRect().x));
-                    INPUT_Y.setText(String.valueOf(newValue.getImage().getRect().y));
-                } else {
-                    INPUT_IMAGE_PATH.clear();
-                    INPUT_X.clear();
-                    INPUT_Y.clear();
-                }
-            }
             if (newValue == null) {
                 INPUT_SITUATION_NAME.clear();
                 INPUT_IMAGE_PATH.clear();
@@ -184,7 +171,20 @@ public class SettingController implements Initializable {
                 CHOICE_CLICK_TYPE_LIST.getSelectionModel().clearSelection();
                 INPUT_X.clear();
                 INPUT_Y.clear();
+                return;
             }
+            INPUT_SITUATION_NAME.setText(newValue.getName());
+            CHECK_CLICK.setSelected(newValue.isClick());
+            CHOICE_CLICK_TYPE_LIST.getSelectionModel().select(newValue.getAction());
+            if(newValue.getImage() == null){
+                INPUT_IMAGE_PATH.clear();
+                INPUT_X.clear();
+                INPUT_Y.clear();
+                return;
+            }
+            INPUT_IMAGE_PATH.setText(newValue.getImage().getPath());
+            INPUT_X.setText(String.valueOf(newValue.getImage().getRect().x));
+            INPUT_Y.setText(String.valueOf(newValue.getImage().getRect().y));
         });
     }
 
