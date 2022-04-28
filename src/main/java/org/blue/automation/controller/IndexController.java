@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
 import org.blue.automation.entities.Mode;
 import org.blue.automation.factories.UIControlFactory;
+import org.blue.automation.services.impl.AdbOperationServiceImpl;
 import org.blue.automation.thread.ModeCallable;
 import org.blue.automation.services.ModeService;
 import org.blue.automation.services.impl.ModeServiceImpl;
@@ -100,7 +101,7 @@ public class IndexController implements Initializable {
         BUTTON_SWITCH.setDisable(true);
         switch (BUTTON_SWITCH.getText()) {
             case "运行":
-                ModeCallable modeCallable = new ModeCallable(CURRENT_MODE.get());
+                ModeCallable modeCallable = new ModeCallable(CURRENT_MODE.get(),new AdbOperationServiceImpl());
                 runningMode = THREAD_POOL.submit(modeCallable);
                 BUTTON_SWITCH.setText("结束");
                 break;

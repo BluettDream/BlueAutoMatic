@@ -13,7 +13,6 @@ import org.opencv.core.Rect;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class ModeServiceTest {
     private static final Logger log = LogManager.getLogger(ModeServiceTest.class);
@@ -35,14 +34,15 @@ class ModeServiceTest {
         Mode mode = new Mode();
         mode.setName("测试10");
         ArrayList<Situation> situations = new ArrayList<>();
-        situations.add(new Situation("情景1",new SituationImage(PathEnum.IMAGE_OUTER+"test1.png",new Rect(new double[]{10,20,100,200})),true, Action.CLICK));
-        situations.add(new Situation("情景2",new SituationImage(PathEnum.IMAGE_OUTER+"test2.png",new Rect(new double[]{10,20,100,200})),false));
-        situations.add(new Situation("情景3",new SituationImage(PathEnum.IMAGE_OUTER+"test3.png",new Rect(new double[]{10,20,100,200})),true, Action.LONG_CLICK));
-        situations.add(new Situation("情景4",new SituationImage(PathEnum.IMAGE_OUTER+"test4.png",new Rect(new double[]{10,20,100,200})),true, Action.SLIDE));
-        situations.add(new Situation("情景5",new SituationImage(PathEnum.IMAGE_OUTER+"test5.png",new Rect(new double[]{10,20,100,200})),false));
-        situations.add(new Situation("情景6",new SituationImage(PathEnum.IMAGE_OUTER+"test6.png",new Rect(new double[]{10,20,100,200})),true, Action.RANDOM_CLICK));
+        situations.add(new Situation("情景1",1,new SituationImage(PathEnum.IMAGE_OUTER+"test1.png",new Rect(new double[]{10,20,100,200})),true, Action.CLICK));
+        situations.add(new Situation("情景2",2,new SituationImage(PathEnum.IMAGE_OUTER+"test2.png",new Rect(new double[]{10,20,100,200})),false));
+        situations.add(new Situation("情景3",1,new SituationImage(PathEnum.IMAGE_OUTER+"test3.png",new Rect(new double[]{10,20,100,200})),true, Action.LONG_CLICK));
+        //situations.add(new Situation("情景4",new SituationImage(PathEnum.IMAGE_OUTER+"test4.png",new Rect(new double[]{10,20,100,200})),true, Action.SLIDE));
+        //situations.add(new Situation("情景5",new SituationImage(PathEnum.IMAGE_OUTER+"test5.png",new Rect(new double[]{10,20,100,200})),false));
+        //situations.add(new Situation("情景6",new SituationImage(PathEnum.IMAGE_OUTER+"test6.png",new Rect(new double[]{10,20,100,200})),true, Action.RANDOM_CLICK));
         mode.setSituations(situations);
-        modeService.addMode(mode);
+        if (modeService.addMode(mode)) log.info("添加成功");
+        else log.info("添加失败");
     }
 
     @Test

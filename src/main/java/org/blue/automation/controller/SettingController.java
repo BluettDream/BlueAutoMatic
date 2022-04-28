@@ -16,10 +16,11 @@ import org.blue.automation.entities.SituationImage;
 import org.blue.automation.entities.enums.Action;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.factories.UIControlFactory;
-import org.blue.automation.services.AdbService;
+import org.blue.automation.services.OperationModeService;
 import org.blue.automation.services.SituationService;
-import org.blue.automation.services.impl.AdbServiceImpl;
+import org.blue.automation.services.impl.AdbOperationServiceImpl;
 import org.blue.automation.services.impl.SituationServiceImpl;
+import org.blue.automation.utils.PinYinUtil;
 import org.opencv.core.Rect;
 
 import javax.imageio.ImageIO;
@@ -44,6 +45,9 @@ public class SettingController implements Initializable {
     private TextField INPUT_SITUATION_NAME;
 
     @FXML
+    private TextField INPUT_SITUATION_PRIORITY;
+
+    @FXML
     private TextField INPUT_IMAGE_PATH;
 
     @FXML
@@ -62,7 +66,7 @@ public class SettingController implements Initializable {
     private static SimpleObjectProperty<Mode> CURRENT_MODE;
     private SituationService situationService;
     private static String PRE_DIRECTORY_PATH;
-    private AdbService adbService;
+    private OperationModeService operationModeService;
 
     @FXML
     void setSituationName() {
@@ -82,14 +86,9 @@ public class SettingController implements Initializable {
     }
 
     @FXML
-    void setSituationImagePath() {
-        currentSituation.get().getImage().setPath(INPUT_IMAGE_PATH.getText());
-    }
-
-    @FXML
     void chooseImage() {
-        File file = UIControlFactory.createImageFileChooser("选择图片",PRE_DIRECTORY_PATH).showOpenDialog(Main.STAGE_MAP.get("settingStage"));
-        if(StringUtils.isBlank(PRE_DIRECTORY_PATH)) PRE_DIRECTORY_PATH = new File(file.getAbsolutePath()).getParent();
+        File file = UIControlFactory.createImageFileChooser("选择图片", PRE_DIRECTORY_PATH).showOpenDialog(Main.STAGE_MAP.get("settingStage"));
+        if (StringUtils.isBlank(PRE_DIRECTORY_PATH)) PRE_DIRECTORY_PATH = new File(file.getAbsolutePath()).getParent();
         currentSituation.get().getImage().setPath(file.getAbsolutePath());
         INPUT_IMAGE_PATH.setText(file.getAbsolutePath());
     }
@@ -101,16 +100,18 @@ public class SettingController implements Initializable {
 
     @FXML
     void captureSituationImage() {
-        adbService = adbService == null ? new AdbServiceImpl() : adbService;
-        File file = UIControlFactory.createImageFileChooser("保存图片","E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
-        adbService.captureAndSave("/sdcard/blue_main.png",file.getAbsolutePath());
-        new Alert(Alert.AlertType.INFORMATION,"截屏保存成功").showAndWait();
+        operationModeService = operationModeService == null ? new AdbOperationServiceImpl() : operationModeService;
+        File file = UIControlFactory.createImageFileChooser("保存图片", "E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
+        if(file != null && !StringUtils.isBlank(file.getAbsolutePath())){
+            operationModeService.captureAndSave("/sdcard/blue_main.png", file.getAbsolutePath());
+            new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
+        }
     }
 
     @FXML
     void deleteSituation() {
         if (situationService.deleteSituation(currentSituation.get())) {
-            new Alert(Alert.AlertType.INFORMATION,"删除成功").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "删除成功").showAndWait();
             log.info("{}删除成功", currentSituation.get().getName());
             CHOICE_SITUATION_LIST.setItems(
                     FXCollections.observableArrayList(situationService.getAllSituationsByName(CURRENT_MODE.get().getName()))
@@ -125,6 +126,7 @@ public class SettingController implements Initializable {
     @FXML
     void saveSituation() {
         boolean needSave = true;
+        currentSituation.get().setPriority(Integer.parseInt(INPUT_SITUATION_PRIORITY.getText()));
         currentSituation.get().getImage().getRect().x = Integer.parseInt(INPUT_X.getText());
         currentSituation.get().getImage().getRect().y = Integer.parseInt(INPUT_Y.getText());
         if (!StringUtils.isBlank(INPUT_IMAGE_PATH.getText())) {
@@ -132,7 +134,8 @@ public class SettingController implements Initializable {
                 BufferedImage image = ImageIO.read(new FileInputStream(INPUT_IMAGE_PATH.getText()));
                 currentSituation.get().getImage().getRect().width = image.getWidth();
                 currentSituation.get().getImage().getRect().height = image.getHeight();
-                String imagePath = PathEnum.IMAGE_INNER + currentSituation.get().getName()+".png";
+                //根据情景名称保存图片到项目路径下,并将名称汉字改为拼音保存(防止opencv读取失败)
+                String imagePath = PathEnum.IMAGE_INNER + PinYinUtil.getInstance().getPinYin(currentSituation.get().getName()) + ".png";
                 boolean res = ImageIO.write(image, "png", new FileOutputStream(imagePath));
                 if (res) currentSituation.get().getImage().setPath(imagePath);
                 else needSave = false;
@@ -166,10 +169,10 @@ public class SettingController implements Initializable {
         situationService = new SituationServiceImpl();
         CURRENT_MODE = IndexController.getCurrentModeProperty();
         currentSituation = new SimpleObjectProperty<>();
-        initCurrentSituation();
-        initChoiceSituationList();
         initChoiceClickTypeList();
         CHECK_CLICK.selectedProperty().addListener((observable, oldValue, newValue) -> CHOICE_CLICK_TYPE_LIST.setDisable(!newValue));
+        initCurrentSituation();
+        initChoiceSituationList();
     }
 
     private void initCurrentSituation() {
@@ -177,6 +180,7 @@ public class SettingController implements Initializable {
             CHOICE_SITUATION_LIST.getSelectionModel().select(newValue);
             if (newValue == null) {
                 INPUT_SITUATION_NAME.clear();
+                INPUT_SITUATION_PRIORITY.clear();
                 INPUT_IMAGE_PATH.clear();
                 CHECK_CLICK.setSelected(false);
                 CHOICE_CLICK_TYPE_LIST.getSelectionModel().clearSelection();
@@ -185,9 +189,10 @@ public class SettingController implements Initializable {
                 return;
             }
             INPUT_SITUATION_NAME.setText(newValue.getName());
+            INPUT_SITUATION_PRIORITY.setText(String.valueOf(newValue.getPriority()));
             CHECK_CLICK.setSelected(newValue.isClick());
             CHOICE_CLICK_TYPE_LIST.getSelectionModel().select(newValue.getAction());
-            if(newValue.getImage() == null){
+            if (newValue.getImage() == null) {
                 INPUT_IMAGE_PATH.clear();
                 INPUT_X.clear();
                 INPUT_Y.clear();

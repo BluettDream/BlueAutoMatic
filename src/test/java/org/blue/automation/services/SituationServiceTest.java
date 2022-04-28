@@ -6,7 +6,6 @@ import org.blue.automation.entities.Situation;
 import org.blue.automation.entities.SituationImage;
 import org.blue.automation.entities.enums.Action;
 import org.blue.automation.entities.enums.PathEnum;
-import org.blue.automation.services.impl.ModeServiceImpl;
 import org.blue.automation.services.impl.SituationServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.opencv.core.Rect;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class SituationServiceTest {
     private final static Logger log = LogManager.getLogger(SituationServiceTest.class);

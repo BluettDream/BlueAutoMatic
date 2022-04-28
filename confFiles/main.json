@@ -1,0 +1,124 @@
+[
+  {
+    "name": "御魂(2人司机)",
+    "situations": [
+      {
+        "name": "等待队友(2号)",
+        "priority": 2,
+        "image": {
+          "path": "D:/homework/java/Blue/images/inner/DengDaiDuiYou(2Hao).png",
+          "rect": {
+            "x": 1136,
+            "y": 343,
+            "width": 79,
+            "height": 78
+          }
+        },
+        "click": false,
+        "action": null,
+        "simile": null
+      },
+      {
+        "name": "正在开始游戏",
+        "priority": 0,
+        "image": {
+          "path": "D:/homework/java/Blue/images/inner/ZhunBeiKaiShiYouXi.png",
+          "rect": {
+            "x": 2056,
+            "y": 938,
+            "width": 157,
+            "height": 92
+          }
+        },
+        "click": true,
+        "action": "CLICK",
+        "simile": null
+      },
+      {
+        "name": "正在游戏",
+        "priority": 0,
+        "image": {
+          "path": "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
+          "rect": {
+            "x": 148,
+            "y": 25,
+            "width": 46,
+            "height": 49
+          }
+        },
+        "click": false,
+        "action": null,
+        "simile": null
+      },
+      {
+        "name": "正在准备",
+        "priority": 1,
+        "image": {
+          "path": "D:/homework/java/Blue/images/inner/ZhengZaiZhunBei.png",
+          "rect": {
+            "x": 1986,
+            "y": 813,
+            "width": 166,
+            "height": 74
+          }
+        },
+        "click": true,
+        "action": "CLICK",
+        "simile": null
+      },
+      {
+        "name": "正在邀请队友",
+        "priority": 0,
+        "image": {
+          "path": "D:/homework/java/Blue/images/inner/ZhengZaiYaoQingDuiYou.png",
+          "rect": {
+            "x": 1020,
+            "y": 484,
+            "width": 62,
+            "height": 110
+          }
+        },
+        "click": true,
+        "action": "CLICK",
+        "simile": null
+      }
+    ]
+  },
+  {
+    "name": "御魂(2人打手)",
+    "situations": []
+  },
+  {
+    "name": "御魂(3人打手)",
+    "situations": [
+      {
+        "name": "等待队友(3号)",
+        "priority": 1,
+        "image": {
+          "path": "D:/homework/java/Blue/images/inner/DengDaiDuiYou(3Hao).png",
+          "rect": {
+            "x": 1805,
+            "y": 340,
+            "width": 78,
+            "height": 79
+          }
+        },
+        "click": false,
+        "action": null,
+        "simile": null
+      }
+    ]
+  },
+  {
+    "name": "御魂(3人司机)",
+    "situations": []
+  },
+  {
+    "name": "业原火",
+    "situations": []
+  },
+  {
+    "name": "御灵",
+    "situations": []
+  }
+]

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ModeServiceImpl implements ModeService {
     private static final Logger log = LogManager.getLogger(ModeServiceImpl.class);
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private String File_Name = "test.json";
+    private String File_Name = "main.json";
 
     @Override
     public ArrayList<Mode> getAllModes() {

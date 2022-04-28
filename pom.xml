@@ -15,10 +15,21 @@
         <log4j.version>2.17.1</log4j.version>
         <jackson.version>2.13.2.2</jackson.version>
         <commons.lang3.version>3.12.0</commons.lang3.version>
-        <py4j.version>1.0.0</py4j.version>
+        <mynlp.version>3.2.1</mynlp.version>
     </properties>
 
     <dependencies>
+        <!--汉字转拼音库-->
+        <dependency>
+            <groupId>com.mayabot.mynlp</groupId>
+            <artifactId>mynlp</artifactId>
+            <version>${mynlp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mayabot.mynlp.resource</groupId>
+            <artifactId>mynlp-resource-pinyin</artifactId>
+            <version>1.1.0</version>
+        </dependency>
         <!--apache commons库-->
         <dependency>
             <groupId>org.apache.commons</groupId>

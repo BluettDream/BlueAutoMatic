@@ -5,7 +5,7 @@ import org.opencv.core.Point;
 
 import java.util.ArrayList;
 
-public interface AdbService {
+public interface OperationModeService {
 
     /**
      * 获取ADB连接的所有设备

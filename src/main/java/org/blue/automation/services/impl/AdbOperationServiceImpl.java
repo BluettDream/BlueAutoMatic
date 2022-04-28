@@ -1,7 +1,7 @@
 package org.blue.automation.services.impl;
 
 import org.blue.automation.entities.AdbDevice;
-import org.blue.automation.services.AdbService;
+import org.blue.automation.services.OperationModeService;
 import org.blue.automation.utils.CMDUtil;
 import org.opencv.core.Point;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * name: MengHao Tian
  * date: 2022/4/25 11:37
  */
-public class AdbServiceImpl implements AdbService {
+public class AdbOperationServiceImpl implements OperationModeService {
     private static final CMDUtil CMD_UTIL = CMDUtil.getInstance();
 
     @Override

@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.Situation;
 import org.blue.automation.entities.SituationImage;
 import org.blue.automation.entities.enums.PathEnum;
-import org.blue.automation.services.AdbService;
 import org.blue.automation.utils.ImageUtil;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
