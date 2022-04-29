@@ -13,9 +13,12 @@ import java.util.ArrayList;
  */
 public class AdbOperationServiceImpl implements OperationService {
     private static final CMDUtil CMD_UTIL = CMDUtil.getInstance();
+    private String deviceNumber = "192.168.100.21:5555";
+    private static boolean CONNECTED = false;
 
     @Override
     public void click(Point clickPoint) {
+        if(!connect()) throw new NullPointerException("ADB连接失败");
         CMD_UTIL.executeCMDCommand(
                 getAdbShellInput().append("tap").append(" ")
                         .append(clickPoint.x).append(" ").append(clickPoint.y).toString()
@@ -34,6 +37,7 @@ public class AdbOperationServiceImpl implements OperationService {
 
     @Override
     public void longSlide(Point startPoint, Point endPoint, long delayTime) {
+        if(!connect()) throw new NullPointerException("ADB连接失败");
         CMD_UTIL.executeCMDCommand(
                 getAdbShellInput().append("swipe").append(" ")
                         .append(startPoint.x).append(" ").append(startPoint.y).append(" ")
@@ -44,12 +48,12 @@ public class AdbOperationServiceImpl implements OperationService {
 
     @Override
     public void captureAndSave(String computerFile) {
+        if(!connect()) throw new NullPointerException("ADB连接失败");
         screenCap("/sdcard/blue_main.png");
         pull("/sdcard/blue_main.png", computerFile);
     }
 
-
-    public void screenCap(String phoneFile) {
+    private void screenCap(String phoneFile) {
         CMD_UTIL.executeCMDCommand(
                 getAdbShell().append("screencap").append(" ")
                         .append("-p").append(" ")
@@ -57,7 +61,7 @@ public class AdbOperationServiceImpl implements OperationService {
         );
     }
 
-    public void pull(String phoneFile, String computerFile) {
+    private void pull(String phoneFile, String computerFile) {
         CMD_UTIL.executeCMDCommand(
                 getAdb().append("pull").append(" ")
                         .append(phoneFile).append(" ")
@@ -65,7 +69,26 @@ public class AdbOperationServiceImpl implements OperationService {
         );
     }
 
-    public ArrayList<AdbDevice> getAllDevices() {
+    private boolean connect() {
+        if (CONNECTED) return true;
+        //双重验证连接成功(连接设备+获取设备列表)
+        if (connectToDevice(deviceNumber) && getAllDevices().size() > 0) {
+            CONNECTED = true;
+            return true;
+        }
+        CONNECTED = false;
+        return false;
+    }
+
+    private boolean connectToDevice(String ipAddress) {
+        String output = CMD_UTIL.executeCMDCommand(
+                getAdb().append("connect").append(" ")
+                        .append(ipAddress).toString()
+        );
+        return output.contains("connected");
+    }
+
+    private ArrayList<AdbDevice> getAllDevices() {
         String output = CMD_UTIL.executeCMDCommand(getAdb().append("devices").toString());
         //分割控制台输出语句
         String[] split = output.split("\n");
@@ -74,21 +97,18 @@ public class AdbOperationServiceImpl implements OperationService {
         ArrayList<AdbDevice> deviceArrayList = new ArrayList<>();
         //遍历控制台的每一行输出
         for (String str : split) {
-            //如果开始显示设备列表,则进行存储
-            if (isShow) {
-                //根据\t进行当前行的分割,把设备名称和设备状态分开
-                String[] device = str.split("\t");
-                //如果分割后的数组大于1个,则成功获取设备
-                if (device.length > 1) {
-                    //选择设备的状态
-                    switch (device[1]) {
-                        case "device":
-                            deviceArrayList.add(new AdbDevice(device[0], AdbDevice.State.DEVICE));
-                            break;
-                        case "offline":
-                            deviceArrayList.add(new AdbDevice(device[0], AdbDevice.State.OFFLINE));
-                            break;
-                    }
+            //根据\t进行当前行的分割,把设备名称和设备状态分开
+            String[] device = str.split("\t");
+            //如果开始显示设备列表,则进行存储,如果分割后的数组大于1个,则成功获取设备
+            if (isShow && device.length > 1) {
+                //选择设备的状态
+                switch (device[1]) {
+                    case "device":
+                        deviceArrayList.add(new AdbDevice(device[0], AdbDevice.State.DEVICE));
+                        break;
+                    case "offline":
+                        deviceArrayList.add(new AdbDevice(device[0], AdbDevice.State.OFFLINE));
+                        break;
                 }
             }
             //如果当前行含有attached,则下一行开始显示设备列表
@@ -97,22 +117,31 @@ public class AdbOperationServiceImpl implements OperationService {
         return deviceArrayList;
     }
 
-    //public void execOut(String computerFile) {
-    //    CMD_UTIL.executeCMDCommand(
-    //            getAdb().append("exec-out").append(" ")
-    //                    .append("screencap").append(" ")
-    //                    .append("-p").append(" ").append(">").append(" ")
-    //                    .append(computerFile).toString()
-    //    );
-    //}
+    /*
+    public void execOut(String computerFile) {
+        CMD_UTIL.executeCMDCommand(
+                getAdb().append("exec-out").append(" ")
+                        .append("screencap").append(" ")
+                        .append("-p").append(" ").append(">").append(" ")
+                        .append(computerFile).toString()
+        );
+    }
+    */
+
+    public String getDeviceNumber() {
+        return deviceNumber;
+    }
+
+    public void setDeviceNumber(String deviceNumber) {
+        this.deviceNumber = deviceNumber;
+    }
 
     private StringBuilder getAdb() {
         return new StringBuilder().append("adb").append(" ");
     }
 
     private StringBuilder getAdbShell() {
-        return new StringBuilder().append("adb").append(" ")
-                .append("shell").append(" ");
+        return getAdb().append("shell").append(" ");
     }
 
     private StringBuilder getAdbShellInput() {

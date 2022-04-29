@@ -7,14 +7,14 @@ public interface OperationService {
     /**
      * 点击功能
      *
-     * @param clickPoint 点击的坐标点
+     * @param clickPoint 点击位置
      **/
     void click(Point clickPoint);
 
     /**
      * 长按功能
      *
-     * @param clickPoint 长按的坐标点
+     * @param clickPoint 长按位置
      * @param delayTime 长按时间(单位ms)
      **/
     void longClick(Point clickPoint,long delayTime);
