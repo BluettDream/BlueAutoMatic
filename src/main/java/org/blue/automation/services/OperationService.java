@@ -2,6 +2,8 @@ package org.blue.automation.services;
 
 import org.opencv.core.Point;
 
+import java.util.ArrayList;
+
 public interface OperationService {
 
     /**
@@ -18,6 +20,13 @@ public interface OperationService {
      * @param delayTime 长按时间(单位ms)
      **/
     void longClick(Point clickPoint,long delayTime);
+
+    /**
+     * 随机多次点击
+     *
+     * @param points 点击的坐标点
+     **/
+    void multipleClicks(ArrayList<Point> points);
 
     /**
      * 滑动功能(默认滑动50ms)

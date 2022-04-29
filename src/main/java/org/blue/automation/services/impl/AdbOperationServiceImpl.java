@@ -1,17 +1,24 @@
 package org.blue.automation.services.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.AdbDevice;
+import org.blue.automation.entities.Situation;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.CMDUtil;
+import org.blue.automation.utils.ImageUtil;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 /**
  * name: MengHao Tian
  * date: 2022/4/25 11:37
  */
 public class AdbOperationServiceImpl implements OperationService {
+    private static final Logger log = LogManager.getLogger(AdbOperationServiceImpl.class);
     private static final CMDUtil CMD_UTIL = CMDUtil.getInstance();
     private String deviceNumber = "192.168.100.21:5555";
     private static boolean CONNECTED = false;
@@ -28,6 +35,19 @@ public class AdbOperationServiceImpl implements OperationService {
     @Override
     public void longClick(Point clickPoint, long delayTime) {
         longSlide(clickPoint, clickPoint, delayTime);
+    }
+
+    @Override
+    public void multipleClicks(ArrayList<Point> points) {
+        for (Point point : points) {
+            click(point);
+            try {
+                //随机延时(100~400ms)
+                TimeUnit.MILLISECONDS.sleep((long) (Math.random()*300+100));
+            } catch (InterruptedException e) {
+                log.error("ADB点击等待出现异常:",e);
+            }
+        }
     }
 
     @Override
@@ -71,8 +91,9 @@ public class AdbOperationServiceImpl implements OperationService {
 
     private boolean connect() {
         if (CONNECTED) return true;
-        //双重验证连接成功(连接设备+获取设备列表)
-        if (connectToDevice(deviceNumber) && getAllDevices().size() > 0) {
+        //双重验证连接成功(连接设备+获取设备列表并且有活跃设备)
+        ArrayList<AdbDevice> allDevices = getAllDevices();
+        if (connectToDevice(deviceNumber) && allDevices.size() > 0 && allDevices.stream().anyMatch(adbDevice -> adbDevice.getState().equals(AdbDevice.State.DEVICE))) {
             CONNECTED = true;
             return true;
         }

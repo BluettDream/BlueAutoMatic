@@ -5,9 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
 import org.blue.automation.entities.Mode;
 import org.blue.automation.entities.Situation;
+import org.blue.automation.entities.SituationImage;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.OperationService;
+import org.blue.automation.utils.ImageUtil;
+import org.opencv.core.Point;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.*;
@@ -46,7 +50,7 @@ public class ModeCallable implements Callable<Boolean> {
         while (!Thread.currentThread().isInterrupted() && waitTime < 15000) {
             futureArrayList.clear();
             clearSituation(endSituation);
-            if (isMatch) initMillis = System.currentTimeMillis();
+            waitTime = System.currentTimeMillis() - initMillis;
             operationService.captureAndSave(PathEnum.IMAGE_OUTER + "main.png");
             situationArrayList.forEach(situation -> futureArrayList.add(completionService.submit(new SituationCallable(situation))));
             for (Future<Situation> situationFuture : futureArrayList) {
@@ -71,7 +75,10 @@ public class ModeCallable implements Callable<Boolean> {
             }
             log.info("匹配结果为:{},相似度为:{}", endSituation.getName(), endSituation.getSimile().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
             isMatch = !endSituation.getName().equals("匹配失败");
-            waitTime = System.currentTimeMillis() - initMillis;
+            if (isMatch) {
+                initMillis = System.currentTimeMillis();
+                if(endSituation.getAction() != null) endSituation.getAction().operate(operationService,endSituation.getImage());
+            }
             log.debug("等待时间:{}ms", waitTime);
         }
         log.info("{}运行结束", mode.getName());

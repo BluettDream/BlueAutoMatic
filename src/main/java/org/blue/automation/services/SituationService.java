@@ -1,6 +1,5 @@
 package org.blue.automation.services;
 
-import org.blue.automation.entities.Mode;
 import org.blue.automation.entities.Situation;
 
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package org.blue.automation.entities;
 
 import org.opencv.core.Rect;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.Objects;
 
 /**
@@ -78,6 +78,21 @@ public class SituationImage implements Serializable {
 
     public void setHeight(Integer height) {
         this.height = height;
+    }
+
+    public SituationImage copy(){
+        SituationImage image = null;
+        try {
+            ByteArrayOutputStream bas = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bas);
+            oos.writeObject(this);
+            ByteArrayInputStream bis = new ByteArrayInputStream(bas.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            image = (SituationImage) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
     @Override

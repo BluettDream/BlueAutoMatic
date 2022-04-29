@@ -1,14 +1,46 @@
 package org.blue.automation.utils;
 
+import com.sun.org.apache.bcel.internal.generic.IADD;
+import org.blue.automation.entities.SituationImage;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * name: MengHao Tian
  * date: 2022/4/27 23:26
  */
 public class ImageUtil {
+
+    /**
+     * 生成10个随机点,根据与图像中心坐标点的距离进行排序,近的在前，远的在后
+     *
+     * @param image 情景图像
+     * @return 距离中心坐标点第三近的点
+     **/
+    public Point calculateRandomClick(SituationImage image){
+        int centerX = image.getX() + image.getWidth() / 2;
+        int centerY = image.getY() + image.getHeight() / 2;
+        int randomX,randomY;
+        List<Point> points = new ArrayList<>(10);
+        for (int i = 0; i < 10; ++i) {
+            randomX = (int) (Math.random() * image.getWidth() + image.getX());
+            randomY = (int) (Math.random() * image.getHeight() + image.getY());
+            points.add(i,new Point(randomX,randomY));
+        }
+        points.sort((o1, o2) -> {
+            double distance1 = Math.sqrt(Math.abs((o1.x - centerX)* (o1.x - centerX)+(o1.y - centerY)* (o1.y - centerY)));
+            double distance2 = Math.sqrt(Math.abs((o2.x - centerX)* (o2.x - centerX)+(o2.y - centerY)* (o2.y - centerY)));
+            if(distance1 == distance2) return 0;
+            return distance1 < distance2 ? -1 : 1;
+        });
+        return points.get(2);
+    }
 
     /**
      * 模板匹配,获取图像相似度

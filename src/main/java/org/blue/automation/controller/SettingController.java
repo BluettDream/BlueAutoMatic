@@ -69,7 +69,7 @@ public class SettingController implements Initializable {
 
     @FXML
     void setSituationName() {
-        Situation tempSituation = new Situation(INPUT_SITUATION_NAME.getText(), new SituationImage(null), false);
+        Situation tempSituation = new Situation(INPUT_SITUATION_NAME.getText(), new SituationImage(null,0,0), false);
         tempSituation.setName(INPUT_SITUATION_NAME.getText());
         if (!situationService.isCompliance(tempSituation)) {
             new Alert(Alert.AlertType.WARNING, "请检查情景名称是否为空或含有空格").showAndWait();
@@ -100,8 +100,9 @@ public class SettingController implements Initializable {
     @FXML
     void captureSituationImage() {
         operationService = operationService == null ? new AdbOperationServiceImpl() : operationService;
+        // TODO: 2022/4/29 完善记忆上一次打开文件路径功能
         File file = UIControlFactory.createImageFileChooser("保存图片", "E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
-        if(file != null && !StringUtils.isBlank(file.getAbsolutePath())){
+        if (file != null && !StringUtils.isBlank(file.getAbsolutePath())) {
             operationService.captureAndSave(file.getAbsolutePath());
             new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
         }
@@ -168,10 +169,14 @@ public class SettingController implements Initializable {
         situationService = new SituationServiceImpl();
         CURRENT_MODE = IndexController.getCurrentModeProperty();
         currentSituation = new SimpleObjectProperty<>();
+        initCheckClick();
         initChoiceClickTypeList();
-        CHECK_CLICK.selectedProperty().addListener((observable, oldValue, newValue) -> CHOICE_CLICK_TYPE_LIST.setDisable(!newValue));
         initCurrentSituation();
         initChoiceSituationList();
+    }
+
+    private void initCheckClick() {
+        CHECK_CLICK.selectedProperty().addListener((observable, oldValue, newValue) -> CHOICE_CLICK_TYPE_LIST.setDisable(!newValue));
     }
 
     private void initCurrentSituation() {
@@ -183,6 +188,7 @@ public class SettingController implements Initializable {
                 INPUT_IMAGE_PATH.clear();
                 CHECK_CLICK.setSelected(false);
                 CHOICE_CLICK_TYPE_LIST.getSelectionModel().clearSelection();
+                CHOICE_CLICK_TYPE_LIST.setDisable(true);
                 INPUT_X.clear();
                 INPUT_Y.clear();
                 return;
@@ -191,6 +197,7 @@ public class SettingController implements Initializable {
             INPUT_SITUATION_PRIORITY.setText(String.valueOf(newValue.getPriority()));
             CHECK_CLICK.setSelected(newValue.isClick());
             CHOICE_CLICK_TYPE_LIST.getSelectionModel().select(newValue.getAction());
+            CHOICE_CLICK_TYPE_LIST.setDisable(!newValue.isClick());
             if (newValue.getImage() == null) {
                 INPUT_IMAGE_PATH.clear();
                 INPUT_X.clear();
