@@ -16,7 +16,7 @@ import org.blue.automation.entities.SituationImage;
 import org.blue.automation.entities.enums.Action;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.factories.UIControlFactory;
-import org.blue.automation.services.OperationModeService;
+import org.blue.automation.services.OperationService;
 import org.blue.automation.services.SituationService;
 import org.blue.automation.services.impl.AdbOperationServiceImpl;
 import org.blue.automation.services.impl.SituationServiceImpl;
@@ -65,7 +65,7 @@ public class SettingController implements Initializable {
     private static SimpleObjectProperty<Mode> CURRENT_MODE;
     private SituationService situationService;
     private static String PRE_DIRECTORY_PATH;
-    private OperationModeService operationModeService;
+    private OperationService operationService;
 
     @FXML
     void setSituationName() {
@@ -99,10 +99,10 @@ public class SettingController implements Initializable {
 
     @FXML
     void captureSituationImage() {
-        operationModeService = operationModeService == null ? new AdbOperationServiceImpl() : operationModeService;
+        operationService = operationService == null ? new AdbOperationServiceImpl() : operationService;
         File file = UIControlFactory.createImageFileChooser("保存图片", "E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
         if(file != null && !StringUtils.isBlank(file.getAbsolutePath())){
-            operationModeService.captureAndSave("/sdcard/blue_main.png", file.getAbsolutePath());
+            operationService.captureAndSave(file.getAbsolutePath());
             new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
         }
     }

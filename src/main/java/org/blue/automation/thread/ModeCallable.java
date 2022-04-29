@@ -6,7 +6,7 @@ import org.blue.automation.Main;
 import org.blue.automation.entities.Mode;
 import org.blue.automation.entities.Situation;
 import org.blue.automation.entities.enums.PathEnum;
-import org.blue.automation.services.OperationModeService;
+import org.blue.automation.services.OperationService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,12 +19,12 @@ import java.util.concurrent.*;
 public class ModeCallable implements Callable<Boolean> {
     private final static Logger log = LogManager.getLogger(ModeCallable.class);
     private final ExecutorService THREAD_POOL = Main.THREAD_POOL;
-    private final OperationModeService operationModeService;
+    private final OperationService operationService;
     private final Mode mode;
 
-    public ModeCallable(Mode mode, OperationModeService operationModeService) {
+    public ModeCallable(Mode mode, OperationService operationService) {
         this.mode = mode;
-        this.operationModeService = operationModeService;
+        this.operationService = operationService;
     }
 
     @Override
@@ -32,9 +32,7 @@ public class ModeCallable implements Callable<Boolean> {
         ArrayList<Situation> situationArrayList = mode.getSituations();
         //如果没有情景列表,则直接返回false
         if (situationArrayList == null || situationArrayList.size() <= 0) return false;
-        //如果adb连接失败,则直接退出
-        if (!operationModeService.isConnected(operationModeService.getAllDevices().get(0))) return false;
-        log.info("adb连接成功,开始运行:{}", mode);
+        log.info("模式开始运行:{}", mode);
         //创建接收完成任务的线程池
         CompletionService<Situation> completionService = new ExecutorCompletionService<>(THREAD_POOL);
         //接收任务的列表
@@ -49,7 +47,7 @@ public class ModeCallable implements Callable<Boolean> {
             futureArrayList.clear();
             clearSituation(endSituation);
             if (isMatch) initMillis = System.currentTimeMillis();
-            operationModeService.captureAndSave("/sdcard/blue_main.png", PathEnum.IMAGE_OUTER + "main.png");
+            operationService.captureAndSave(PathEnum.IMAGE_OUTER + "main.png");
             situationArrayList.forEach(situation -> futureArrayList.add(completionService.submit(new SituationCallable(situation))));
             for (Future<Situation> situationFuture : futureArrayList) {
                 Situation curSituation;

@@ -1,7 +1,7 @@
 package org.blue.automation.services.impl;
 
 import org.blue.automation.entities.AdbDevice;
-import org.blue.automation.services.OperationModeService;
+import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.CMDUtil;
 import org.opencv.core.Point;
 
@@ -11,10 +11,60 @@ import java.util.ArrayList;
  * name: MengHao Tian
  * date: 2022/4/25 11:37
  */
-public class AdbOperationServiceImpl implements OperationModeService {
+public class AdbOperationServiceImpl implements OperationService {
     private static final CMDUtil CMD_UTIL = CMDUtil.getInstance();
 
     @Override
+    public void click(Point clickPoint) {
+        CMD_UTIL.executeCMDCommand(
+                getAdbShellInput().append("tap").append(" ")
+                        .append(clickPoint.x).append(" ").append(clickPoint.y).toString()
+        );
+    }
+
+    @Override
+    public void longClick(Point clickPoint, long delayTime) {
+        longSlide(clickPoint, clickPoint, delayTime);
+    }
+
+    @Override
+    public void slide(Point startPoint, Point endPoint) {
+        longSlide(startPoint, endPoint, 50);
+    }
+
+    @Override
+    public void longSlide(Point startPoint, Point endPoint, long delayTime) {
+        CMD_UTIL.executeCMDCommand(
+                getAdbShellInput().append("swipe").append(" ")
+                        .append(startPoint.x).append(" ").append(startPoint.y).append(" ")
+                        .append(endPoint.x).append(" ").append(endPoint.y).append(" ")
+                        .append(delayTime).toString()
+        );
+    }
+
+    @Override
+    public void captureAndSave(String computerFile) {
+        screenCap("/sdcard/blue_main.png");
+        pull("/sdcard/blue_main.png", computerFile);
+    }
+
+
+    public void screenCap(String phoneFile) {
+        CMD_UTIL.executeCMDCommand(
+                getAdbShell().append("screencap").append(" ")
+                        .append("-p").append(" ")
+                        .append(phoneFile).toString()
+        );
+    }
+
+    public void pull(String phoneFile, String computerFile) {
+        CMD_UTIL.executeCMDCommand(
+                getAdb().append("pull").append(" ")
+                        .append(phoneFile).append(" ")
+                        .append(computerFile).toString()
+        );
+    }
+
     public ArrayList<AdbDevice> getAllDevices() {
         String output = CMD_UTIL.executeCMDCommand(getAdb().append("devices").toString());
         //分割控制台输出语句
@@ -47,72 +97,14 @@ public class AdbOperationServiceImpl implements OperationModeService {
         return deviceArrayList;
     }
 
-    @Override
-    public boolean isConnected(AdbDevice adbDevice) {
-        return adbDevice.getState() == AdbDevice.State.DEVICE;
-    }
-
-    @Override
-    public void click(Point clickPoint) {
-        CMD_UTIL.executeCMDCommand(
-                getAdbShellInput().append("tap").append(" ")
-                        .append(clickPoint.x).append(" ").append(clickPoint.y).toString()
-        );
-    }
-
-    @Override
-    public void longClick(Point clickPoint, long delayTime) {
-        longSlide(clickPoint, clickPoint, delayTime);
-    }
-
-    @Override
-    public void slide(Point startPoint, Point endPoint) {
-        longSlide(startPoint, endPoint, 50);
-    }
-
-    @Override
-    public void longSlide(Point startPoint, Point endPoint, long delayTime) {
-        CMD_UTIL.executeCMDCommand(
-                getAdbShellInput().append("swipe").append(" ")
-                        .append(startPoint.x).append(" ").append(startPoint.y).append(" ")
-                        .append(endPoint.x).append(" ").append(endPoint.y).append(" ")
-                        .append(delayTime).toString()
-        );
-    }
-
-    @Override
-    public void pull(String phoneFile, String computerFile) {
-        CMD_UTIL.executeCMDCommand(
-                getAdb().append("pull").append(" ")
-                        .append(phoneFile).append(" ")
-                        .append(computerFile).toString()
-        );
-    }
-
-    @Override
-    public void execOut(String computerFile) {
-        CMD_UTIL.executeCMDCommand(
-                getAdb().append("exec-out").append(" ")
-                        .append("screencap").append(" ")
-                        .append("-p").append(" ").append(">").append(" ")
-                        .append(computerFile).toString()
-        );
-    }
-
-    @Override
-    public void screenCap(String phoneFile) {
-        CMD_UTIL.executeCMDCommand(
-                getAdbShell().append("screencap").append(" ")
-                        .append("-p").append(" ")
-                        .append(phoneFile).toString()
-        );
-    }
-
-    @Override
-    public void captureAndSave(String phoneFile, String computerFile) {
-        screenCap(phoneFile);
-        pull(phoneFile,computerFile);
-    }
+    //public void execOut(String computerFile) {
+    //    CMD_UTIL.executeCMDCommand(
+    //            getAdb().append("exec-out").append(" ")
+    //                    .append("screencap").append(" ")
+    //                    .append("-p").append(" ").append(">").append(" ")
+    //                    .append(computerFile).toString()
+    //    );
+    //}
 
     private StringBuilder getAdb() {
         return new StringBuilder().append("adb").append(" ");
