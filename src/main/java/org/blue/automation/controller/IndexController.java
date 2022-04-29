@@ -101,7 +101,7 @@ public class IndexController implements Initializable {
         BUTTON_SWITCH.setDisable(true);
         switch (BUTTON_SWITCH.getText()) {
             case "运行":
-                ModeCallable modeCallable = new ModeCallable(CURRENT_MODE.get(),new AdbOperationServiceImpl());
+                ModeCallable modeCallable = new ModeCallable(CURRENT_MODE.get(), new AdbOperationServiceImpl());
                 runningMode = THREAD_POOL.submit(modeCallable);
                 BUTTON_SWITCH.setText("结束");
                 break;
@@ -164,17 +164,15 @@ public class IndexController implements Initializable {
         BUTTON_SWITCH.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("结束")) {
                 THREAD_POOL.execute(() -> {
-                    log.debug("开始监听模式线程");
+                    log.info("开始监听模式线程");
                     try {
-                        //如果刚添加的模式或者模式不完整,则提示先设置再运行,如果模式正常运行结束,则自动跳转
-                        if (!runningMode.get())
-                            Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, "请先将模式进行设置后再运行").showAndWait());
-                        log.debug("线程检测完毕,结束按钮已自动更新");
-                        Platform.runLater(() -> BUTTON_SWITCH.setText("运行"));
+                        runningMode.get();
                     } catch (InterruptedException | ExecutionException | CancellationException e) {
-                        log.warn("模式线程抛出异常:", e);
+                        log.error("模式线程抛出异常:", e);
                         Thread.currentThread().interrupt();
                     }
+                    Platform.runLater(() -> BUTTON_SWITCH.setText("运行"));
+                    log.info("模式监听线程运行结束,按钮已自动更新");
                 });
             }
         });

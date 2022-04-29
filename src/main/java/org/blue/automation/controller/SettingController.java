@@ -21,7 +21,6 @@ import org.blue.automation.services.SituationService;
 import org.blue.automation.services.impl.AdbOperationServiceImpl;
 import org.blue.automation.services.impl.SituationServiceImpl;
 import org.blue.automation.utils.PinYinUtil;
-import org.opencv.core.Rect;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -70,7 +69,7 @@ public class SettingController implements Initializable {
 
     @FXML
     void setSituationName() {
-        Situation tempSituation = new Situation(INPUT_SITUATION_NAME.getText(), new SituationImage(null, new Rect()), false);
+        Situation tempSituation = new Situation(INPUT_SITUATION_NAME.getText(), new SituationImage(null), false);
         tempSituation.setName(INPUT_SITUATION_NAME.getText());
         if (!situationService.isCompliance(tempSituation)) {
             new Alert(Alert.AlertType.WARNING, "请检查情景名称是否为空或含有空格").showAndWait();
@@ -127,13 +126,13 @@ public class SettingController implements Initializable {
     void saveSituation() {
         boolean needSave = true;
         currentSituation.get().setPriority(Integer.parseInt(INPUT_SITUATION_PRIORITY.getText()));
-        currentSituation.get().getImage().getRect().x = Integer.parseInt(INPUT_X.getText());
-        currentSituation.get().getImage().getRect().y = Integer.parseInt(INPUT_Y.getText());
+        currentSituation.get().getImage().setX(Integer.parseInt(INPUT_X.getText()));
+        currentSituation.get().getImage().setY(Integer.parseInt(INPUT_Y.getText()));
         if (!StringUtils.isBlank(INPUT_IMAGE_PATH.getText())) {
             try {
                 BufferedImage image = ImageIO.read(new FileInputStream(INPUT_IMAGE_PATH.getText()));
-                currentSituation.get().getImage().getRect().width = image.getWidth();
-                currentSituation.get().getImage().getRect().height = image.getHeight();
+                currentSituation.get().getImage().setWidth(image.getWidth());
+                currentSituation.get().getImage().setHeight(image.getHeight());
                 //根据情景名称保存图片到项目路径下,并将名称汉字改为拼音保存(防止opencv读取失败)
                 String imagePath = PathEnum.IMAGE_INNER + PinYinUtil.getInstance().getPinYin(currentSituation.get().getName()) + ".png";
                 boolean res = ImageIO.write(image, "png", new FileOutputStream(imagePath));
@@ -199,8 +198,8 @@ public class SettingController implements Initializable {
                 return;
             }
             INPUT_IMAGE_PATH.setText(newValue.getImage().getPath());
-            INPUT_X.setText(String.valueOf(newValue.getImage().getRect().x));
-            INPUT_Y.setText(String.valueOf(newValue.getImage().getRect().y));
+            INPUT_X.setText(String.valueOf(newValue.getImage().getX()));
+            INPUT_Y.setText(String.valueOf(newValue.getImage().getY()));
         });
     }
 

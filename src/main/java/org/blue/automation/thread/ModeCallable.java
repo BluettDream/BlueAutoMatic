@@ -5,16 +5,12 @@ import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
 import org.blue.automation.entities.Mode;
 import org.blue.automation.entities.Situation;
-import org.blue.automation.entities.SituationImage;
-import org.blue.automation.entities.enums.Action;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.OperationModeService;
-import org.blue.automation.services.impl.AdbOperationServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * name: MengHao Tian
@@ -50,14 +46,15 @@ public class ModeCallable implements Callable<Boolean> {
         //最终对象
         Situation endSituation = new Situation();
         while (!Thread.currentThread().isInterrupted() && waitTime < 15000) {
-            try {
-                futureArrayList.clear();
-                clearSituation(endSituation);
-                if (isMatch) initMillis = System.currentTimeMillis();
-                operationModeService.captureAndSave("/sdcard/blue_main.png", PathEnum.IMAGE_OUTER + "main.png");
-                situationArrayList.forEach(situation -> futureArrayList.add(completionService.submit(new SituationCallable(situation))));
-                for (Future<Situation> situationFuture : futureArrayList) {
-                    Situation curSituation = situationFuture.get();
+            futureArrayList.clear();
+            clearSituation(endSituation);
+            if (isMatch) initMillis = System.currentTimeMillis();
+            operationModeService.captureAndSave("/sdcard/blue_main.png", PathEnum.IMAGE_OUTER + "main.png");
+            situationArrayList.forEach(situation -> futureArrayList.add(completionService.submit(new SituationCallable(situation))));
+            for (Future<Situation> situationFuture : futureArrayList) {
+                Situation curSituation;
+                try {
+                    curSituation = situationFuture.get();
                     log.debug("{}相似度为:{}", curSituation.getName(), curSituation.getSimile());
                     //如果当前情景相似度大于最低相似度,则进入判断
                     //如果当前对象的优先级比结果对象的优先级高则直接将结果设置为当前对象
@@ -68,13 +65,14 @@ public class ModeCallable implements Callable<Boolean> {
                             && curSituation.getSimile().compareTo(endSituation.getSimile()) >= 0))) {
                         endSituation = curSituation.copy();
                     }
+                } catch (InterruptedException | ExecutionException e) {
+                    log.error("获取情景线程结果出现异常:",e);
+                    Thread.currentThread().interrupt();
+                    return false;
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                Thread.currentThread().interrupt();
             }
             log.info("匹配结果为:{},相似度为:{}", endSituation.getName(), endSituation.getSimile().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-            if (endSituation.getName().equals("匹配失败")) isMatch = false;
-            else isMatch = true;
+            isMatch = !endSituation.getName().equals("匹配失败");
             waitTime = System.currentTimeMillis() - initMillis;
             log.debug("等待时间:{}ms", waitTime);
         }

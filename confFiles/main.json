@@ -7,12 +7,10 @@
         "priority": 2,
         "image": {
           "path": "D:/homework/java/Blue/images/inner/DengDaiDuiYou(2Hao).png",
-          "rect": {
-            "x": 1136,
-            "y": 343,
-            "width": 79,
-            "height": 78
-          }
+          "x": 1136,
+          "y": 343,
+          "width": 79,
+          "height": 78
         },
         "click": false,
         "action": null,
@@ -23,12 +21,10 @@
         "priority": 0,
         "image": {
           "path": "D:/homework/java/Blue/images/inner/ZhunBeiKaiShiYouXi.png",
-          "rect": {
-            "x": 2056,
-            "y": 938,
-            "width": 157,
-            "height": 92
-          }
+          "x": 2056,
+          "y": 938,
+          "width": 157,
+          "height": 92
         },
         "click": true,
         "action": "CLICK",
@@ -39,12 +35,10 @@
         "priority": 0,
         "image": {
           "path": "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
-          "rect": {
-            "x": 148,
-            "y": 25,
-            "width": 46,
-            "height": 49
-          }
+          "x": 148,
+          "y": 25,
+          "width": 46,
+          "height": 49
         },
         "click": false,
         "action": null,
@@ -55,12 +49,10 @@
         "priority": 1,
         "image": {
           "path": "D:/homework/java/Blue/images/inner/ZhengZaiZhunBei.png",
-          "rect": {
-            "x": 1986,
-            "y": 813,
-            "width": 166,
-            "height": 74
-          }
+          "x": 1986,
+          "y": 813,
+          "width": 166,
+          "height": 74
         },
         "click": true,
         "action": "CLICK",
@@ -71,12 +63,10 @@
         "priority": 0,
         "image": {
           "path": "D:/homework/java/Blue/images/inner/ZhengZaiYaoQingDuiYou.png",
-          "rect": {
-            "x": 1020,
-            "y": 484,
-            "width": 62,
-            "height": 110
-          }
+          "x": 1020,
+          "y": 484,
+          "width": 62,
+          "height": 110
         },
         "click": true,
         "action": "CLICK",
@@ -96,12 +86,10 @@
         "priority": 1,
         "image": {
           "path": "D:/homework/java/Blue/images/inner/DengDaiDuiYou(3Hao).png",
-          "rect": {
-            "x": 1805,
-            "y": 340,
-            "width": 78,
-            "height": 79
-          }
+          "x": 1805,
+          "y": 340,
+          "width": 78,
+          "height": 79
         },
         "click": false,
         "action": null,

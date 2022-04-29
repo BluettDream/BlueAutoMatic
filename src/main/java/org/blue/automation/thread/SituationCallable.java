@@ -27,7 +27,7 @@ public class SituationCallable implements Callable<Situation>{
     public Situation call() throws Exception {
         ImageUtil imageUtil = ImageUtil.getInstance();
         SituationImage templateImage = situation.getImage();
-        Mat originMat = imageUtil.interceptImage(PathEnum.IMAGE_OUTER+"main.png", templateImage.getRect());
+        Mat originMat = imageUtil.interceptImage(PathEnum.IMAGE_OUTER+"main.png", templateImage.getX(), templateImage.getY(), templateImage.getWidth(), templateImage.getHeight());
         Mat templateMat = Imgcodecs.imread(templateImage.getPath());
         situation.setSimile(BigDecimal.valueOf(imageUtil.getSimile(originMat,templateMat)));
         return situation;

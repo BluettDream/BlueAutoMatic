@@ -26,7 +26,7 @@ class SituationServiceTest {
 
     @Test
     void addSituation() {
-        situationService.addSituation(new Situation("新增情景2",new SituationImage(PathEnum.IMAGE+"/newPic.png",new Rect()),true, Action.RANDOM_CLICK));
+        situationService.addSituation(new Situation("新增情景2",new SituationImage(PathEnum.IMAGE+"/newPic.png"),true, Action.RANDOM_CLICK));
     }
 
     @Test
@@ -38,7 +38,7 @@ class SituationServiceTest {
 
     @Test
     void updateSituation() {
-        boolean res = situationService.updateSituation(new Situation("情景5", new SituationImage(PathEnum.IMAGE_OUTER + "", new Rect()), false));
+        boolean res = situationService.updateSituation(new Situation("情景5", new SituationImage(PathEnum.IMAGE_OUTER.toString()), false));
         if(res) log.info("更新成功");
         else log.warn("更新失败");
     }

@@ -1,12 +1,10 @@
 package org.blue.automation;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opencv.core.Core;
@@ -32,9 +30,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        STAGE_MAP = new HashMap<String, Stage>() {{
-            put("primaryStage", primaryStage);
-        }};
+        STAGE_MAP = new HashMap<String, Stage>() {
+            private static final long serialVersionUID = -8572400555535584432L;
+            {
+                put("primaryStage", primaryStage);
+            }
+        };
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/index.fxml"));
         Parent root = fxmlLoader.load();

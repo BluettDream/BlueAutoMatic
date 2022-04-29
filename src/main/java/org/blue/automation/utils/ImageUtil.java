@@ -34,11 +34,14 @@ public class ImageUtil {
      * 截取图片
      *
      * @param imagePath 图片路径
-     * @param imageRect 图像矩阵(左上角坐标,宽高)
-     * @return opencv图像对象
+     * @param x 截取图片的x坐标
+     * @param y 截取图片的y坐标
+     * @param width 截取图片的宽
+     * @param height 截取图片的高
+     * @return 指定宽高的opencv的Mat对象
      **/
-    public Mat interceptImage(String imagePath, Rect imageRect) {
-        return Imgcodecs.imread(imagePath).submat(imageRect);
+    public Mat interceptImage(String imagePath, int x,int y,int width,int height) {
+        return Imgcodecs.imread(imagePath).submat(new Rect(x,y,width,height));
     }
 
     private ImageUtil() {

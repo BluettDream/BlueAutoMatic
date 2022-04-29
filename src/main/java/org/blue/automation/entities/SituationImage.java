@@ -3,6 +3,7 @@ package org.blue.automation.entities;
 import org.opencv.core.Rect;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * name: MengHao Tian
@@ -13,7 +14,10 @@ public class SituationImage implements Serializable {
     //图片路径
     private String path;
     //图片大小以及左上角坐标
-    private Rect rect;
+    private Integer x;
+    private Integer y;
+    private Integer width;
+    private Integer height;
 
     public SituationImage() {
     }
@@ -22,9 +26,18 @@ public class SituationImage implements Serializable {
         this.path = path;
     }
 
-    public SituationImage(String path, Rect rect) {
+    public SituationImage(String path, Integer x, Integer y) {
         this.path = path;
-        this.rect = rect;
+        this.x = x;
+        this.y = y;
+    }
+
+    public SituationImage(String path, Integer x, Integer y, Integer width, Integer height) {
+        this.path = path;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public String getPath() {
@@ -35,19 +48,59 @@ public class SituationImage implements Serializable {
         this.path = path;
     }
 
-    public Rect getRect() {
-        return rect;
+    public Integer getX() {
+        return x;
     }
 
-    public void setRect(Rect rect) {
-        this.rect = rect;
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SituationImage that = (SituationImage) o;
+        return Objects.equals(path, that.path) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(width, that.width) && Objects.equals(height, that.height);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(path, x, y, width, height);
     }
 
     @Override
     public String toString() {
         return "SituationImage{" +
                 "path='" + path + '\'' +
-                ", rect=" + rect +
+                ", x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
                 '}';
     }
 }
