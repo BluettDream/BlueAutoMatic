@@ -3,15 +3,12 @@ package org.blue.automation.services.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.AdbDevice;
-import org.blue.automation.entities.Situation;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.CMDUtil;
-import org.blue.automation.utils.ImageUtil;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 /**
  * name: MengHao Tian

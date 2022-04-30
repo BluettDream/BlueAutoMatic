@@ -1,15 +1,11 @@
 package org.blue.automation.utils;
 
-import com.sun.org.apache.bcel.internal.generic.IADD;
-import org.blue.automation.entities.SituationImage;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * name: MengHao Tian
@@ -20,17 +16,16 @@ public class ImageUtil {
     /**
      * 生成10个随机点,根据与图像中心坐标点的距离进行排序,近的在前，远的在后
      *
-     * @param image 情景图像
      * @return 距离中心坐标点第三近的点
      **/
-    public Point calculateRandomClick(SituationImage image){
-        int centerX = image.getX() + image.getWidth() / 2;
-        int centerY = image.getY() + image.getHeight() / 2;
+    public Point calculateRandomClick(int x,int y,int width,int height){
+        int centerX = x + width / 2;
+        int centerY = y + height / 2;
         int randomX,randomY;
         List<Point> points = new ArrayList<>(10);
         for (int i = 0; i < 10; ++i) {
-            randomX = (int) (Math.random() * image.getWidth() + image.getX());
-            randomY = (int) (Math.random() * image.getHeight() + image.getY());
+            randomX = (int) (Math.random() * width + x);
+            randomY = (int) (Math.random() * height + y);
             points.add(i,new Point(randomX,randomY));
         }
         points.sort((o1, o2) -> {

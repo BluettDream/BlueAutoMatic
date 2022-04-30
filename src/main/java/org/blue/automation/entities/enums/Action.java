@@ -1,7 +1,6 @@
 package org.blue.automation.entities.enums;
 
-import org.blue.automation.entities.Situation;
-import org.blue.automation.entities.SituationImage;
+import org.blue.automation.entities.vo.ImageProperty;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.ImageUtil;
 import org.opencv.core.Point;
@@ -15,14 +14,14 @@ public enum Action {
     SLIDE("滑动"),
     LONG_SLIDE("缓慢滑动");
 
-    public void operate(OperationService operationService,SituationImage image){
+    public void operate(OperationService operationService, ImageProperty image){
         ImageUtil imageUtil = ImageUtil.getInstance();
         switch (this){
-            case CLICK:operationService.click(imageUtil.calculateRandomClick(image));break;
-            case LONG_CLICK:operationService.longClick(imageUtil.calculateRandomClick(image),100);break;
+            case CLICK:operationService.click(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()));break;
+            case LONG_CLICK:operationService.longClick(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()),100);break;
             case RANDOM_CLICK:
                 ArrayList<Point> points = new ArrayList<>();
-                SituationImage temp;
+                ImageProperty temp;
                 // TODO: 2022/4/29 完善图片处理逻辑,添加自定义路径功能
                 if(image.getPath().contains("YouXiJieShuZhong")){
                     temp = image.copy();
@@ -33,13 +32,13 @@ public enum Action {
                     //随机次数
                     int times = (int) (Math.random() * 3) + 3;
                     for (int i = 0; i < times; i++) {
-                        points.add(imageUtil.calculateRandomClick(temp));
+                        points.add(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()));
                     }
                 }else{
                     //随机次数
                     int times = (int) (Math.random()*2) + 3;
                     for (int i = 0; i < times; i++) {
-                        points.add(imageUtil.calculateRandomClick(image));
+                        points.add(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()));
                     }
                 }
                 operationService.multipleClicks(points);
