@@ -10,4 +10,28 @@ public class StringUtil {
         return str == null || str.equals("") || str.contains(" ");
     }
 
+    public static boolean isDecimal(String str){
+        if(isWrong(str)) return false;
+        char[] chars = str.toCharArray();
+        int dotCount = 0;
+        for (char c : chars) {
+            if(c < '0' || c > '9'){
+                if(c == '.' && dotCount++ < 1) {
+                    continue;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isInteger(String str){
+        if(isWrong(str)) return false;
+        char[] chars = str.toCharArray();
+        for (char c : chars) {
+            if(c < '0' || c > '9') return false;
+        }
+        return true;
+    }
+
 }

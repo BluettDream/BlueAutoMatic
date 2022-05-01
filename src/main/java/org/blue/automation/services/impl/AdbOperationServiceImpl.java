@@ -17,12 +17,13 @@ import java.util.concurrent.TimeUnit;
 public class AdbOperationServiceImpl implements OperationService {
     private static final Logger log = LogManager.getLogger(AdbOperationServiceImpl.class);
     private static final CMDUtil CMD_UTIL = CMDUtil.getInstance();
+    private String phoneFilePath = "/sdcard/blue_main.png";
     private String deviceNumber = "192.168.100.21:5555";
-    private static boolean CONNECTED = false;
+    private boolean connected = false;
 
     @Override
     public void click(Point clickPoint) {
-        if(!connect()) throw new NullPointerException("ADB连接失败");
+        if(notConnect()) throw new RuntimeException("ADB连接失败");
         CMD_UTIL.executeCMDCommand(
                 getAdbShellInput().append("tap").append(" ")
                         .append(clickPoint.x).append(" ").append(clickPoint.y).toString()
@@ -39,10 +40,10 @@ public class AdbOperationServiceImpl implements OperationService {
         for (Point point : points) {
             click(point);
             try {
-                //随机延时(100~400ms)
-                TimeUnit.MILLISECONDS.sleep((long) (Math.random()*300+100));
+                //随机延时(100~300ms)
+                TimeUnit.MILLISECONDS.sleep((long) (Math.random()*200+100));
             } catch (InterruptedException e) {
-                log.error("ADB点击等待出现异常:",e);
+                log.error("ADB多次点击出现异常:",e);
             }
         }
     }
@@ -54,7 +55,7 @@ public class AdbOperationServiceImpl implements OperationService {
 
     @Override
     public void longSlide(Point startPoint, Point endPoint, long delayTime) {
-        if(!connect()) throw new NullPointerException("ADB连接失败");
+        if(notConnect()) throw new RuntimeException("ADB连接失败");
         CMD_UTIL.executeCMDCommand(
                 getAdbShellInput().append("swipe").append(" ")
                         .append(startPoint.x).append(" ").append(startPoint.y).append(" ")
@@ -65,9 +66,9 @@ public class AdbOperationServiceImpl implements OperationService {
 
     @Override
     public void captureAndSave(String computerFile) {
-        if(!connect()) throw new NullPointerException("ADB连接失败");
-        screenCap("/sdcard/blue_main.png");
-        pull("/sdcard/blue_main.png", computerFile);
+        if(notConnect()) throw new RuntimeException("ADB连接失败");
+        screenCap(phoneFilePath);
+        pull(phoneFilePath, computerFile);
     }
 
     private void screenCap(String phoneFile) {
@@ -86,16 +87,16 @@ public class AdbOperationServiceImpl implements OperationService {
         );
     }
 
-    private boolean connect() {
-        if (CONNECTED) return true;
+    private boolean notConnect() {
+        if (connected) return false;
         //双重验证连接成功(连接设备+获取设备列表并且有活跃设备)
         ArrayList<AdbDevice> allDevices = getAllDevices();
         if (connectToDevice(deviceNumber) && allDevices.size() > 0 && allDevices.stream().anyMatch(adbDevice -> adbDevice.getState().equals(AdbDevice.State.DEVICE))) {
-            CONNECTED = true;
-            return true;
+            connected = true;
+            return false;
         }
-        CONNECTED = false;
-        return false;
+        connected = false;
+        return true;
     }
 
     private boolean connectToDevice(String ipAddress) {

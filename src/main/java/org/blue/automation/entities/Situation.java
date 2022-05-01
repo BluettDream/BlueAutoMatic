@@ -1,4 +1,4 @@
-package org.blue.automation.entities.vo;
+package org.blue.automation.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -15,40 +15,39 @@ import java.util.Objects;
  * name: MengHao Tian
  * date: 2022/4/29 20:28
  */
-public class SituationProperty implements Serializable {
+public class Situation implements Serializable{
     private static final long serialVersionUID = -54614979185635915L;
 
-    private final SimpleStringProperty name = new SimpleStringProperty();
-    private final SimpleIntegerProperty priority = new SimpleIntegerProperty(-1);
-    private final SimpleObjectProperty<ImageProperty> image = new SimpleObjectProperty<>(new ImageProperty());
-    private final SimpleObjectProperty<BigDecimal> lowestSimile = new SimpleObjectProperty<>(new BigDecimal("0.9").setScale(2,BigDecimal.ROUND_HALF_UP));
-    private final SimpleBooleanProperty click = new SimpleBooleanProperty(false);
-    private final SimpleObjectProperty<Action> action = new SimpleObjectProperty<>();
-    private final SimpleBooleanProperty custom = new SimpleBooleanProperty(false);
-    private final SimpleObjectProperty<ImageProperty> customImage = new SimpleObjectProperty<>(new ImageProperty());
+    private SimpleStringProperty name = new SimpleStringProperty();
+    private SimpleIntegerProperty priority = new SimpleIntegerProperty(-1);
+    private SimpleObjectProperty<ImageInformation> image = new SimpleObjectProperty<>(new ImageInformation());
+    private SimpleObjectProperty<BigDecimal> lowestSimile = new SimpleObjectProperty<>(new BigDecimal("0.9").setScale(2,BigDecimal.ROUND_HALF_UP));
+    private SimpleBooleanProperty click = new SimpleBooleanProperty(false);
+    private SimpleObjectProperty<Action> action = new SimpleObjectProperty<>();
+    private SimpleBooleanProperty custom = new SimpleBooleanProperty(false);
+    private SimpleObjectProperty<ImageInformation> customImage = new SimpleObjectProperty<>(new ImageInformation());
     @JsonIgnore
-    private final SimpleObjectProperty<BigDecimal> realSimile = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<BigDecimal> realSimile = new SimpleObjectProperty<>();
 
-    public SituationProperty copy() {
-        SituationProperty situationProperty = null;
-        try {
-            ByteArrayOutputStream bas = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bas);
-            oos.writeObject(this);
-            ByteArrayInputStream bis = new ByteArrayInputStream(bas.toByteArray());
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            situationProperty = (SituationProperty) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return situationProperty;
+    public Situation cloneFor(Situation cloneObject){
+        Situation situation = new Situation();
+        situation.name = new SimpleStringProperty(cloneObject.getName());
+        situation.priority = new SimpleIntegerProperty(cloneObject.getPriority());
+        situation.image = new SimpleObjectProperty<>(cloneObject.getImage().cloneFor(cloneObject.getImage()));
+        situation.lowestSimile = new SimpleObjectProperty<>(cloneObject.getLowestSimile());
+        situation.click = new SimpleBooleanProperty(cloneObject.isClick());
+        situation.action = new SimpleObjectProperty<>(cloneObject.getAction());
+        situation.custom = new SimpleBooleanProperty(cloneObject.isCustom());
+        situation.customImage = new SimpleObjectProperty<>(cloneObject.getCustomImage().cloneFor(cloneObject.getCustomImage()));
+        situation.realSimile = new SimpleObjectProperty<>(cloneObject.getRealSimile());
+        return situation;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SituationProperty that = (SituationProperty) o;
+        Situation that = (Situation) o;
         return Objects.equals(name, that.name) && Objects.equals(priority, that.priority) && Objects.equals(image, that.image) && Objects.equals(lowestSimile, that.lowestSimile) && Objects.equals(click, that.click) && Objects.equals(action, that.action) && Objects.equals(custom, that.custom) && Objects.equals(customImage, that.customImage) && Objects.equals(realSimile, that.realSimile);
     }
 
@@ -80,7 +79,7 @@ public class SituationProperty implements Serializable {
         return name;
     }
 
-    public SituationProperty setName(String name) {
+    public Situation setName(String name) {
         this.name.set(name);
         return this;
     }
@@ -93,20 +92,20 @@ public class SituationProperty implements Serializable {
         return priority;
     }
 
-    public SituationProperty setPriority(int priority) {
+    public Situation setPriority(int priority) {
         this.priority.set(priority);
         return this;
     }
 
-    public ImageProperty getImage() {
+    public ImageInformation getImage() {
         return image.get();
     }
 
-    public SimpleObjectProperty<ImageProperty> imageProperty() {
+    public SimpleObjectProperty<ImageInformation> imageProperty() {
         return image;
     }
 
-    public SituationProperty setImage(ImageProperty image) {
+    public Situation setImage(ImageInformation image) {
         this.image.set(image);
         return this;
     }
@@ -119,7 +118,7 @@ public class SituationProperty implements Serializable {
         return click;
     }
 
-    public SituationProperty setClick(boolean click) {
+    public Situation setClick(boolean click) {
         this.click.set(click);
         return this;
     }
@@ -132,7 +131,7 @@ public class SituationProperty implements Serializable {
         return action;
     }
 
-    public SituationProperty setAction(Action action) {
+    public Situation setAction(Action action) {
         this.action.set(action);
         return this;
     }
@@ -145,7 +144,7 @@ public class SituationProperty implements Serializable {
         return lowestSimile;
     }
 
-    public SituationProperty setLowestSimile(BigDecimal lowestSimile) {
+    public Situation setLowestSimile(BigDecimal lowestSimile) {
         this.lowestSimile.set(lowestSimile);
         return this;
     }
@@ -158,20 +157,20 @@ public class SituationProperty implements Serializable {
         return realSimile;
     }
 
-    public SituationProperty setRealSimile(BigDecimal realSimile) {
+    public Situation setRealSimile(BigDecimal realSimile) {
         this.realSimile.set(realSimile);
         return this;
     }
 
-    public ImageProperty getCustomImage() {
+    public ImageInformation getCustomImage() {
         return customImage.get();
     }
 
-    public SimpleObjectProperty<ImageProperty> customImageProperty() {
+    public SimpleObjectProperty<ImageInformation> customImageProperty() {
         return customImage;
     }
 
-    public SituationProperty setCustomImage(ImageProperty customImage) {
+    public Situation setCustomImage(ImageInformation customImage) {
         this.customImage.set(customImage);
         return this;
     }
@@ -184,7 +183,7 @@ public class SituationProperty implements Serializable {
         return custom;
     }
 
-    public SituationProperty setCustom(boolean custom) {
+    public Situation setCustom(boolean custom) {
         this.custom.set(custom);
         return this;
     }

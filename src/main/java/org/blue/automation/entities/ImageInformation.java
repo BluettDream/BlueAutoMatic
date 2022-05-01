@@ -1,4 +1,4 @@
-package org.blue.automation.entities.vo;
+package org.blue.automation.entities;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,35 +10,29 @@ import java.util.Objects;
  * name: MengHao Tian
  * date: 2022/4/29 22:05
  */
-public class ImageProperty implements Serializable{
+public class ImageInformation implements Serializable{
     private static final long serialVersionUID = 4959158909659101095L;
 
-    private final SimpleStringProperty path = new SimpleStringProperty();
-    private final SimpleIntegerProperty x = new SimpleIntegerProperty(0);
-    private final SimpleIntegerProperty y = new SimpleIntegerProperty(0);
-    private final SimpleIntegerProperty width = new SimpleIntegerProperty(0);
+    private SimpleStringProperty path = new SimpleStringProperty();
+    private SimpleIntegerProperty x = new SimpleIntegerProperty(0);
+    private SimpleIntegerProperty y = new SimpleIntegerProperty(0);
+    private SimpleIntegerProperty width = new SimpleIntegerProperty(0);
     private final SimpleIntegerProperty height = new SimpleIntegerProperty(0);
 
-    public ImageProperty copy() {
-        ImageProperty imageProperty = null;
-        try {
-            ByteArrayOutputStream bas = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bas);
-            oos.writeObject(this);
-            ByteArrayInputStream bis = new ByteArrayInputStream(bas.toByteArray());
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            imageProperty = (ImageProperty) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return imageProperty;
+    public ImageInformation cloneFor(ImageInformation cloneObject){
+        ImageInformation imageInformation = new ImageInformation();
+        imageInformation.path = new SimpleStringProperty(cloneObject.getPath());
+        imageInformation.x = new SimpleIntegerProperty(cloneObject.getX());
+        imageInformation.y = new SimpleIntegerProperty(cloneObject.getY());
+        imageInformation.width = new SimpleIntegerProperty(cloneObject.getWidth());
+        return imageInformation;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImageProperty that = (ImageProperty) o;
+        ImageInformation that = (ImageInformation) o;
         return Objects.equals(path, that.path) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(width, that.width) && Objects.equals(height, that.height);
     }
 

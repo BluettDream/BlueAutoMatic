@@ -1,4 +1,4 @@
-package org.blue.automation.entities.vo;
+package org.blue.automation.entities;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,31 +11,31 @@ import java.util.Objects;
  * name: MengHao Tian
  * date: 2022/4/29 20:14
  */
-public class ModeProperty implements Serializable {
+public class Mode implements Serializable {
     private static final long serialVersionUID = 3847206222193416167L;
     private final SimpleStringProperty name = new SimpleStringProperty();
-    private ArrayList<SituationProperty> situationList = new ArrayList<>();
+    private ArrayList<Situation> situationList = new ArrayList<>();
 
-    public ModeProperty copy() {
-        ModeProperty modeProperty = null;
+    public Mode copy() {
+        Mode mode = null;
         try {
             ByteArrayOutputStream bas = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bas);
             oos.writeObject(this);
             ByteArrayInputStream bis = new ByteArrayInputStream(bas.toByteArray());
             ObjectInputStream ois = new ObjectInputStream(bis);
-            modeProperty = (ModeProperty) ois.readObject();
+            mode = (Mode) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return modeProperty;
+        return mode;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ModeProperty that = (ModeProperty) o;
+        Mode that = (Mode) o;
         return Objects.equals(name, that.name) && Objects.equals(situationList, that.situationList);
     }
 
@@ -61,16 +61,16 @@ public class ModeProperty implements Serializable {
         return name;
     }
 
-    public ModeProperty setName(String name) {
+    public Mode setName(String name) {
         this.name.set(name);
         return this;
     }
 
-    public ArrayList<SituationProperty> getSituationList() {
+    public ArrayList<Situation> getSituationList() {
         return situationList;
     }
 
-    public ModeProperty setSituationList(ArrayList<SituationProperty> situationList) {
+    public Mode setSituationList(ArrayList<Situation> situationList) {
         this.situationList = situationList;
         return this;
     }

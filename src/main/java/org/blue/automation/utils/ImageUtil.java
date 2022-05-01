@@ -18,7 +18,7 @@ public class ImageUtil {
      *
      * @return 距离中心坐标点第三近的点
      **/
-    public Point calculateRandomClick(int x,int y,int width,int height){
+    public Point getRandomPoint(int x, int y, int width, int height){
         int centerX = x + width / 2;
         int centerY = y + height / 2;
         int randomX,randomY;

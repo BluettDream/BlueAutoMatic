@@ -1,12 +1,7 @@
 package org.blue.automation.controller;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -16,21 +11,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
 import org.blue.automation.entities.enums.Action;
-import org.blue.automation.entities.vo.SituationProperty;
+import org.blue.automation.entities.enums.PathEnum;
+import org.blue.automation.entities.Situation;
 import org.blue.automation.factories.UIControlFactory;
-import org.blue.automation.services.OperationService;
-import org.blue.automation.services.SituationPropertyService;
-import org.blue.automation.services.impl.AdbOperationServiceImpl;
-import org.blue.automation.services.impl.SituationPropertyServiceImpl;
+import org.blue.automation.services.SituationService;
+import org.blue.automation.services.impl.SituationServiceImpl;
+import org.blue.automation.utils.PinYinUtil;
 import org.blue.automation.utils.StringUtil;
-import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
 import java.util.ResourceBundle;
 
 /**
@@ -40,7 +36,7 @@ import java.util.ResourceBundle;
 public class SettingController implements Initializable {
     private static final Logger log = LogManager.getLogger(SettingController.class);
     @FXML
-    private ChoiceBox<SituationProperty> CHOICE_SITUATION_LIST;
+    private ChoiceBox<Situation> CHOICE_SITUATION_LIST;
     @FXML
     private TextField INPUT_SITUATION_NAME;
     @FXML
@@ -70,48 +66,101 @@ public class SettingController implements Initializable {
     @FXML
     private TextField INPUT_CUSTOM_HEIGHT;
 
-    private final Property<ObservableList<SituationProperty>> situationList = new SimpleListProperty<>();
-    private final SimpleObjectProperty<SituationProperty> currentSituation = new SimpleObjectProperty<>();
-    private SituationPropertyService situationService;
+    private final SimpleObjectProperty<Situation> situationProperty = new SimpleObjectProperty<>(new Situation());
+    private SituationService situationService;
     private String preDirectoryPath;
-    private OperationService operationService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        situationService = new SituationPropertyServiceImpl(IndexController.getModeService());
-        situationList.setValue(FXCollections.observableArrayList(situationService.selectAllSituationProperties(IndexController.getCurrentMode().getName())));
-        if(situationList.getValue()!=null && situationList.getValue().size() > 0) currentSituation.set(situationList.getValue().get(0));
+        situationService = new SituationServiceImpl(IndexController.getModeService());
         initChoice();
         initInput();
         initCheck();
-        HBOX_CUSTOM.visibleProperty().bind(currentSituation.getValue().customProperty());
+        initPane();
+    }
+
+    @FXML
+    void chooseImage() {
+        File file = UIControlFactory.createImageFileChooser("选择图片", preDirectoryPath).showOpenDialog(Main.STAGE_MAP.get("settingStage"));
+        if (!StringUtil.isWrong(preDirectoryPath)) preDirectoryPath = new File(file.getAbsolutePath()).getParent();
+        situationProperty.get().getImage().setPath(file.getAbsolutePath());
+    }
+
+    @FXML
+    void captureSituationImage() {
+        // TODO: 2022/4/29 完善记忆上一次打开文件路径功能
+        File file = UIControlFactory.createImageFileChooser("保存图片", "E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
+        if (file != null && !StringUtil.isWrong(file.getAbsolutePath())) {
+            IndexController.getOperationService().captureAndSave(file.getAbsolutePath());
+            new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
+        }
+    }
+
+    @FXML
+    void deleteSituation() {
+        if (!situationService.deleteSituationByName(situationProperty.get().getName())) {
+            new Alert(Alert.AlertType.ERROR,"删除失败").showAndWait();
+            return;
+        }
+        CHOICE_SITUATION_LIST.setItems(FXCollections.observableArrayList(situationService.selectAllSituations(IndexController.getCurrentMode().getName())));
+        log.info("{}情景删除成功",situationProperty.get().getName());
+        reset();
+    }
+
+    @FXML
+    void saveSituation() {
+        try {
+            BufferedImage image = ImageIO.read(new FileInputStream(INPUT_IMAGE_PATH.getText()));
+            situationProperty.get().getImage().setWidth(image.getWidth());
+            situationProperty.get().getImage().setHeight(image.getHeight());
+            //根据情景名称保存图片到项目路径下,并将名称汉字改为拼音保存(防止opencv读取失败)
+            String imagePath = PathEnum.IMAGE_INNER + PinYinUtil.getInstance().getPinYin(situationProperty.get().getName()) + ".png";
+            if (ImageIO.write(image, "png", new FileOutputStream(imagePath))) situationProperty.get().getImage().setPath(imagePath);
+        } catch (IOException e) {
+            log.error("图片读取异常:", e);
+        }
+        if(!situationProperty.get().getImage().getPath().contains(PathEnum.IMAGE_INNER.getPath())){
+            new Alert(Alert.AlertType.ERROR,"图片读取失败").showAndWait();
+            return;
+        }
+        if (situationService.addSituation(situationProperty.get())) {
+            new Alert(Alert.AlertType.INFORMATION,situationProperty.get().getName()+"保存成功,图片已另存为:"+situationProperty.get().getImage().getPath()).showAndWait();
+            log.info("情景保存成功:{}",situationProperty.get());
+            CHOICE_SITUATION_LIST.setItems(FXCollections.observableArrayList(situationService.selectAllSituations(IndexController.getCurrentMode().getName())));
+            reset();
+            return;
+        }
+        new Alert(Alert.AlertType.ERROR,"保存失败").showAndWait();
+    }
+
+    @FXML
+    private void reset() {
+        CHOICE_SITUATION_LIST.getSelectionModel().clearSelection();
     }
 
     private void initChoice() {
-        CHOICE_SITUATION_LIST.setConverter(new StringConverter<SituationProperty>() {
+        CHOICE_SITUATION_LIST.setConverter(new StringConverter<Situation>() {
             @Override
-            public String toString(SituationProperty object) {
+            public String toString(Situation object) {
                 return object.getName();
             }
 
             @Override
-            public SituationProperty fromString(String string) {
-                return new SituationProperty().setName(string);
+            public Situation fromString(String string) {
+                return new Situation().setName(string);
             }
         });
-        CHOICE_SITUATION_LIST.itemsProperty().bindBidirectional(situationList);
-        CHOICE_SITUATION_LIST.valueProperty().bindBidirectional(currentSituation);
-        CHOICE_SITUATION_LIST.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            currentSituation.getValue().setName(newValue.getName());
-        });
+        CHOICE_SITUATION_LIST.setItems(FXCollections.observableList(situationService.selectAllSituations(IndexController.getCurrentMode().getName())));
+        CHOICE_SITUATION_LIST.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateSituationProperty(newValue));
+        CHOICE_SITUATION_LIST.getSelectionModel().selectFirst();
         CHOICE_CLICK_TYPE_LIST.setItems(FXCollections.observableArrayList(Action.values()));
-        CHOICE_CLICK_TYPE_LIST.valueProperty().bindBidirectional(currentSituation.get().actionProperty());
-        CHOICE_CLICK_TYPE_LIST.disableProperty().bind(currentSituation.get().clickProperty().not());
+        CHOICE_CLICK_TYPE_LIST.valueProperty().bindBidirectional(situationProperty.get().actionProperty());
+        CHOICE_CLICK_TYPE_LIST.disableProperty().bind(situationProperty.get().clickProperty().not());
     }
 
     private void initInput() {
-        INPUT_SITUATION_NAME.textProperty().bindBidirectional(currentSituation.getValue().nameProperty());
-        INPUT_SITUATION_PRIORITY.textProperty().bindBidirectional(currentSituation.get().priorityProperty(), new StringConverter<Number>() {
+        INPUT_SITUATION_NAME.textProperty().bindBidirectional(situationProperty.get().nameProperty());
+        INPUT_SITUATION_PRIORITY.textProperty().bindBidirectional(situationProperty.get().priorityProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return String.valueOf(object);
@@ -119,10 +168,33 @@ public class SettingController implements Initializable {
 
             @Override
             public Number fromString(String string) {
-                return null;
+                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
             }
         });
-        INPUT_LOWEST_SIMILE.textProperty().bindBidirectional(currentSituation.get().lowestSimileProperty(), new StringConverter<BigDecimal>() {
+        INPUT_IMAGE_PATH.textProperty().bindBidirectional(situationProperty.get().getImage().pathProperty());
+        INPUT_X.textProperty().bindBidirectional(situationProperty.get().getImage().xProperty(), new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                return String.valueOf(object);
+            }
+
+            @Override
+            public Number fromString(String string) {
+                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
+            }
+        });
+        INPUT_Y.textProperty().bindBidirectional(situationProperty.get().getImage().yProperty(), new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                return String.valueOf(object);
+            }
+
+            @Override
+            public Number fromString(String string) {
+                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
+            }
+        });
+        INPUT_LOWEST_SIMILE.textProperty().bindBidirectional(situationProperty.get().lowestSimileProperty(), new StringConverter<BigDecimal>() {
             @Override
             public String toString(BigDecimal object) {
                 return object.setScale(2,BigDecimal.ROUND_HALF_UP).toString();
@@ -130,10 +202,10 @@ public class SettingController implements Initializable {
 
             @Override
             public BigDecimal fromString(String string) {
-                return null;
+                return new BigDecimal(string).setScale(2,BigDecimal.ROUND_HALF_UP);
             }
         });
-        INPUT_CUSTOM_X.textProperty().bindBidirectional(currentSituation.get().getImage().xProperty(), new StringConverter<Number>() {
+        INPUT_CUSTOM_X.textProperty().bindBidirectional(situationProperty.get().getCustomImage().xProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return String.valueOf(object);
@@ -141,32 +213,10 @@ public class SettingController implements Initializable {
 
             @Override
             public Number fromString(String string) {
-                return null;
+                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
             }
         });
-        INPUT_CUSTOM_Y.textProperty().bindBidirectional(currentSituation, new StringConverter<SituationProperty>() {
-            @Override
-            public String toString(SituationProperty object) {
-                return String.valueOf(object.getImage().getY());
-            }
-
-            @Override
-            public SituationProperty fromString(String string) {
-                return null;
-            }
-        });
-        INPUT_CUSTOM_WIDTH.textProperty().bindBidirectional(currentSituation, new StringConverter<SituationProperty>() {
-            @Override
-            public String toString(SituationProperty object) {
-                return String.valueOf(object.getImage().getWidth());
-            }
-
-            @Override
-            public SituationProperty fromString(String string) {
-                return null;
-            }
-        });
-        INPUT_CUSTOM_HEIGHT.textProperty().bindBidirectional(currentSituation.get().getCustomImage().heightProperty(), new StringConverter<Number>() {
+        INPUT_CUSTOM_Y.textProperty().bindBidirectional(situationProperty.get().getCustomImage().yProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return String.valueOf(object);
@@ -174,11 +224,10 @@ public class SettingController implements Initializable {
 
             @Override
             public Number fromString(String string) {
-                return null;
+                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
             }
         });
-        INPUT_IMAGE_PATH.textProperty().bindBidirectional(currentSituation.get().getImage().pathProperty());
-        INPUT_X.textProperty().bindBidirectional(currentSituation.get().getImage().xProperty(), new StringConverter<Number>() {
+        INPUT_CUSTOM_WIDTH.textProperty().bindBidirectional(situationProperty.get().getCustomImage().widthProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return String.valueOf(object);
@@ -186,10 +235,10 @@ public class SettingController implements Initializable {
 
             @Override
             public Number fromString(String string) {
-                return Integer.parseInt(string);
+                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
             }
         });
-        INPUT_Y.textProperty().bindBidirectional(currentSituation.get().getImage().yProperty(), new StringConverter<Number>() {
+        INPUT_CUSTOM_HEIGHT.textProperty().bindBidirectional(situationProperty.get().getCustomImage().heightProperty(), new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return String.valueOf(object);
@@ -197,102 +246,39 @@ public class SettingController implements Initializable {
 
             @Override
             public Number fromString(String string) {
-                return Integer.parseInt(string);
+                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
             }
         });
     }
 
     private void initCheck() {
-        CHECK_CLICK.selectedProperty().bindBidirectional(currentSituation.get().clickProperty());
-        CHECK_CUSTOM.selectedProperty().bindBidirectional(currentSituation.get().customProperty());
+        CHECK_CLICK.selectedProperty().bindBidirectional(situationProperty.get().clickProperty());
+        CHECK_CUSTOM.selectedProperty().bindBidirectional(situationProperty.get().customProperty());
     }
 
-    @FXML
-    private void addSituationProperty() {
-        log.info("当前情景:{}",currentSituation.get());
-        //SituationProperty tempSituation = new SituationProperty(INPUT_SITUATION_NAME.getText(), new SituationImage(null,0,0), false);
-        //tempSituation.setName(INPUT_SITUATION_NAME.getText());
-        //if (!situationService.isCompliance(tempSituation)) {
-        //    new Alert(Alert.AlertType.WARNING, "请检查情景名称是否为空或含有空格").showAndWait();
-        //    return;
-        //}
-        //if (situationService.isExisted(tempSituation)) {
-        //    new Alert(Alert.AlertType.WARNING, "情景名称已存在,请重新输入").showAndWait();
-        //    return;
-        //}
-        //currentSituation.set(tempSituation);
-        //CHOICE_SITUATION_LIST.getItems().add(currentSituation.get());
-        //log.info("当前情景的名称:{}", currentSituation.get().getName());
+    private void initPane() {
+        HBOX_CUSTOM.visibleProperty().bind(situationProperty.getValue().customProperty());
     }
 
-    @FXML
-    void chooseImage() {
-        File file = UIControlFactory.createImageFileChooser("选择图片", preDirectoryPath).showOpenDialog(Main.STAGE_MAP.get("settingStage"));
-        if (StringUtil.isWrong(preDirectoryPath)) preDirectoryPath = new File(file.getAbsolutePath()).getParent();
-        currentSituation.get().getImage().setPath(file.getAbsolutePath());
+    private void updateSituationProperty(Situation newSituation) {
+        if(newSituation == null) newSituation = new Situation();
+        situationProperty.get().setName(newSituation.getName());
+        situationProperty.get().setPriority(newSituation.getPriority());
+        situationProperty.get().setLowestSimile(newSituation.getLowestSimile());
+        situationProperty.get().setClick(newSituation.isClick());
+        situationProperty.get().setAction(newSituation.getAction());
+        situationProperty.get().setCustom(newSituation.isCustom());
+        //image
+        situationProperty.get().getImage().setPath(newSituation.getImage().getPath());
+        situationProperty.get().getImage().setX(newSituation.getImage().getX());
+        situationProperty.get().getImage().setY(newSituation.getImage().getY());
+        situationProperty.get().getImage().setHeight(newSituation.getImage().getHeight());
+        situationProperty.get().getImage().setWidth(newSituation.getImage().getWidth());
+        //customImage
+        situationProperty.get().getCustomImage().setX(newSituation.getCustomImage().getX());
+        situationProperty.get().getCustomImage().setY(newSituation.getCustomImage().getY());
+        situationProperty.get().getCustomImage().setHeight(newSituation.getCustomImage().getHeight());
+        situationProperty.get().getCustomImage().setWidth(newSituation.getCustomImage().getWidth());
     }
 
-    @FXML
-    void captureSituationImage() {
-        operationService = operationService == null ? new AdbOperationServiceImpl() : operationService;
-        // TODO: 2022/4/29 完善记忆上一次打开文件路径功能
-        File file = UIControlFactory.createImageFileChooser("保存图片", "E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
-        if (file != null && !StringUtil.isWrong(file.getAbsolutePath())) {
-            operationService.captureAndSave(file.getAbsolutePath());
-            new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
-        }
-    }
-
-    @FXML
-    void deleteSituation() {
-        if (situationService.deleteSituationPropertyByName(currentSituation.get().getName())) {
-            situationList.setValue(FXCollections.observableArrayList(situationService.selectAllSituationProperties(IndexController.getCurrentMode().getName())));
-            CHOICE_SITUATION_LIST.getSelectionModel().clearSelection();
-            log.info("{}删除成功", currentSituation.get().getName());
-        } else {
-            new Alert(Alert.AlertType.ERROR, currentSituation.get().getName() + "删除失败").showAndWait();
-            log.info("{}删除失败", currentSituation.get().getName());
-        }
-    }
-
-    @FXML
-    void saveSituation() {
-        //boolean needSave = true;
-        //currentSituation.get().setPriority(Integer.parseInt(INPUT_SITUATION_PRIORITY.getText()));
-        //currentSituation.get().getImage().setX(Integer.parseInt(INPUT_X.getText()));
-        //currentSituation.get().getImage().setY(Integer.parseInt(INPUT_Y.getText()));
-        //if (!StringUtils.isBlank(INPUT_IMAGE_PATH.getText())) {
-        //    try {
-        //        BufferedImage image = ImageIO.read(new FileInputStream(INPUT_IMAGE_PATH.getText()));
-        //        currentSituation.get().getImage().setWidth(image.getWidth());
-        //        currentSituation.get().getImage().setHeight(image.getHeight());
-        //        //根据情景名称保存图片到项目路径下,并将名称汉字改为拼音保存(防止opencv读取失败)
-        //        String imagePath = PathEnum.IMAGE_INNER + PinYinUtil.getInstance().getPinYin(currentSituation.get().getName()) + ".png";
-        //        boolean res = ImageIO.write(image, "png", new FileOutputStream(imagePath));
-        //        if (res) currentSituation.get().getImage().setPath(imagePath);
-        //        else needSave = false;
-        //    } catch (IOException e) {
-        //        needSave = false;
-        //        log.error("读取图片异常:", e);
-        //        new Alert(Alert.AlertType.ERROR, "图片读取异常").showAndWait();
-        //    }
-        //}
-        //if (needSave && situationService.isExisted(currentSituation.get()) && situationService.updateSituation(currentSituation.get())) {
-        //    log.info("情景更新成功:{}", currentSituation.get());
-        //    new Alert(Alert.AlertType.INFORMATION, "更新成功").showAndWait();
-        //    return;
-        //}
-        //if (needSave && !situationService.isExisted(currentSituation.get()) && situationService.addSituation(currentSituation.get())) {
-        //    log.info("情景添加成功:{}", currentSituation.get());
-        //    new Alert(Alert.AlertType.INFORMATION, "保存成功").showAndWait();
-        //    return;
-        //}
-        //log.info("情景保存失败:{}", currentSituation.get());
-        //new Alert(Alert.AlertType.WARNING, "保存失败").showAndWait();
-    }
-
-    @FXML
-    private void reset() {
-        currentSituation.set(null);
-    }
 }

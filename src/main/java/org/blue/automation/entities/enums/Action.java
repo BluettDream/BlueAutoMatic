@@ -1,50 +1,47 @@
 package org.blue.automation.entities.enums;
 
-import org.blue.automation.entities.vo.ImageProperty;
+import org.blue.automation.entities.ImageInformation;
+import org.blue.automation.entities.Situation;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.ImageUtil;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
 
-public enum Action {
+public enum Action{
     CLICK("单击"),
     LONG_CLICK("长按"),
-    RANDOM_CLICK("随机多次点击"),
+    MULTIPLE_CLICKS("随机多次点击"),
     SLIDE("滑动"),
     LONG_SLIDE("缓慢滑动");
 
-    public void operate(OperationService operationService, ImageProperty image){
+    public static void operate(OperationService operationService, Situation situation){
         ImageUtil imageUtil = ImageUtil.getInstance();
-        switch (this){
-            case CLICK:operationService.click(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()));break;
-            case LONG_CLICK:operationService.longClick(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()),100);break;
-            case RANDOM_CLICK:
+        ImageInformation temp = situation.getImage();
+        if(situation.isCustom()) temp = situation.getCustomImage();
+        if(situation.getAction() == null) return;
+        switch (situation.getAction()){
+            case CLICK:
+                operationService.click(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
+                break;
+            case LONG_CLICK:
+                operationService.longClick(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()),100);
+                break;
+            case MULTIPLE_CLICKS:
                 ArrayList<Point> points = new ArrayList<>();
-                ImageProperty temp;
-                // TODO: 2022/4/29 完善图片处理逻辑,添加自定义路径功能
-                if(image.getPath().contains("YouXiJieShuZhong")){
-                    temp = image.copy();
-                    temp.setX(1565);
-                    temp.setY(605);
-                    temp.setWidth(770);
-                    temp.setHeight(460);
-                    //随机次数
-                    int times = (int) (Math.random() * 3) + 3;
-                    for (int i = 0; i < times; i++) {
-                        points.add(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()));
-                    }
-                }else{
-                    //随机次数
-                    int times = (int) (Math.random()*2) + 3;
-                    for (int i = 0; i < times; i++) {
-                        points.add(imageUtil.calculateRandomClick(image.getX(),image.getY(),image.getWidth(),image.getHeight()));
-                    }
+                //随机次数(1~3次)
+                int times = (int) (Math.random()*2) + 1;
+                for (int i = 0; i < times; i++) {
+                    points.add(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
                 operationService.multipleClicks(points);
                 break;
             case SLIDE:
+                // TODO: 2022/5/1 扩展滑动逻辑
             case LONG_SLIDE:
+                // TODO: 2022/5/1 扩展长滑逻辑
+                break;
+            default:
                 break;
         }
     }
