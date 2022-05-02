@@ -9,6 +9,12 @@ import com.mayabot.nlp.module.pinyin.Pinyins;
  */
 public class PinYinUtil {
 
+    /**
+     * 将汉字转化为拼音,每个拼音的首字母大写,字符和数字不做处理
+     *
+     * @param hanZi 汉字
+     * @return 拼音
+     **/
     public String getPinYin(String hanZi){
         PinyinResult result = Pinyins.convert(hanZi).keepNum(true).keepPunctuation(true);
         String[] split = result.asString().split(" ");

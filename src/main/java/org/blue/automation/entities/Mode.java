@@ -16,21 +16,6 @@ public class Mode implements Serializable {
     private final SimpleStringProperty name = new SimpleStringProperty();
     private ArrayList<Situation> situationList = new ArrayList<>();
 
-    public Mode copy() {
-        Mode mode = null;
-        try {
-            ByteArrayOutputStream bas = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bas);
-            oos.writeObject(this);
-            ByteArrayInputStream bis = new ByteArrayInputStream(bas.toByteArray());
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            mode = (Mode) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return mode;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

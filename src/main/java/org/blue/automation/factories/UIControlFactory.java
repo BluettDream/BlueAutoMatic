@@ -13,6 +13,14 @@ import java.io.File;
  */
 public class UIControlFactory {
 
+    /**
+     * 创建一个带输入框的弹窗
+     *
+     * @param title 标题
+     * @param headerText 头部信息
+     * @param contentText 内容信息
+     * @return 输入框弹窗
+     **/
     public static TextInputDialog createTestInputDialog(String title, String headerText, String contentText){
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle(title);
@@ -28,6 +36,13 @@ public class UIControlFactory {
         return dialog;
     }
 
+    /**
+     * 创建一个图像文件选择器
+     *
+     * @param title 标题
+     * @param preDirectoryPath 初始化打开路径
+     * @return 文件选择器
+     **/
     public static FileChooser createImageFileChooser(String title,String preDirectoryPath){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);

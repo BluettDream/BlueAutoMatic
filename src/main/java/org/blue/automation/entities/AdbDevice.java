@@ -5,11 +5,19 @@ package org.blue.automation.entities;
  * date: 2022/4/25 13:55
  */
 public class AdbDevice {
+    /**
+     * 设备名称
+     **/
     private String name;
+    /**
+     * 设备状态
+     **/
     private State state;
 
     public enum State{
+        //设备在线
         DEVICE,
+        //设备下线
         OFFLINE
     }
 

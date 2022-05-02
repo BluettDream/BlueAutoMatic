@@ -18,14 +18,41 @@ import java.util.Objects;
 public class Situation implements Serializable{
     private static final long serialVersionUID = -54614979185635915L;
 
+    /**
+     * 情景名称
+     **/
     private SimpleStringProperty name = new SimpleStringProperty();
+    /**
+     * 优先级
+     **/
     private SimpleIntegerProperty priority = new SimpleIntegerProperty(-1);
+    /**
+     * 图像信息
+     **/
     private SimpleObjectProperty<ImageInformation> image = new SimpleObjectProperty<>(new ImageInformation());
+    /**
+     * 最低相似度
+     **/
     private SimpleObjectProperty<BigDecimal> lowestSimile = new SimpleObjectProperty<>(new BigDecimal("0.9").setScale(2,BigDecimal.ROUND_HALF_UP));
+    /**
+     * 是否需要点击
+     **/
     private SimpleBooleanProperty click = new SimpleBooleanProperty(false);
+    /**
+     * 点击的具体行动
+     **/
     private SimpleObjectProperty<Action> action = new SimpleObjectProperty<>();
+    /**
+     * 是否自定义点击位置
+     **/
     private SimpleBooleanProperty custom = new SimpleBooleanProperty(false);
+    /**
+     * 自定义的位置
+     **/
     private SimpleObjectProperty<ImageInformation> customImage = new SimpleObjectProperty<>(new ImageInformation());
+    /**
+     * 真实的相似度
+     **/
     @JsonIgnore
     private SimpleObjectProperty<BigDecimal> realSimile = new SimpleObjectProperty<>();
 

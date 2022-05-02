@@ -15,6 +15,13 @@ public enum Action{
     SLIDE("滑动"),
     LONG_SLIDE("缓慢滑动");
 
+    /**
+     * 情景中具体实现operationService的方法
+     * 与operationService接口方法相关联,接口新增方法,此处就需要添加case顾虑.
+     *
+     * @param operationService 操作服务接口
+     * @param situation 情景
+     **/
     public static void operate(OperationService operationService, Situation situation){
         ImageUtil imageUtil = ImageUtil.getInstance();
         ImageInformation temp = situation.getImage();

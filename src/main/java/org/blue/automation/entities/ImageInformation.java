@@ -13,12 +13,30 @@ import java.util.Objects;
 public class ImageInformation implements Serializable{
     private static final long serialVersionUID = 4959158909659101095L;
 
+    /**
+     * 图像路径
+     **/
     private SimpleStringProperty path = new SimpleStringProperty();
+    /**
+     * 左上角x坐标
+     **/
     private SimpleIntegerProperty x = new SimpleIntegerProperty(0);
+    /**
+     * 左上角y坐标
+     **/
     private SimpleIntegerProperty y = new SimpleIntegerProperty(0);
+    /**
+     * 图像宽度
+     **/
     private SimpleIntegerProperty width = new SimpleIntegerProperty(0);
+    /**
+     * 图像高度
+     **/
     private final SimpleIntegerProperty height = new SimpleIntegerProperty(0);
 
+    /**
+     * 图像克隆
+     **/
     public ImageInformation cloneFor(ImageInformation cloneObject){
         ImageInformation imageInformation = new ImageInformation();
         imageInformation.path = new SimpleStringProperty(cloneObject.getPath());

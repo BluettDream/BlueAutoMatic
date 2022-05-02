@@ -46,12 +46,30 @@ public class IndexController implements Initializable {
     @FXML
     private Button BUTTON_SWITCH;
 
+    /**
+     * 当前模式属性
+     **/
     private static final SimpleObjectProperty<Mode> CURRENT_MODE_PROPERTY = new SimpleObjectProperty<>();
+    /**
+     * 模式接口
+     **/
     private static final ModeService MODE_SERVICE = new ModeServiceImpl("main.json");
     // TODO: 2022/5/1 添加可选择启动模式的功能
+    /**
+     * 操作接口
+     **/
     private static OperationService OPERATION_SERVICE = new AdbOperationServiceImpl();
+    /**
+     * 模式列表
+     **/
     private final Property<ObservableList<Mode>> modeList = new SimpleListProperty<>();
+    /**
+     * 主线程池
+     **/
     private final ExecutorService THREAD_POOL = Main.THREAD_POOL;
+    /**
+     * 正在运行的模式线程
+     **/
     private Future<Boolean> runningMode;
 
 
@@ -93,6 +111,9 @@ public class IndexController implements Initializable {
         });
     }
 
+    /**
+     * 添加模式
+     **/
     @FXML
     private void addMode() {
         TextInputDialog dialog = UIControlFactory.createTestInputDialog("添加模式", null, "请输入模式名称");
@@ -110,6 +131,9 @@ public class IndexController implements Initializable {
         });
     }
 
+    /**
+     * 打开配置模式页面
+     **/
     @FXML
     private void configureMode() {
         Stage settingStage = Main.STAGE_MAP.get("settingStage");
@@ -128,6 +152,9 @@ public class IndexController implements Initializable {
         }
     }
 
+    /**
+     * 删除模式
+     **/
     @FXML
     private void deleteMode() {
         if(MODE_SERVICE.deleteModeByName(CURRENT_MODE_PROPERTY.get().getName())){
@@ -139,6 +166,9 @@ public class IndexController implements Initializable {
         }
     }
 
+    /**
+     * 运行按钮设置
+     **/
     @FXML
     private void switchOnAndOff() {
         BUTTON_SWITCH.setDisable(true);
@@ -157,16 +187,25 @@ public class IndexController implements Initializable {
         BUTTON_SWITCH.setDisable(false);
     }
 
+    /**
+     * 导出配置文件
+     **/
     @FXML
     public void exportFile() {
 
     }
 
+    /**
+     * 导入配置文件
+     **/
     @FXML
     public void importFile() {
 
     }
 
+    /**
+     * 打开帮助界面
+     **/
     @FXML
     public void openHelp() {
         log.info("打开帮助界面");

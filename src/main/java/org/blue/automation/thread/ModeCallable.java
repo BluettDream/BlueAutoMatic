@@ -85,6 +85,10 @@ public class ModeCallable implements Callable<Boolean> {
         return true;
     }
 
+    /**
+     * 重置endSituation类
+     *
+     **/
     private void clearEndSituation() {
         endSituation.setName("匹配失败");
         endSituation.setPriority(-1);
