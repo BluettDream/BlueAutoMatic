@@ -19,6 +19,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.joonasvali.naturalmouse</groupId>
+            <artifactId>naturalmouse</artifactId>
+            <version>2.0.3</version>
+        </dependency>
         <!--汉字转拼音库-->
         <dependency>
             <groupId>com.mayabot.mynlp</groupId>
