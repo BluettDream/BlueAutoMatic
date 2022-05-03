@@ -2,17 +2,16 @@ package org.blue.automation.services.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.entities.Mode;
 import org.blue.automation.services.ModeService;
+import org.blue.automation.utils.FileUtil;
 import org.blue.automation.utils.StringUtil;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -21,13 +20,7 @@ import java.util.ArrayList;
  */
 public class ModeServiceImpl implements ModeService {
     private static final Logger log = LogManager.getLogger(ModeServiceImpl.class);
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    static {
-        //空对象不抛异常,取消时间戳显示
-        OBJECT_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS
-                ,SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        OBJECT_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-    }
+    private final ObjectMapper objectMapper = FileUtil.getInstance().getObjectMapper();
 
     private String fileName;
     public ModeServiceImpl(String fileName) {
@@ -42,7 +35,7 @@ public class ModeServiceImpl implements ModeService {
     @Override
     public ArrayList<Mode> selectAllModes() {
         try {
-            return OBJECT_MAPPER.readValue(
+            return objectMapper.readValue(
                     new InputStreamReader(new FileInputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
                     , new TypeReference<ArrayList<Mode>>() {
                     }
@@ -97,7 +90,7 @@ public class ModeServiceImpl implements ModeService {
 
     private boolean write(ArrayList<Mode> modeArrayList) {
         try {
-            OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(
                     new OutputStreamWriter(new FileOutputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
                     , modeArrayList);
             return true;

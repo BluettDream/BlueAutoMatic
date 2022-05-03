@@ -3,6 +3,8 @@ package org.blue.automation.services.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.AdbDevice;
+import org.blue.automation.entities.AdbProvider;
+import org.blue.automation.services.AdbProviderService;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.CMDUtil;
 import org.opencv.core.Point;
@@ -17,8 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class AdbOperationServiceImpl implements OperationService {
     private static final Logger log = LogManager.getLogger(AdbOperationServiceImpl.class);
     private static final CMDUtil CMD_UTIL = CMDUtil.getInstance();
-    private String phoneFilePath = "/sdcard/blue_main.png";
-    private String deviceNumber = "192.168.100.21:5555";
+    private final AdbProvider adbProvider = new AdbProviderServiceImpl("adb.json").getAdbProvider();
     private boolean connected = false;
 
     @Override
@@ -67,8 +68,8 @@ public class AdbOperationServiceImpl implements OperationService {
     @Override
     public void captureAndSave(String computerFile) {
         if(notConnect()) throw new RuntimeException("ADB连接失败");
-        screenCap(phoneFilePath);
-        pull(phoneFilePath, computerFile);
+        screenCap(adbProvider.getPhoneFilePath());
+        pull(adbProvider.getPhoneFilePath(), computerFile);
     }
 
     private void screenCap(String phoneFile) {
@@ -91,7 +92,7 @@ public class AdbOperationServiceImpl implements OperationService {
         if (connected) return false;
         //双重验证连接成功(连接设备+获取设备列表并且有活跃设备)
         ArrayList<AdbDevice> allDevices = getAllDevices();
-        if (connectToDevice(deviceNumber) && allDevices.size() > 0 && allDevices.stream().anyMatch(adbDevice -> adbDevice.getState().equals(AdbDevice.State.DEVICE))) {
+        if (connectToDevice(adbProvider.getDeviceNumber()) && allDevices.size() > 0 && allDevices.stream().anyMatch(adbDevice -> adbDevice.getState().equals(AdbDevice.State.DEVICE))) {
             connected = true;
             return false;
         }
@@ -133,26 +134,8 @@ public class AdbOperationServiceImpl implements OperationService {
             //如果当前行含有attached,则下一行开始显示设备列表
             if (str.contains("attached")) isShow = true;
         }
+        log.debug("adb所有设备:{}",deviceArrayList);
         return deviceArrayList;
-    }
-
-    /*
-    public void execOut(String computerFile) {
-        CMD_UTIL.executeCMDCommand(
-                getAdb().append("exec-out").append(" ")
-                        .append("screencap").append(" ")
-                        .append("-p").append(" ").append(">").append(" ")
-                        .append(computerFile).toString()
-        );
-    }
-    */
-
-    public String getDeviceNumber() {
-        return deviceNumber;
-    }
-
-    public void setDeviceNumber(String deviceNumber) {
-        this.deviceNumber = deviceNumber;
     }
 
     private StringBuilder getAdb() {

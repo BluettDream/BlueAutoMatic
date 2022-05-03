@@ -73,11 +73,9 @@ public class ImageUtil {
 
     private ImageUtil() {
     }
-
     private static class ImageUtilHolder {
         private static final ImageUtil INSTANCE = new ImageUtil();
     }
-
     public static ImageUtil getInstance() {
         return ImageUtilHolder.INSTANCE;
     }
