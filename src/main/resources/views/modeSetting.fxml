@@ -48,7 +48,7 @@
          <children>
             <HBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" minHeight="45.0" minWidth="115.0" prefHeight="45.0" prefWidth="115.0" text="选择情景:" textOverrun="CENTER_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                  <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" text="选择情景:" textOverrun="CENTER_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="23.0" />
                      </font>

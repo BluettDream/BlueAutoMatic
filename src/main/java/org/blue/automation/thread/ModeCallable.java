@@ -44,6 +44,10 @@ public class ModeCallable implements Callable<Boolean> {
      * 最终情景
      **/
     private Situation endSituation = new Situation();
+    /**
+     * 前一次情景
+     **/
+    private Situation preSituation = new Situation();
 
     /**
      * 当前情景相似度大于最低相似度,进入判断,如果当前对象的优先级比结果对象的优先级高则直接将结果设置为当前对象
@@ -63,6 +67,7 @@ public class ModeCallable implements Callable<Boolean> {
                 Situation temp;
                 try {
                     temp = situationFuture.get();
+                    log.debug("{}相似度:{}",temp.getName(),temp.getRealSimile());
                     if (temp.getRealSimile().compareTo(temp.getLowestSimile()) >= 0 &&
                             (temp.getPriority() > endSituation.getPriority() || (temp.getPriority() == endSituation.getPriority()
                             && temp.getRealSimile().compareTo(endSituation.getRealSimile()) >= 0))) {
@@ -75,9 +80,10 @@ public class ModeCallable implements Callable<Boolean> {
                 }
             }
             log.info("匹配结果:{},相似度:{}", endSituation.getName(), endSituation.getRealSimile().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-            if (!endSituation.getName().equals("匹配失败")) {
+            if (!endSituation.getName().equals("匹配失败") && !endSituation.getName().equals(preSituation.getName())) {
                 initMillis = System.currentTimeMillis();
                 Action.operate(OPERATION_SERVICE, endSituation);
+                preSituation = endSituation.cloneFor(endSituation);
             }
             log.debug("等待时间:{}ms", waitTime);
         }

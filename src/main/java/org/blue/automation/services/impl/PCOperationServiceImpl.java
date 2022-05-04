@@ -6,7 +6,6 @@ import org.opencv.core.Point;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -50,6 +49,11 @@ public class PCOperationServiceImpl implements OperationService {
 
     @Override
     public void captureAndSave(String computerFile) {
+
+    }
+
+    @Override
+    public void setFilePath(String filePath) {
 
     }
 

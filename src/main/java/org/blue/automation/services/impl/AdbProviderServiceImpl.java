@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.AdbProvider;
-import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.AdbProviderService;
 import org.blue.automation.utils.FileUtil;
 
@@ -18,17 +17,17 @@ import java.nio.charset.StandardCharsets;
 public class AdbProviderServiceImpl implements AdbProviderService {
     private final static Logger log = LogManager.getLogger(AdbOperationServiceImpl.class);
     private final ObjectMapper objectMapper = FileUtil.getInstance().getObjectMapper();
-    private String fileName;
+    private String filePath;
 
-    public AdbProviderServiceImpl(String fileName) {
-        this.fileName = fileName;
+    public AdbProviderServiceImpl(String filePath) {
+        this.filePath = filePath;
     }
 
     @Override
     public AdbProvider getAdbProvider() {
         try {
             return objectMapper.readValue(
-                    new InputStreamReader(new FileInputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
+                    new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)
                     , AdbProvider.class
             );
         } catch (IOException e) {
@@ -41,7 +40,7 @@ public class AdbProviderServiceImpl implements AdbProviderService {
     public boolean setAdbProvider(AdbProvider adbProvider) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new OutputStreamWriter(new FileOutputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
+                    new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8)
                     , adbProvider);
             return true;
         } catch (IOException e) {

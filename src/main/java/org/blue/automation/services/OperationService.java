@@ -52,4 +52,11 @@ public interface OperationService {
      **/
     void captureAndSave(String computerFile);
 
+    /**
+     * 后台运行需要的文件路径
+     *
+     * @param filePath 文件路径
+     **/
+    void setFilePath(String filePath);
+
 }

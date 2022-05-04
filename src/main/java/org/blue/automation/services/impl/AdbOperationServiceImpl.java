@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class AdbOperationServiceImpl implements OperationService {
     private static final Logger log = LogManager.getLogger(AdbOperationServiceImpl.class);
     private static final CMDUtil CMD_UTIL = CMDUtil.getInstance();
-    private final AdbProvider adbProvider = new AdbProviderServiceImpl("adb.json").getAdbProvider();
+    private AdbProvider adbProvider;
     private boolean connected = false;
 
     @Override
@@ -72,6 +72,11 @@ public class AdbOperationServiceImpl implements OperationService {
         pull(adbProvider.getPhoneFilePath(), computerFile);
     }
 
+    @Override
+    public void setFilePath(String filePath) {
+        adbProvider = new AdbProviderServiceImpl(filePath).getAdbProvider();
+    }
+
     private void screenCap(String phoneFile) {
         CMD_UTIL.executeCMDCommand(
                 getAdbShell().append("screencap").append(" ")
@@ -91,10 +96,12 @@ public class AdbOperationServiceImpl implements OperationService {
     private boolean notConnect() {
         if (connected) return false;
         //双重验证连接成功(连接设备+获取设备列表并且有活跃设备)
-        ArrayList<AdbDevice> allDevices = getAllDevices();
-        if (connectToDevice(adbProvider.getDeviceNumber()) && allDevices.size() > 0 && allDevices.stream().anyMatch(adbDevice -> adbDevice.getState().equals(AdbDevice.State.DEVICE))) {
-            connected = true;
-            return false;
+        if (adbProvider != null && connectToDevice(adbProvider.getDeviceNumber())) {
+            ArrayList<AdbDevice> allDevices = getAllDevices();
+            if(allDevices.size() > 0 && allDevices.stream().anyMatch(adbDevice -> adbDevice.getState().equals(AdbDevice.State.DEVICE))){
+                connected = true;
+                return false;
+            }
         }
         connected = false;
         return true;
@@ -102,14 +109,14 @@ public class AdbOperationServiceImpl implements OperationService {
 
     private boolean connectToDevice(String ipAddress) {
         String output = CMD_UTIL.executeCMDCommand(
-                getAdb().append("connect").append(" ")
-                        .append(ipAddress).toString()
+                "adb" + " " + "connect" + " " +
+                        ipAddress
         );
         return output.contains("connected");
     }
 
     private ArrayList<AdbDevice> getAllDevices() {
-        String output = CMD_UTIL.executeCMDCommand(getAdb().append("devices").toString());
+        String output = CMD_UTIL.executeCMDCommand("adb" + " " + "devices");
         //分割控制台输出语句
         String[] split = output.split("\n");
         //判断当前语句之后是否为设备列表
@@ -139,7 +146,9 @@ public class AdbOperationServiceImpl implements OperationService {
     }
 
     private StringBuilder getAdb() {
-        return new StringBuilder().append("adb").append(" ");
+        return new StringBuilder().append("adb").append(" ")
+                .append("-s").append(" ")
+                .append(adbProvider.getDeviceNumber()).append(" ");
     }
 
     private StringBuilder getAdbShell() {

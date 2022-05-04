@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="240.0" minWidth="300.0" prefHeight="240.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.blue.automation.controller.IndexController">
+<VBox minHeight="240.0" minWidth="400.0" prefHeight="240.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.blue.automation.controller.IndexController">
    <children>
       <MenuBar minWidth="300.0" prefHeight="25.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
         <menus>
@@ -29,23 +29,49 @@
       </MenuBar>
       <FlowPane alignment="TOP_CENTER" prefWidth="300.0" prefWrapLength="300.0" vgap="10.0" VBox.vgrow="ALWAYS">
          <children>
-            <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="88.0" prefWidth="397.0" prefWrapLength="100.0">
+            <VBox alignment="CENTER" spacing="15.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" text="模式:" textOverrun="CENTER_ELLIPSIS" wrapText="true">
-                     <font>
-                        <Font size="35.0" />
-                     </font>
-                  </Label>
-                  <ChoiceBox fx:id="CHOICE_MODE_LIST" prefHeight="45.0" prefWidth="170.0">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ChoiceBox>
+                  <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefWidth="400.0" prefWrapLength="100.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" text="运行方式:" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                        </Label>
+                        <ChoiceBox fx:id="CHOICE_OPERATION_LIST" prefHeight="40.0" prefWidth="125.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ChoiceBox>
+                        <Button fx:id="BUTTON_CHOOSE_ADB_FILE" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onAction="#chooseAdbFile" text="选择文件" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </FlowPane>
+                  <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefWidth="250.0" prefWrapLength="100.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" text="模式:" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                        </Label>
+                        <ChoiceBox fx:id="CHOICE_MODE_LIST" prefHeight="40.0" prefWidth="170.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ChoiceBox>
+                     </children>
+                  </FlowPane>
                </children>
-            </FlowPane>
+            </VBox>
             <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefHeight="110.0" prefWidth="398.0" prefWrapLength="150.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onAction="#configureMode" text="设置" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                  <Button alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onAction="#configureMode" text="修改" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                      <font>
                         <Font size="25.0" />
                      </font>

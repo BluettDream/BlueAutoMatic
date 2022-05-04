@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AdbProviderServiceImplTest {
     static final Logger log = LogManager.getLogger(AdbProviderServiceImplTest.class);
-    private final AdbProviderService adbProviderService = new AdbProviderServiceImpl("adb.json");
+    private final AdbProviderService adbProviderService = new AdbProviderServiceImpl("模拟器.json");
 
     @Test
     void setAdbProvider() {

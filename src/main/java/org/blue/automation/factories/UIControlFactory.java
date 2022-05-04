@@ -44,15 +44,26 @@ public class UIControlFactory {
      * @return 文件选择器
      **/
     public static FileChooser createImageFileChooser(String title,String preDirectoryPath){
+        return createFileChooser(title,preDirectoryPath,true);
+    }
+
+    public static FileChooser createFileChooser(String title,String preDirectoryPath,boolean isImage){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
-        fileChooser.getExtensionFilters().addAll(
-                //new FileChooser.ExtensionFilter("All Images", "*.*"),
-                //new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                //new FileChooser.ExtensionFilter("GIF", "*.gif"),
-                //new FileChooser.ExtensionFilter("BMP", "*.bmp"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
-        );
+        if(isImage){
+            fileChooser.getExtensionFilters().addAll(
+                    //new FileChooser.ExtensionFilter("All Images", "*.*"),
+                    //new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                    //new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                    //new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                    new FileChooser.ExtensionFilter("PNG", "*.png")
+            );
+        }else{
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("JSON", "*.json"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*")
+            );
+        }
         if(!StringUtil.isWrong(preDirectoryPath)) fileChooser.setInitialDirectory(new File(preDirectoryPath));
         return fileChooser;
     }
