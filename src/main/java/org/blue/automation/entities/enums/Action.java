@@ -1,7 +1,7 @@
 package org.blue.automation.entities.enums;
 
-import org.blue.automation.entities.ImageInformation;
-import org.blue.automation.entities.Situation;
+import org.blue.automation.entities.ImageBase;
+import org.blue.automation.entities.SituationBase;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.ImageUtil;
 import org.opencv.core.Point;
@@ -22,9 +22,9 @@ public enum Action{
      * @param operationService 操作服务接口
      * @param situation 情景
      **/
-    public static void operate(OperationService operationService, Situation situation){
+    public static void operate(OperationService operationService, SituationBase situation){
         ImageUtil imageUtil = ImageUtil.getInstance();
-        ImageInformation temp = situation.getImage();
+        ImageBase temp = situation.getImage();
         if(situation.isCustom()) temp = situation.getCustomImage();
         if(situation.getAction() == null) return;
         switch (situation.getAction()){
@@ -36,8 +36,8 @@ public enum Action{
                 break;
             case MULTIPLE_CLICKS:
                 ArrayList<Point> points = new ArrayList<>();
-                //随机次数(1~3次)
-                int times = (int) (Math.random()*2) + 1;
+                //随机次数(1~4次)
+                int times = (int) (Math.random()*3) + 1;
                 for (int i = 0; i < times; i++) {
                     points.add(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }

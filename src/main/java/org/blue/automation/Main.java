@@ -58,6 +58,11 @@ public class Main extends Application {
             }
             log.info("线程池已关闭");
         });
+
+        Stage stage = new Stage();
+        stage.setTitle("蓝色");
+        stage.setResizable(false);
+        STAGE_MAP.put("modeRunningStage", stage);
     }
 
     public static void main(String[] args) {

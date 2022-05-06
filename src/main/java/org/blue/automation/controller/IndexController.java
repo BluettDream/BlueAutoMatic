@@ -23,16 +23,12 @@ import org.blue.automation.services.OperationService;
 import org.blue.automation.services.impl.AdbOperationServiceImpl;
 import org.blue.automation.services.impl.ModeServiceImpl;
 import org.blue.automation.services.impl.PCOperationServiceImpl;
-import org.blue.automation.thread.ModeCallable;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 /**
  * name: MengHao Tian
@@ -67,15 +63,6 @@ public class IndexController implements Initializable {
      * 模式列表
      **/
     private final Property<ObservableList<Mode>> modeList = new SimpleListProperty<>();
-    /**
-     * 主线程池
-     **/
-    private final ExecutorService THREAD_POOL = Main.THREAD_POOL;
-    /**
-     * 正在运行的模式线程
-     **/
-    private Future<Boolean> runningMode;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -98,9 +85,9 @@ public class IndexController implements Initializable {
         CHOICE_MODE_LIST.valueProperty().bindBidirectional(CURRENT_MODE_PROPERTY);
         CHOICE_MODE_LIST.getSelectionModel().selectFirst();
         //初始化操作方式下拉列表
-        CHOICE_OPERATION_LIST.getItems().addAll("手机","模拟器","电脑");
+        CHOICE_OPERATION_LIST.getItems().addAll("手机", "模拟器", "电脑");
         CHOICE_OPERATION_LIST.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            switch (newValue){
+            switch (newValue) {
                 case "手机":
                 case "模拟器":
                     OPERATION_SERVICE = new AdbOperationServiceImpl();
@@ -117,8 +104,8 @@ public class IndexController implements Initializable {
 
     @FXML
     void chooseAdbFile() {
-        File file = UIControlFactory.createFileChooser("选择json文件", PathEnum.JSON.getPath(),false).showOpenDialog(Main.STAGE_MAP.get("primaryStage"));
-        if(file != null) OPERATION_SERVICE.setFilePath(file.getAbsolutePath());
+        File file = UIControlFactory.createFileChooser("选择json文件", PathEnum.JSON.getPath(), false).showOpenDialog(Main.STAGE_MAP.get("primaryStage"));
+        if (file != null) OPERATION_SERVICE.setFilePath(file.getAbsolutePath());
     }
 
     /**
@@ -130,12 +117,12 @@ public class IndexController implements Initializable {
         Optional<String> nameText = dialog.showAndWait();
         nameText.ifPresent(name -> {
             Mode mode = new Mode().setName(name);
-            if(MODE_SERVICE.addMode(mode)) {
+            if (MODE_SERVICE.addMode(mode)) {
                 modeList.setValue(FXCollections.observableArrayList(MODE_SERVICE.selectAllModes()));
                 CURRENT_MODE_PROPERTY.set(mode);
-                log.info("{}添加成功",name);
-            }else{
-                new Alert(Alert.AlertType.ERROR,"添加失败").showAndWait();
+                log.info("{}添加成功", name);
+            } else {
+                new Alert(Alert.AlertType.ERROR, "添加失败").showAndWait();
                 log.error("{}添加失败", name);
             }
         });
@@ -155,11 +142,12 @@ public class IndexController implements Initializable {
             Main.STAGE_MAP.put("modeSettingStage", settingStage);
         }
         try {
-            settingStage.setScene(new Scene(new FXMLLoader(getClass().getResource("/views/modeSetting.fxml")).load(), 600, 400));
-            settingStage.show();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/modeSetting.fxml"));
+            settingStage.setScene(new Scene(fxmlLoader.load(), 600, 400));
         } catch (IOException e) {
             log.error("创建settingStage异常:", e);
         }
+        settingStage.show();
     }
 
     /**
@@ -167,11 +155,11 @@ public class IndexController implements Initializable {
      **/
     @FXML
     private void deleteMode() {
-        if(MODE_SERVICE.deleteModeByName(CURRENT_MODE_PROPERTY.get().getName())){
+        if (MODE_SERVICE.deleteModeByName(CURRENT_MODE_PROPERTY.get().getName())) {
             log.info("{}模式删除成功", CURRENT_MODE_PROPERTY.get().getName());
             modeList.setValue(FXCollections.observableArrayList(MODE_SERVICE.selectAllModes()));
             CURRENT_MODE_PROPERTY.set(modeList.getValue().get(0));
-        }else{
+        } else {
             log.error("{}模式删除失败", CURRENT_MODE_PROPERTY.get().getName());
         }
     }
@@ -182,18 +170,14 @@ public class IndexController implements Initializable {
     @FXML
     private void switchOnAndOff() {
         BUTTON_SWITCH.setDisable(true);
-        switch (BUTTON_SWITCH.getText()) {
-            case "运行":
-                log.debug("当前模式:{}", CURRENT_MODE_PROPERTY);
-                ModeCallable modeCallable = new ModeCallable();
-                runningMode = THREAD_POOL.submit(modeCallable);
-                BUTTON_SWITCH.setText("结束");
-                break;
-            case "结束":
-                if (!runningMode.isDone()) runningMode.cancel(true);
-                BUTTON_SWITCH.setText("运行");
-                break;
+        Stage stage = Main.STAGE_MAP.get("modeRunningStage");
+        log.debug("当前模式:{}", CURRENT_MODE_PROPERTY);
+        try {
+            stage.setScene(new Scene(new FXMLLoader(getClass().getResource("/views/modeRunning.fxml")).load(),600,400));
+        }catch (IOException e){
+            log.error("模式运行信息展示界面启动异常:",e);
         }
+        stage.show();
         BUTTON_SWITCH.setDisable(false);
     }
 
@@ -221,8 +205,8 @@ public class IndexController implements Initializable {
         log.info("打开帮助界面");
     }
 
-    public static Mode getCurrentMode() {
-        return CURRENT_MODE_PROPERTY.get();
+    public static SimpleObjectProperty<Mode> getCurrentModeProperty() {
+        return CURRENT_MODE_PROPERTY;
     }
 
     public static ModeService getModeService() {

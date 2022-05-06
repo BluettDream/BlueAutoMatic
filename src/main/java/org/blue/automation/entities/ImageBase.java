@@ -10,7 +10,7 @@ import java.util.Objects;
  * name: MengHao Tian
  * date: 2022/4/29 22:05
  */
-public class ImageInformation implements Serializable{
+public class ImageBase implements Serializable{
     private static final long serialVersionUID = 4959158909659101095L;
 
     /**
@@ -37,20 +37,20 @@ public class ImageInformation implements Serializable{
     /**
      * 图像克隆
      **/
-    public ImageInformation cloneFor(ImageInformation cloneObject){
-        ImageInformation imageInformation = new ImageInformation();
-        imageInformation.path = new SimpleStringProperty(cloneObject.getPath());
-        imageInformation.x = new SimpleIntegerProperty(cloneObject.getX());
-        imageInformation.y = new SimpleIntegerProperty(cloneObject.getY());
-        imageInformation.width = new SimpleIntegerProperty(cloneObject.getWidth());
-        return imageInformation;
+    public ImageBase cloneFor(ImageBase cloneObject){
+        ImageBase imageBase = new ImageBase();
+        imageBase.path = new SimpleStringProperty(cloneObject.getPath());
+        imageBase.x = new SimpleIntegerProperty(cloneObject.getX());
+        imageBase.y = new SimpleIntegerProperty(cloneObject.getY());
+        imageBase.width = new SimpleIntegerProperty(cloneObject.getWidth());
+        return imageBase;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImageInformation that = (ImageInformation) o;
+        ImageBase that = (ImageBase) o;
         return Objects.equals(path, that.path) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(width, that.width) && Objects.equals(height, that.height);
     }
 
@@ -78,8 +78,9 @@ public class ImageInformation implements Serializable{
         return path;
     }
 
-    public void setPath(String path) {
+    public ImageBase setPath(String path) {
         this.path.set(path);
+        return this;
     }
 
     public int getX() {
@@ -90,8 +91,9 @@ public class ImageInformation implements Serializable{
         return x;
     }
 
-    public void setX(int x) {
+    public ImageBase setX(int x) {
         this.x.set(x);
+        return this;
     }
 
     public int getY() {
@@ -102,8 +104,9 @@ public class ImageInformation implements Serializable{
         return y;
     }
 
-    public void setY(int y) {
+    public ImageBase setY(int y) {
         this.y.set(y);
+        return this;
     }
 
     public int getWidth() {
@@ -114,8 +117,9 @@ public class ImageInformation implements Serializable{
         return width;
     }
 
-    public void setWidth(int width) {
+    public ImageBase setWidth(int width) {
         this.width.set(width);
+        return this;
     }
 
     public int getHeight() {
@@ -126,7 +130,8 @@ public class ImageInformation implements Serializable{
         return height;
     }
 
-    public void setHeight(int height) {
+    public ImageBase setHeight(int height) {
         this.height.set(height);
+        return this;
     }
 }

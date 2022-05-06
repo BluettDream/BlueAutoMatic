@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Mode implements Serializable {
     private static final long serialVersionUID = 3847206222193416167L;
     private final SimpleStringProperty name = new SimpleStringProperty();
-    private ArrayList<Situation> situationList = new ArrayList<>();
+    private ArrayList<SituationBase> situationList = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -51,11 +51,11 @@ public class Mode implements Serializable {
         return this;
     }
 
-    public ArrayList<Situation> getSituationList() {
+    public ArrayList<SituationBase> getSituationList() {
         return situationList;
     }
 
-    public Mode setSituationList(ArrayList<Situation> situationList) {
+    public Mode setSituationList(ArrayList<SituationBase> situationList) {
         this.situationList = situationList;
         return this;
     }

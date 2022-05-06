@@ -1,13 +1,17 @@
 package org.blue.automation.thread;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
 import org.blue.automation.controller.IndexController;
+import org.blue.automation.controller.ModeRunningController;
+import org.blue.automation.entities.SituationBase;
 import org.blue.automation.entities.enums.Action;
 import org.blue.automation.entities.enums.PathEnum;
-import org.blue.automation.entities.Situation;
 import org.blue.automation.services.OperationService;
+import org.blue.automation.utils.StringUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,15 +27,15 @@ public class ModeCallable implements Callable<Boolean> {
     /**
      * 接收完成任务的线程池
      **/
-    private final CompletionService<Situation> completionService = new ExecutorCompletionService<>(Main.THREAD_POOL);
+    private final CompletionService<SituationBase> completionService = new ExecutorCompletionService<>(Main.THREAD_POOL);
     /**
      * 任务接收列表
      **/
-    private final ArrayList<Future<Situation>> futureArrayList = new ArrayList<>();
+    private final ArrayList<Future<SituationBase>> futureArrayList = new ArrayList<>();
     /**
      * 情景列表
      **/
-    ArrayList<Situation> situationList = IndexController.getCurrentMode().getSituationList();
+    private final ArrayList<SituationBase> situationList = IndexController.getCurrentModeProperty().get().getSituationList();
     /**
      * 初始时间
      **/
@@ -39,15 +43,16 @@ public class ModeCallable implements Callable<Boolean> {
     /**
      * 等待时间
      **/
-    private long waitTime = 0;
+    private long runningTime = 0;
     /**
      * 最终情景
      **/
-    private Situation endSituation = new Situation();
+    private SituationBase endSituation = new SituationBase();
     /**
      * 前一次情景
      **/
-    private Situation preSituation = new Situation();
+    private SituationBase preSituation = new SituationBase();
+    private long equalTimes = 0;
 
     /**
      * 当前情景相似度大于最低相似度,进入判断,如果当前对象的优先级比结果对象的优先级高则直接将结果设置为当前对象
@@ -55,16 +60,16 @@ public class ModeCallable implements Callable<Boolean> {
      **/
     @Override
     public Boolean call() {
-        log.info("{}模式开始运行", IndexController.getCurrentMode().getName());
+        log.info("{}模式开始运行", IndexController.getCurrentModeProperty().getName());
         if (situationList == null || situationList.size() <= 0) return false;
-        while (!Thread.currentThread().isInterrupted() && waitTime < 15000) {
+        long millis = System.currentTimeMillis();
+        while (!Thread.currentThread().isInterrupted() && runningTime < 60*60*1000) {
             clearEndSituation();
             futureArrayList.clear();
-            waitTime = System.currentTimeMillis() - initMillis;
             OPERATION_SERVICE.captureAndSave(PathEnum.IMAGE_OUTER + "main.png");
             situationList.forEach(situation -> futureArrayList.add(completionService.submit(new SituationCallable(situation))));
-            for (Future<Situation> situationFuture : futureArrayList) {
-                Situation temp;
+            for (Future<SituationBase> situationFuture : futureArrayList) {
+                SituationBase temp;
                 try {
                     temp = situationFuture.get();
                     log.debug("{}相似度:{}",temp.getName(),temp.getRealSimile());
@@ -80,14 +85,27 @@ public class ModeCallable implements Callable<Boolean> {
                 }
             }
             log.info("匹配结果:{},相似度:{}", endSituation.getName(), endSituation.getRealSimile().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-            if (!endSituation.getName().equals("匹配失败") && !endSituation.getName().equals(preSituation.getName())) {
-                initMillis = System.currentTimeMillis();
+            if (!endSituation.getName().equals("正在匹配")) {
                 Action.operate(OPERATION_SERVICE, endSituation);
-                preSituation = endSituation.cloneFor(endSituation);
             }
-            log.debug("等待时间:{}ms", waitTime);
+            if(!StringUtil.isWrong(preSituation.getName()) && endSituation.getName().equals(preSituation.getName())){
+                equalTimes = System.currentTimeMillis() - initMillis;
+                if(equalTimes > preSituation.getMaxDelayTime()*1000){
+                    break;
+                }
+            }else{
+                initMillis = System.currentTimeMillis();
+            }
+            Platform.runLater(()->{
+                ModeRunningController.resultProperty().set("匹配结果: "+endSituation.getName());
+                ModeRunningController.WAIT_TIMEProperty().set(runningTime / (60*60.0*1000));
+                ModeRunningController.SITUATION_LISTProperty().get().setAll(situationList);
+            });
+            preSituation = endSituation.cloneFor(endSituation);
+            runningTime = System.currentTimeMillis() - millis;
+            log.debug("等待时间:{}ms", equalTimes);
         }
-        log.info("{}模式运行结束", IndexController.getCurrentMode().getName());
+        log.info("{}模式运行结束", IndexController.getCurrentModeProperty().getName());
         return true;
     }
 
@@ -96,9 +114,12 @@ public class ModeCallable implements Callable<Boolean> {
      *
      **/
     private void clearEndSituation() {
-        endSituation.setName("匹配失败");
+        endSituation.setName("正在匹配");
         endSituation.setPriority(-1);
-        endSituation.setImage(null);
         endSituation.setRealSimile(BigDecimal.valueOf(-1));
+    }
+
+    public SituationBase getEndSituation() {
+        return endSituation;
     }
 }

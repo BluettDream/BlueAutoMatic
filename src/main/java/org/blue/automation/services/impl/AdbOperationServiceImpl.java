@@ -41,8 +41,8 @@ public class AdbOperationServiceImpl implements OperationService {
         for (Point point : points) {
             click(point);
             try {
-                //随机延时(100~300ms)
-                TimeUnit.MILLISECONDS.sleep((long) (Math.random()*200+100));
+                //随机延时(50~300ms)
+                TimeUnit.MILLISECONDS.sleep((long) (Math.random()*250+50));
             } catch (InterruptedException e) {
                 log.error("ADB多次点击出现异常:",e);
             }

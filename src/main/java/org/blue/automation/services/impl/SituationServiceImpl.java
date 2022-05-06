@@ -1,7 +1,7 @@
 package org.blue.automation.services.impl;
 
 import org.blue.automation.entities.Mode;
-import org.blue.automation.entities.Situation;
+import org.blue.automation.entities.SituationBase;
 import org.blue.automation.services.ModeService;
 import org.blue.automation.services.SituationService;
 import org.blue.automation.utils.StringUtil;
@@ -21,7 +21,7 @@ public class SituationServiceImpl implements SituationService {
     }
 
     @Override
-    public ArrayList<Situation> selectAllSituations(String modeName) {
+    public ArrayList<SituationBase> selectAllSituations(String modeName) {
         Mode mode = modeService.selectModeByName(modeName);
         if(mode == null) return null;
         currentMode = mode;
@@ -29,33 +29,35 @@ public class SituationServiceImpl implements SituationService {
     }
 
     @Override
-    public Situation selectSituationByName(String name) {
+    public SituationBase selectSituationByName(String name) {
         if(currentMode == null || StringUtil.isWrong(name)) return null;
-        ArrayList<Situation> situationList = currentMode.getSituationList();
+        ArrayList<SituationBase> situationList = currentMode.getSituationList();
         if(situationList == null || situationList.size() < 1) return null;
-        for (Situation originSituation : situationList) {
+        for (SituationBase originSituation : situationList) {
             if(originSituation.getName().equals(name)) return originSituation;
         }
         return null;
     }
 
     @Override
-    public boolean addSituation(Situation situation) {
+    public boolean addSituation(SituationBase situation) {
         if(currentMode == null || situation == null || StringUtil.isWrong(situation.getName())) return false;
-        ArrayList<Situation> situationList = currentMode.getSituationList();
+        ArrayList<SituationBase> situationList = currentMode.getSituationList();
         if(situationList == null) return false;
         //如果名称相同则更新情景
-        for (Situation originSituation : situationList) {
-            if(originSituation.getName().equals(situation.getName())) return updateSituation(situation);
+        if(situationList.size() > 0){
+            for (SituationBase originSituation : situationList) {
+                if(originSituation.getName().equals(situation.getName())) return updateSituation(situation);
+            }
         }
         currentMode.getSituationList().add(situation);
         return modeService.updateMode(currentMode);
     }
 
     @Override
-    public boolean updateSituation(Situation situation) {
+    public boolean updateSituation(SituationBase situation) {
         if(currentMode == null || situation == null || StringUtil.isWrong(situation.getName())) return false;
-        ArrayList<Situation> situationList = currentMode.getSituationList();
+        ArrayList<SituationBase> situationList = currentMode.getSituationList();
         if(situationList == null || situationList.size() < 1) return false;
         for (int i = 0; i < situationList.size(); ++i) {
             //名称相同则更新当前情景

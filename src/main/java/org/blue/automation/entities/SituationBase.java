@@ -1,22 +1,19 @@
 package org.blue.automation.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import org.blue.automation.entities.enums.Action;
 
-import java.io.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
  * name: MengHao Tian
- * date: 2022/4/29 20:28
+ * date: 2022/5/4 12:31
  */
-public class Situation implements Serializable{
-    private static final long serialVersionUID = -54614979185635915L;
+public class SituationBase implements Serializable {
+    private static final long serialVersionUID = 8438026337136155490L;
 
     /**
      * 情景名称
@@ -29,7 +26,7 @@ public class Situation implements Serializable{
     /**
      * 图像信息
      **/
-    private SimpleObjectProperty<ImageInformation> image = new SimpleObjectProperty<>(new ImageInformation());
+    private SimpleObjectProperty<ImageBase> image = new SimpleObjectProperty<>(new ImageBase());
     /**
      * 最低相似度
      **/
@@ -49,15 +46,19 @@ public class Situation implements Serializable{
     /**
      * 自定义的位置
      **/
-    private SimpleObjectProperty<ImageInformation> customImage = new SimpleObjectProperty<>(new ImageInformation());
+    private SimpleObjectProperty<ImageBase> customImage = new SimpleObjectProperty<>(new ImageBase());
     /**
-     * 真实的相似度
+     * 最大延迟时间
+     **/
+    private SimpleDoubleProperty maxDelayTime = new SimpleDoubleProperty(30.0);
+    /**
+     * 真实相似度
      **/
     @JsonIgnore
     private SimpleObjectProperty<BigDecimal> realSimile = new SimpleObjectProperty<>();
 
-    public Situation cloneFor(Situation cloneObject){
-        Situation situation = new Situation();
+    public SituationBase cloneFor(SituationBase cloneObject){
+        SituationBase situation = new SituationBase();
         situation.name = new SimpleStringProperty(cloneObject.getName());
         situation.priority = new SimpleIntegerProperty(cloneObject.getPriority());
         situation.image = new SimpleObjectProperty<>(cloneObject.getImage().cloneFor(cloneObject.getImage()));
@@ -66,6 +67,7 @@ public class Situation implements Serializable{
         situation.action = new SimpleObjectProperty<>(cloneObject.getAction());
         situation.custom = new SimpleBooleanProperty(cloneObject.isCustom());
         situation.customImage = new SimpleObjectProperty<>(cloneObject.getCustomImage().cloneFor(cloneObject.getCustomImage()));
+        situation.maxDelayTime = new SimpleDoubleProperty(cloneObject.getMaxDelayTime());
         situation.realSimile = new SimpleObjectProperty<>(cloneObject.getRealSimile());
         return situation;
     }
@@ -74,18 +76,18 @@ public class Situation implements Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Situation that = (Situation) o;
-        return Objects.equals(name, that.name) && Objects.equals(priority, that.priority) && Objects.equals(image, that.image) && Objects.equals(lowestSimile, that.lowestSimile) && Objects.equals(click, that.click) && Objects.equals(action, that.action) && Objects.equals(custom, that.custom) && Objects.equals(customImage, that.customImage) && Objects.equals(realSimile, that.realSimile);
+        SituationBase that = (SituationBase) o;
+        return Objects.equals(name, that.name) && Objects.equals(priority, that.priority) && Objects.equals(image, that.image) && Objects.equals(lowestSimile, that.lowestSimile) && Objects.equals(click, that.click) && Objects.equals(action, that.action) && Objects.equals(custom, that.custom) && Objects.equals(customImage, that.customImage) && Objects.equals(maxDelayTime, that.maxDelayTime) && Objects.equals(realSimile, that.realSimile);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, priority, image, lowestSimile, click, action, custom, customImage, realSimile);
+        return Objects.hash(name, priority, image, lowestSimile, click, action, custom, customImage, maxDelayTime, realSimile);
     }
 
     @Override
     public String toString() {
-        return "SituationProperty{" +
+        return "SituationBase{" +
                 "name=" + name +
                 ", priority=" + priority +
                 ", image=" + image +
@@ -94,6 +96,7 @@ public class Situation implements Serializable{
                 ", action=" + action +
                 ", custom=" + custom +
                 ", customImage=" + customImage +
+                ", maxDelayTime=" + maxDelayTime +
                 ", realSimile=" + realSimile +
                 '}';
     }
@@ -106,7 +109,7 @@ public class Situation implements Serializable{
         return name;
     }
 
-    public Situation setName(String name) {
+    public SituationBase setName(String name) {
         this.name.set(name);
         return this;
     }
@@ -119,20 +122,20 @@ public class Situation implements Serializable{
         return priority;
     }
 
-    public Situation setPriority(int priority) {
+    public SituationBase setPriority(int priority) {
         this.priority.set(priority);
         return this;
     }
 
-    public ImageInformation getImage() {
+    public ImageBase getImage() {
         return image.get();
     }
 
-    public SimpleObjectProperty<ImageInformation> imageProperty() {
+    public SimpleObjectProperty<ImageBase> imageProperty() {
         return image;
     }
 
-    public Situation setImage(ImageInformation image) {
+    public SituationBase setImage(ImageBase image) {
         this.image.set(image);
         return this;
     }
@@ -145,7 +148,7 @@ public class Situation implements Serializable{
         return click;
     }
 
-    public Situation setClick(boolean click) {
+    public SituationBase setClick(boolean click) {
         this.click.set(click);
         return this;
     }
@@ -158,7 +161,7 @@ public class Situation implements Serializable{
         return action;
     }
 
-    public Situation setAction(Action action) {
+    public SituationBase setAction(Action action) {
         this.action.set(action);
         return this;
     }
@@ -171,7 +174,7 @@ public class Situation implements Serializable{
         return lowestSimile;
     }
 
-    public Situation setLowestSimile(BigDecimal lowestSimile) {
+    public SituationBase setLowestSimile(BigDecimal lowestSimile) {
         this.lowestSimile.set(lowestSimile);
         return this;
     }
@@ -184,21 +187,34 @@ public class Situation implements Serializable{
         return realSimile;
     }
 
-    public Situation setRealSimile(BigDecimal realSimile) {
+    public SituationBase setRealSimile(BigDecimal realSimile) {
         this.realSimile.set(realSimile);
         return this;
     }
 
-    public ImageInformation getCustomImage() {
+    public ImageBase getCustomImage() {
         return customImage.get();
     }
 
-    public SimpleObjectProperty<ImageInformation> customImageProperty() {
+    public SimpleObjectProperty<ImageBase> customImageProperty() {
         return customImage;
     }
 
-    public Situation setCustomImage(ImageInformation customImage) {
+    public SituationBase setCustomImage(ImageBase customImage) {
         this.customImage.set(customImage);
+        return this;
+    }
+
+    public double getMaxDelayTime() {
+        return maxDelayTime.get();
+    }
+
+    public SimpleDoubleProperty maxDelayTimeProperty() {
+        return maxDelayTime;
+    }
+
+    public SituationBase setMaxDelayTime(double maxDelayTime) {
+        this.maxDelayTime.set(maxDelayTime);
         return this;
     }
 
@@ -210,7 +226,7 @@ public class Situation implements Serializable{
         return custom;
     }
 
-    public Situation setCustom(boolean custom) {
+    public SituationBase setCustom(boolean custom) {
         this.custom.set(custom);
         return this;
     }
