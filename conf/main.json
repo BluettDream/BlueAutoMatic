@@ -1,580 +1,547 @@
-[
-  {
-    "name": "御魂(2人司机)",
-    "situationList": [
-      {
-        "name": "等待队友(2号)",
-        "priority": 2,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/DengDaiDuiYou(2Hao).png",
-          "x": 1136,
-          "y": 343,
-          "width": 79,
-          "height": 78
-        },
-        "lowestSimile": 0.9,
-        "click": false,
-        "action": null,
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "开始游戏中",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/KaiShiYouXiZhong.png",
-          "x": 2073,
-          "y": 917,
-          "width": 122,
-          "height": 112
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在游戏",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
-          "x": 148,
-          "y": 25,
-          "width": 46,
-          "height": 49
-        },
-        "lowestSimile": 0.9,
-        "click": false,
-        "action": null,
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 60.0
-      },
-      {
-        "name": "正在准备",
-        "priority": 1,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiZhunBei.png",
-          "x": 1986,
-          "y": 813,
-          "width": 166,
-          "height": 74
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在邀请队友",
-        "priority": 1,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiYaoQingDuiYou.png",
-          "x": 1021,
-          "y": 503,
-          "width": 62,
-          "height": 110
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "游戏结束中",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
-          "x": 844,
-          "y": 131,
-          "width": 181,
-          "height": 145
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "确定邀请队友",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/QueDingYaoQingDuiYou.png",
-          "x": 1216,
-          "y": 604,
-          "width": 264,
-          "height": 90
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在奖励结算",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
-          "x": 1012,
-          "y": 752,
-          "width": 297,
-          "height": 156
-        },
-        "lowestSimile": 0.90,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      }
-    ]
-  },
-  {
-    "name": "御魂(2人打手)",
-    "situationList": [
-  {
-    "name": "正在游戏",
-    "priority": 0,
-    "image": {
-      "path": "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
-      "x": 148,
-      "y": 25,
-      "width": 46,
-      "height": 49
+[ {
+  "name" : "御魂(2人司机)",
+  "situationList" : [ {
+    "name" : "等待队友(2号)",
+    "priority" : 2,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/DengDaiDuiYou(2Hao).png",
+      "x" : 1136,
+      "y" : 343,
+      "width" : 79,
+      "height" : 78
     },
-    "lowestSimile": 0.9,
-    "click": false,
-    "action": null,
-    "custom": false,
-    "customImage": {
-      "path": null,
-      "x": 0,
-      "y": 0,
-      "width": 0,
-      "height": 0
+    "lowestSimile" : 0.9,
+    "click" : false,
+    "action" : null,
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
     },
-    "maxDelayTime": 60.0
-  },
-      {
-        "name": "正在奖励结算",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
-          "x": 1012,
-          "y": 752,
-          "width": 297,
-          "height": 156
-        },
-        "lowestSimile": 0.90,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "游戏结束中",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
-          "x": 844,
-          "y": 131,
-          "width": 181,
-          "height": 145
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      }]
-  },
-  {
-    "name": "御魂(3人司机)",
-    "situationList": [{
-      "name": "等待队友(3号)",
-      "priority": 1,
-      "image": {
-        "path": "D:/homework/java/Blue/images/inner/DengDaiDuiYou(3Hao).png",
-        "x": 1805,
-        "y": 340,
-        "width": 78,
-        "height": 79
-      },
-      "lowestSimile": 0.9,
-      "click": false,
-      "action": null,
-      "custom": false,
-      "customImage": {
-        "path": null,
-        "x": 0,
-        "y": 0,
-        "width": 0,
-        "height": 0
-      },
-      "maxDelayTime": 30.0
-    },{
-      "name": "等待队友(2号)",
-      "priority": 2,
-      "image": {
-        "path": "D:/homework/java/Blue/images/inner/DengDaiDuiYou(2Hao).png",
-        "x": 1136,
-        "y": 343,
-        "width": 79,
-        "height": 78
-      },
-      "lowestSimile": 0.9,
-      "click": false,
-      "action": null,
-      "custom": false,
-      "customImage": {
-        "path": null,
-        "x": 0,
-        "y": 0,
-        "width": 0,
-        "height": 0
-      },
-      "maxDelayTime": 30.0
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "开始游戏中",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/KaiShiYouXiZhong.png",
+      "x" : 2073,
+      "y" : 917,
+      "width" : 122,
+      "height" : 112
     },
-      {
-        "name": "开始游戏中",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/KaiShiYouXiZhong.png",
-          "x": 2073,
-          "y": 917,
-          "width": 122,
-          "height": 112
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在游戏",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
-          "x": 148,
-          "y": 25,
-          "width": 46,
-          "height": 49
-        },
-        "lowestSimile": 0.9,
-        "click": false,
-        "action": null,
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 60.0
-      },
-      {
-        "name": "正在准备",
-        "priority": 1,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiZhunBei.png",
-          "x": 1986,
-          "y": 813,
-          "width": 166,
-          "height": 74
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在邀请队友",
-        "priority": 1,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiYaoQingDuiYou.png",
-          "x": 1021,
-          "y": 503,
-          "width": 62,
-          "height": 110
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "游戏结束中",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
-          "x": 844,
-          "y": 131,
-          "width": 181,
-          "height": 145
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "确定邀请队友",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/QueDingYaoQingDuiYou.png",
-          "x": 1216,
-          "y": 604,
-          "width": 264,
-          "height": 90
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在奖励结算",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
-          "x": 1012,
-          "y": 752,
-          "width": 297,
-          "height": 156
-        },
-        "lowestSimile": 0.90,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      }]
-  },
-  {
-    "name": "御魂(3人打手)",
-    "situationList": [
-
-    ]
-  },
-  {
-    "name": "业原火",
-    "situationList": [
-      {
-        "name": "业原火点击挑战",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/YeYuanHuoDianJiTiaoZhan.png",
-          "x": 1875,
-          "y": 909,
-          "width": 136,
-          "height": 101
-        },
-        "lowestSimile": 0.90,
-        "click": true,
-        "action": "CLICK",
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在游戏",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
-          "x": 148,
-          "y": 25,
-          "width": 46,
-          "height": 49
-        },
-        "lowestSimile": 0.9,
-        "click": false,
-        "action": null,
-        "custom": false,
-        "customImage": {
-          "path": null,
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        },
-        "maxDelayTime": 60.0
-      },
-      {
-        "name": "游戏结束中",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
-          "x": 844,
-          "y": 131,
-          "width": 181,
-          "height": 145
-        },
-        "lowestSimile": 0.9,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      },
-      {
-        "name": "正在奖励结算",
-        "priority": 0,
-        "image": {
-          "path": "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
-          "x": 1012,
-          "y": 752,
-          "width": 297,
-          "height": 156
-        },
-        "lowestSimile": 0.90,
-        "click": true,
-        "action": "MULTIPLE_CLICKS",
-        "custom": true,
-        "customImage": {
-          "path": null,
-          "x": 1565,
-          "y": 605,
-          "width": 770,
-          "height": 460
-        },
-        "maxDelayTime": 30.0
-      }
-    ]
-  },
-  {
-    "name": "御灵",
-    "situationList": []
-  }
-]
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在游戏",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
+      "x" : 148,
+      "y" : 25,
+      "width" : 46,
+      "height" : 49
+    },
+    "lowestSimile" : 0.9,
+    "click" : false,
+    "action" : null,
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 60.0
+  }, {
+    "name" : "正在准备",
+    "priority" : 1,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiZhunBei.png",
+      "x" : 1986,
+      "y" : 813,
+      "width" : 166,
+      "height" : 74
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在邀请队友",
+    "priority" : 1,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiYaoQingDuiYou.png",
+      "x" : 1021,
+      "y" : 503,
+      "width" : 62,
+      "height" : 110
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "游戏结束中",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
+      "x" : 844,
+      "y" : 131,
+      "width" : 181,
+      "height" : 145
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "确定邀请队友",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/QueDingYaoQingDuiYou.png",
+      "x" : 1216,
+      "y" : 604,
+      "width" : 264,
+      "height" : 90
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在奖励结算",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
+      "x" : 1012,
+      "y" : 752,
+      "width" : 297,
+      "height" : 156
+    },
+    "lowestSimile" : 0.90,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  } ]
+}, {
+  "name" : "御魂(2人打手)",
+  "situationList" : [ {
+    "name" : "正在游戏",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
+      "x" : 148,
+      "y" : 25,
+      "width" : 46,
+      "height" : 49
+    },
+    "lowestSimile" : 0.9,
+    "click" : false,
+    "action" : null,
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 60.0
+  }, {
+    "name" : "正在奖励结算",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
+      "x" : 1012,
+      "y" : 752,
+      "width" : 297,
+      "height" : 156
+    },
+    "lowestSimile" : 0.90,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "游戏结束中",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
+      "x" : 844,
+      "y" : 131,
+      "width" : 181,
+      "height" : 145
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  } ]
+}, {
+  "name" : "御魂(3人司机)",
+  "situationList" : [ {
+    "name" : "等待队友(3号)",
+    "priority" : 1,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/DengDaiDuiYou(3Hao).png",
+      "x" : 1805,
+      "y" : 340,
+      "width" : 78,
+      "height" : 79
+    },
+    "lowestSimile" : 0.9,
+    "click" : false,
+    "action" : null,
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "等待队友(2号)",
+    "priority" : 2,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/DengDaiDuiYou(2Hao).png",
+      "x" : 1136,
+      "y" : 343,
+      "width" : 79,
+      "height" : 78
+    },
+    "lowestSimile" : 0.9,
+    "click" : false,
+    "action" : null,
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "开始游戏中",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/KaiShiYouXiZhong.png",
+      "x" : 2073,
+      "y" : 917,
+      "width" : 122,
+      "height" : 112
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在游戏",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
+      "x" : 148,
+      "y" : 25,
+      "width" : 46,
+      "height" : 49
+    },
+    "lowestSimile" : 0.9,
+    "click" : false,
+    "action" : null,
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 60.0
+  }, {
+    "name" : "正在准备",
+    "priority" : 1,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiZhunBei.png",
+      "x" : 1986,
+      "y" : 813,
+      "width" : 166,
+      "height" : 74
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在邀请队友",
+    "priority" : 1,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiYaoQingDuiYou.png",
+      "x" : 1021,
+      "y" : 503,
+      "width" : 62,
+      "height" : 110
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "游戏结束中",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
+      "x" : 844,
+      "y" : 131,
+      "width" : 181,
+      "height" : 145
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "确定邀请队友",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/QueDingYaoQingDuiYou.png",
+      "x" : 1216,
+      "y" : 604,
+      "width" : 264,
+      "height" : 90
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在奖励结算",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
+      "x" : 1012,
+      "y" : 752,
+      "width" : 297,
+      "height" : 156
+    },
+    "lowestSimile" : 0.90,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  } ]
+}, {
+  "name" : "御魂(3人打手)",
+  "situationList" : [ ]
+}, {
+  "name" : "业原火",
+  "situationList" : [ {
+    "name" : "业原火点击挑战",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/YeYuanHuoDianJiTiaoZhan.png",
+      "x" : 1875,
+      "y" : 909,
+      "width" : 136,
+      "height" : 101
+    },
+    "lowestSimile" : 0.90,
+    "click" : true,
+    "action" : "CLICK",
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在游戏",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiYouXi.png",
+      "x" : 148,
+      "y" : 25,
+      "width" : 46,
+      "height" : 49
+    },
+    "lowestSimile" : 0.9,
+    "click" : false,
+    "action" : null,
+    "custom" : false,
+    "customImage" : {
+      "path" : null,
+      "x" : 0,
+      "y" : 0,
+      "width" : 0,
+      "height" : 0
+    },
+    "maxDelayTime" : 60.0
+  }, {
+    "name" : "游戏结束中",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/YouXiJieShuZhong.png",
+      "x" : 844,
+      "y" : 131,
+      "width" : 181,
+      "height" : 145
+    },
+    "lowestSimile" : 0.9,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  }, {
+    "name" : "正在奖励结算",
+    "priority" : 0,
+    "image" : {
+      "path" : "D:/homework/java/Blue/images/inner/ZhengZaiJiangLiJieSuan.png",
+      "x" : 1012,
+      "y" : 752,
+      "width" : 297,
+      "height" : 156
+    },
+    "lowestSimile" : 0.90,
+    "click" : true,
+    "action" : "MULTIPLE_CLICKS",
+    "custom" : true,
+    "customImage" : {
+      "path" : null,
+      "x" : 1565,
+      "y" : 605,
+      "width" : 770,
+      "height" : 460
+    },
+    "maxDelayTime" : 30.0
+  } ]
+}, {
+  "name" : "御灵",
+  "situationList" : [ ]
+} ]

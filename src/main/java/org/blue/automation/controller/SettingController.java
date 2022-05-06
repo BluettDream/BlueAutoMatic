@@ -103,7 +103,7 @@ public class SettingController implements Initializable {
     @FXML
     void captureSituationImage() {
         // TODO: 2022/4/29 完善记忆上一次打开文件路径功能
-        File file = UIControlFactory.createImageFileChooser("保存图片", "E:\\Users\\90774\\Pictures").showSaveDialog(Main.STAGE_MAP.get("settingStage"));
+        File file = UIControlFactory.createImageFileChooser("保存图片", preDirectoryPath).showSaveDialog(Main.STAGE_MAP.get("settingStage"));
         if (file != null && !StringUtil.isWrong(file.getAbsolutePath())) {
             IndexController.getOperationService().captureAndSave(file.getAbsolutePath());
             new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
@@ -119,8 +119,8 @@ public class SettingController implements Initializable {
             new Alert(Alert.AlertType.ERROR,"删除失败").showAndWait();
             return;
         }
-        CHOICE_SITUATION_LIST.setItems(FXCollections.observableArrayList(situationService.selectAllSituations(IndexController.getCurrentModeProperty().getName())));
         log.info("{}情景删除成功", currentSituationProperty.get().getName());
+        CHOICE_SITUATION_LIST.getItems().setAll(situationService.selectAllSituations(IndexController.getCurrentModeProperty().get().getName()));
         reset();
     }
 
@@ -130,21 +130,23 @@ public class SettingController implements Initializable {
     @FXML
     void saveSituation() {
         if(StringUtil.isWrong(currentSituationProperty.get().getImage().getPath())){
-            new Alert(Alert.AlertType.ERROR,"图片读取失败").showAndWait();
+            new Alert(Alert.AlertType.ERROR,"图片路径不符合要求").showAndWait();
             return;
         }
         try {
+            currentSituationProperty.get().getImage().setPath(currentSituationProperty.get().getImage().getPath().replaceAll("\\\\", "/"));
             BufferedImage image = ImageIO.read(new FileInputStream(currentSituationProperty.get().getImage().getPath()));
             currentSituationProperty.get().getImage().setWidth(image.getWidth());
             currentSituationProperty.get().getImage().setHeight(image.getHeight());
         } catch (IOException e) {
             log.error("图片读取异常:", e);
+            new Alert(Alert.AlertType.ERROR,"图片读取失败").showAndWait();
             return;
         }
         if (situationService.addSituation(currentSituationProperty.get())) {
-            new Alert(Alert.AlertType.INFORMATION, currentSituationProperty.get().getName()+"保存成功");
+            new Alert(Alert.AlertType.INFORMATION, currentSituationProperty.get().getName()+"保存成功").showAndWait();
             log.info("情景保存成功:{}", currentSituationProperty.get());
-            CHOICE_SITUATION_LIST.setItems(FXCollections.observableArrayList(situationService.selectAllSituations(IndexController.getCurrentModeProperty().getName())));
+            CHOICE_SITUATION_LIST.getItems().setAll(situationService.selectAllSituations(IndexController.getCurrentModeProperty().get().getName()));
             reset();
             return;
         }
@@ -174,7 +176,7 @@ public class SettingController implements Initializable {
                 return new SituationBase().setName(string);
             }
         });
-        CHOICE_SITUATION_LIST.getItems().setAll(IndexController.getCurrentModeProperty().get().getSituationList());
+        CHOICE_SITUATION_LIST.getItems().setAll(situationService.selectAllSituations(IndexController.getCurrentModeProperty().get().getName()));
         CHOICE_SITUATION_LIST.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateSituationProperty(newValue));
         CHOICE_SITUATION_LIST.getSelectionModel().selectFirst();
         CHOICE_CLICK_TYPE_LIST.setItems(FXCollections.observableArrayList(Action.values()));
