@@ -3,8 +3,6 @@ package org.blue.automation.controller;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -68,13 +66,10 @@ public class ModeRunningController implements Initializable {
         Main.STAGE_MAP.get("modeRunningStage").setOnCloseRequest(event -> runningMode.cancel(true));
         RESULT.bindBidirectional(LABEL_RESULT_SHOW.textProperty());
         PROGRESS_MAX_WAIT_TIME.progressProperty().bindBidirectional(WAIT_TIME);
-        PROGRESS_MAX_WAIT_TIME.progressProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(newValue.doubleValue() >= 1){
-                    runningMode.cancel(true);
-                    LABEL_RESULT_SHOW.setText("运行结束");
-                }
+        PROGRESS_MAX_WAIT_TIME.progressProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.doubleValue() >= 1){
+                runningMode.cancel(true);
+                LABEL_RESULT_SHOW.setText("运行结束");
             }
         });
         LISTVIEW_SITUATION.itemsProperty().bindBidirectional(SITUATION_LIST);

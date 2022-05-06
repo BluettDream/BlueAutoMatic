@@ -1,7 +1,6 @@
 package org.blue.automation.thread;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
@@ -117,9 +116,5 @@ public class ModeCallable implements Callable<Boolean> {
         endSituation.setName("正在匹配");
         endSituation.setPriority(-1);
         endSituation.setRealSimile(BigDecimal.valueOf(-1));
-    }
-
-    public SituationBase getEndSituation() {
-        return endSituation;
     }
 }
