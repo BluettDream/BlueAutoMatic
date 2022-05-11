@@ -28,7 +28,10 @@ import org.blue.automation.services.impl.ModeServiceImpl;
 import org.blue.automation.services.impl.PCOperationServiceImpl;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -237,6 +240,21 @@ public class IndexController implements Initializable {
     @FXML
     public void openHelp() {
         log.info("打开帮助界面");
+        try
+        {
+            URI uri = new URL("file:///"+PathEnum.ROOT+"/help.html").toURI();
+            Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
+                desktop.browse(uri);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            // Copy URL to the clipboard so the user can paste it into their browser
+            StringSelection stringSelection = new StringSelection(PathEnum.ROOT+"/help.html");
+            Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clpbrd.setContents(stringSelection, null);
+        }
     }
 
     public static SimpleObjectProperty<ModeBase> getCurrentModeProperty() {

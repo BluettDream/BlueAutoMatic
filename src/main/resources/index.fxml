@@ -21,7 +21,10 @@
                   <MenuItem mnemonicParsing="false" onAction="#exportFile" text="导出" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" onAction="#openHelp" text="帮助" />
+          <Menu mnemonicParsing="false" text="帮助">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openHelp" text="打开" />
+               </items></Menu>
             <Menu mnemonicParsing="false" text="获取坐标">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#getPoint" text="启动" />
