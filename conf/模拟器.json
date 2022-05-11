@@ -1,4 +1,4 @@
 {
-  "phoneFilePath" : "/mnt/blue_main.png",
-  "deviceNumber" : "127.0.0.1:62001"
+  "phoneFilePath" : "/data/blue_main.png",
+  "deviceNumber" : "127.0.0.1:7555"
 }

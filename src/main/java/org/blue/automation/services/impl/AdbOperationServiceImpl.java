@@ -9,6 +9,7 @@ import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.CMDUtil;
 import org.opencv.core.Point;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -24,11 +25,19 @@ public class AdbOperationServiceImpl implements OperationService {
 
     @Override
     public void click(Point clickPoint) {
-        if(notConnect()) throw new RuntimeException("ADB连接失败");
-        CMD_UTIL.executeCMDCommand(
-                getAdbShellInput().append("tap").append(" ")
-                        .append(clickPoint.x).append(" ").append(clickPoint.y).toString()
-        );
+        try {
+            if(notConnect()) throw new RuntimeException("ADB连接失败");
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        try {
+            CMD_UTIL.executeCMDCommand(
+                    getAdbShellInput().append("tap").append(" ")
+                            .append(clickPoint.x).append(" ").append(clickPoint.y).toString()
+            );
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
@@ -56,18 +65,30 @@ public class AdbOperationServiceImpl implements OperationService {
 
     @Override
     public void longSlide(Point startPoint, Point endPoint, long delayTime) {
-        if(notConnect()) throw new RuntimeException("ADB连接失败");
-        CMD_UTIL.executeCMDCommand(
-                getAdbShellInput().append("swipe").append(" ")
-                        .append(startPoint.x).append(" ").append(startPoint.y).append(" ")
-                        .append(endPoint.x).append(" ").append(endPoint.y).append(" ")
-                        .append(delayTime).toString()
-        );
+        try {
+            if(notConnect()) throw new RuntimeException("ADB连接失败");
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        try {
+            CMD_UTIL.executeCMDCommand(
+                    getAdbShellInput().append("swipe").append(" ")
+                            .append(startPoint.x).append(" ").append(startPoint.y).append(" ")
+                            .append(endPoint.x).append(" ").append(endPoint.y).append(" ")
+                            .append(delayTime).toString()
+            );
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
     public void captureAndSave(String computerFile) {
-        if(notConnect()) throw new RuntimeException("ADB连接失败");
+        try {
+            if(notConnect()) throw new RuntimeException("ADB连接失败");
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         screenCap(adbProvider.getPhoneFilePath());
         pull(adbProvider.getPhoneFilePath(), computerFile);
     }
@@ -78,22 +99,30 @@ public class AdbOperationServiceImpl implements OperationService {
     }
 
     private void screenCap(String phoneFile) {
-        CMD_UTIL.executeCMDCommand(
-                getAdbShell().append("screencap").append(" ")
-                        .append("-p").append(" ")
-                        .append(phoneFile).toString()
-        );
+        try {
+            CMD_UTIL.executeCMDCommand(
+                    getAdbShell().append("screencap").append(" ")
+                            .append("-p").append(" ")
+                            .append(phoneFile).toString()
+            );
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void pull(String phoneFile, String computerFile) {
-        CMD_UTIL.executeCMDCommand(
-                getAdb().append("pull").append(" ")
-                        .append(phoneFile).append(" ")
-                        .append(computerFile).toString()
-        );
+        try {
+            CMD_UTIL.executeCMDCommand(
+                    getAdb().append("pull").append(" ")
+                            .append(phoneFile).append(" ")
+                            .append(computerFile).toString()
+            );
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
-    private boolean notConnect() {
+    private boolean notConnect() throws IOException, InterruptedException {
         if (connected) return false;
         //双重验证连接成功(连接设备+获取设备列表并且有活跃设备)
         if (adbProvider != null && connectToDevice(adbProvider.getDeviceNumber())) {
@@ -107,7 +136,7 @@ public class AdbOperationServiceImpl implements OperationService {
         return true;
     }
 
-    private boolean connectToDevice(String ipAddress) {
+    private boolean connectToDevice(String ipAddress) throws IOException, InterruptedException {
         String output = CMD_UTIL.executeCMDCommand(
                 "adb" + " " + "connect" + " " +
                         ipAddress
@@ -115,7 +144,7 @@ public class AdbOperationServiceImpl implements OperationService {
         return output.contains("connected");
     }
 
-    private ArrayList<AdbDevice> getAllDevices() {
+    private ArrayList<AdbDevice> getAllDevices() throws IOException, InterruptedException {
         String output = CMD_UTIL.executeCMDCommand("adb" + " " + "devices");
         //分割控制台输出语句
         String[] split = output.split("\n");
