@@ -51,7 +51,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ChoiceBox>
-                        <Button fx:id="BUTTON_CHOOSE_ADB_FILE" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onAction="#chooseFile" text="选择文件" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                        <Button alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onAction="#chooseFile" text="选择文件" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                            <font>
                               <Font size="23.0" />
                            </font>

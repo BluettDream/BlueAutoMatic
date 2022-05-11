@@ -49,8 +49,6 @@ public class IndexController implements Initializable {
     @FXML
     private ChoiceBox<String> CHOICE_OPERATION_LIST;
     @FXML
-    private Button BUTTON_CHOOSE_ADB_FILE;
-    @FXML
     private Button BUTTON_SWITCH;
     @FXML
     private Label LABEL_POINT;
@@ -179,9 +177,9 @@ public class IndexController implements Initializable {
         Stage stage = Main.STAGE_MAP.get("modeRunningStage");
         log.debug("当前模式:{}", CURRENT_MODE_PROPERTY);
         try {
-            stage.setScene(new Scene(new FXMLLoader(getClass().getResource("/views/modeRunning.fxml")).load(),600,400));
-        }catch (IOException e){
-            log.error("模式运行信息展示界面启动异常:",e);
+            stage.setScene(new Scene(new FXMLLoader(getClass().getResource("/views/modeRunning.fxml")).load(), 600, 400));
+        } catch (IOException e) {
+            log.error("模式运行信息展示界面启动异常:", e);
         }
         stage.show();
         BUTTON_SWITCH.setDisable(false);
@@ -189,7 +187,7 @@ public class IndexController implements Initializable {
 
     @FXML
     void stopRunning() {
-        if(ModeRunningController.getRunningMode() != null && !ModeRunningController.getRunningMode().isCancelled()){
+        if (ModeRunningController.getRunningMode() != null && !ModeRunningController.getRunningMode().isCancelled()) {
             ModeRunningController.getRunningMode().cancel(true);
         }
     }
@@ -210,16 +208,17 @@ public class IndexController implements Initializable {
 
     }
 
-    private volatile AtomicInteger pointNum = new AtomicInteger(0);
+    private final AtomicInteger pointNum = new AtomicInteger(0);
     private Thread temp;
+
     @FXML
     void getPoint() {
-        if(pointNum.get() == 0){
-            temp = new Thread(()->{
-                while (!Thread.currentThread().isInterrupted()){
+        if (pointNum.get() == 0) {
+            temp = new Thread(() -> {
+                while (!Thread.currentThread().isInterrupted()) {
                     log.info("获取坐标启动");
                     Point point = MouseInfo.getPointerInfo().getLocation();
-                    Platform.runLater(()->LABEL_POINT.setText(point.x+" "+point.y));
+                    Platform.runLater(() -> LABEL_POINT.setText(point.x + " " + point.y));
                     try {
                         Thread.sleep(300);
                     } catch (InterruptedException e) {
@@ -229,31 +228,35 @@ public class IndexController implements Initializable {
             });
             temp.start();
         }
-        switch (pointNum.get()){
-            case 0:pointNum.set(1);break;
-            case 1:temp.interrupt();temp = null;pointNum.set(0);break;
+        switch (pointNum.get()) {
+            case 0:
+                pointNum.set(1);
+                break;
+            case 1:
+                temp.interrupt();
+                temp = null;
+                pointNum.set(0);
+                break;
         }
     }
+
     /**
      * 打开帮助界面
      **/
     @FXML
     public void openHelp() {
         log.info("打开帮助界面");
-        try
-        {
-            URI uri = new URL("file:///"+PathEnum.ROOT+"/help.html").toURI();
+        try {
+            URI uri = new URL("file:///" + PathEnum.ROOT + "/help.html").toURI();
             Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
             if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
                 desktop.browse(uri);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            // Copy URL to the clipboard so the user can paste it into their browser
-            StringSelection stringSelection = new StringSelection(PathEnum.ROOT+"/help.html");
-            Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clpbrd.setContents(stringSelection, null);
+        } catch (Exception e) {
+            log.error("帮助文档打开失败:", e);
+            StringSelection stringSelection = new StringSelection(PathEnum.ROOT + "/help.html");
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+            new Alert(Alert.AlertType.ERROR, "链接已复制到剪贴板,请手动打开浏览器并粘贴链接到网址栏中").showAndWait();
         }
     }
 
