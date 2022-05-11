@@ -39,5 +39,7 @@ class PCOperationServiceImplTest {
 
     @Test
     void captureAndSave() {
+        operationService.setFilePath(System.getProperty("user.dir")+"/conf/电脑.json");
+        operationService.captureAndSave(System.getProperty("user.dir")+"/images/outer/main.png");
     }
 }

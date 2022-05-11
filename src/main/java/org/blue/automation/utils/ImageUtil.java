@@ -43,19 +43,40 @@ public class ImageUtil {
      *
      * @param originMat   源图像
      * @param templateMat 模板图像
-     * @return 相似度
+     * @return 匹配结果的位置和坐标(皆取最大值)
      **/
-    public double getSimile(Mat originMat, Mat templateMat) {
+    public Core.MinMaxLocResult getMaxResult(Mat originMat, Mat templateMat) {
         Mat resultMat = new Mat();
         int resCols = originMat.cols() - templateMat.cols() + 1;
         int resRows = originMat.rows() - templateMat.rows() + 1;
         resultMat.create(resRows, resCols, CvType.CV_32FC1);
         Imgproc.matchTemplate(originMat, templateMat, resultMat, Imgproc.TM_CCOEFF_NORMED);
 
+        Core.MinMaxLocResult result = Core.minMaxLoc(resultMat);
+
         //HighGui.imshow("源图像",originMat);
+        //HighGui.waitKey(0);
         //HighGui.imshow("模板图像",templateMat);
         //HighGui.waitKey(0);
-        return Core.minMaxLoc(resultMat).maxVal;
+        //Point point = result.maxLoc;
+        //Imgproc.rectangle(originMat, point, new Point(point.x + templateMat.cols(), point.y + templateMat.rows()), new Scalar(0, 0, 255));
+        //HighGui.imshow("success",originMat);
+        //HighGui.waitKey(0);
+
+        //for(int i = 0;i<resultMat.rows();i++)
+        //{
+        //    for(int j = 0;j<resultMat.cols();j++)
+        //    {
+        //        double matchValue =resultMat.get(i,j)[0];
+        //        if(matchValue>0.96)
+        //        {	//绘制匹配到的结果
+        //            Imgproc.rectangle(originMat,new Point(j,i),new Point(j+templateMat.cols(),i+templateMat.rows()),new Scalar( 0, 0, 255),2,Imgproc.LINE_AA);
+        //        }
+        //    }
+        //}
+        //HighGui.imshow("success",originMat);
+        //HighGui.waitKey(0);
+        return result;
     }
 
     /**

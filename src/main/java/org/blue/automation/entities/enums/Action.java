@@ -3,6 +3,7 @@ package org.blue.automation.entities.enums;
 import org.blue.automation.entities.ImageBase;
 import org.blue.automation.entities.SituationBase;
 import org.blue.automation.services.OperationService;
+import org.blue.automation.services.impl.PCOperationServiceImpl;
 import org.blue.automation.utils.ImageUtil;
 import org.opencv.core.Point;
 
@@ -22,11 +23,20 @@ public enum Action{
      * @param operationService 操作服务接口
      * @param situation 情景
      **/
-    public static void operate(OperationService operationService, SituationBase situation){
+    public static void operate(OperationService operationService, SituationBase situation) throws InterruptedException {
         ImageUtil imageUtil = ImageUtil.getInstance();
-        ImageBase temp = situation.getImage();
-        if(situation.isCustom()) temp = situation.getCustomImage();
-        if(situation.getAction() == null) return;
+        ImageBase temp = situation.getImage().cloneFor(situation.getImage());
+        if(operationService instanceof PCOperationServiceImpl) {
+            Thread.sleep((long) (Math.random()*400+100));
+        }
+        if(situation.isCustom()) {
+            temp = situation.getCustomImage().cloneFor(situation.getCustomImage());
+            if(situation.isRelation()){
+                temp.setX(situation.getImage().getX()+temp.getX());
+                temp.setY(situation.getImage().getY()+temp.getY());
+            }
+        }
+        if(!situation.isClick() || situation.getAction() == null) return;
         switch (situation.getAction()){
             case CLICK:
                 operationService.click(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
@@ -44,9 +54,10 @@ public enum Action{
                 operationService.multipleClicks(points);
                 break;
             case SLIDE:
-                // TODO: 2022/5/1 扩展滑动逻辑
+                operationService.slide(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()),imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
+                break;
             case LONG_SLIDE:
-                // TODO: 2022/5/1 扩展长滑逻辑
+                operationService.longSlide(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()),imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()),500);
                 break;
             default:
                 break;

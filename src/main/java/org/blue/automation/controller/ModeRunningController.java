@@ -1,5 +1,6 @@
 package org.blue.automation.controller;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,12 +47,12 @@ public class ModeRunningController implements Initializable {
     /**
      * 正在运行的模式线程
      **/
-    private Future<Boolean> runningMode;
+    private static Future<Boolean> RUNNING_MODE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ModeCallable callable = new ModeCallable();
-        runningMode = THREAD_POOL.submit(callable);
+        RUNNING_MODE = THREAD_POOL.submit(callable);
         LISTVIEW_SITUATION.setCellFactory(TextFieldListCell.forListView(new StringConverter<SituationBase>() {
             @Override
             public String toString(SituationBase object) {
@@ -63,13 +64,24 @@ public class ModeRunningController implements Initializable {
                 return null;
             }
         }));
-        Main.STAGE_MAP.get("modeRunningStage").setOnCloseRequest(event -> runningMode.cancel(true));
+        Main.STAGE_MAP.get("modeRunningStage").setOnCloseRequest(event -> RUNNING_MODE.cancel(true));
         RESULT.bindBidirectional(LABEL_RESULT_SHOW.textProperty());
         PROGRESS_MAX_WAIT_TIME.progressProperty().bindBidirectional(WAIT_TIME);
         PROGRESS_MAX_WAIT_TIME.progressProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue.doubleValue() >= 1){
-                runningMode.cancel(true);
+                RUNNING_MODE.cancel(true);
                 LABEL_RESULT_SHOW.setText("运行结束");
+            }
+        });
+        THREAD_POOL.execute(()->{
+            try {
+                RUNNING_MODE.get();
+            } catch (Exception e) {
+                Platform.runLater(()->{
+                    PROGRESS_MAX_WAIT_TIME.setProgress(1.0);
+                    LABEL_RESULT_SHOW.setText("运行结束");
+                });
+                Thread.currentThread().interrupt();
             }
         });
         LISTVIEW_SITUATION.itemsProperty().bindBidirectional(SITUATION_LIST);
@@ -85,5 +97,9 @@ public class ModeRunningController implements Initializable {
 
     public static SimpleListProperty<SituationBase> SITUATION_LISTProperty() {
         return SITUATION_LIST;
+    }
+
+    public static Future<Boolean> getRunningMode() {
+        return RUNNING_MODE;
     }
 }

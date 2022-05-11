@@ -4,7 +4,7 @@ import org.blue.automation.entities.SituationBase;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.entities.ImageBase;
 import org.blue.automation.utils.ImageUtil;
-import org.opencv.core.Mat;
+import org.opencv.core.Core;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import java.math.BigDecimal;
@@ -24,9 +24,11 @@ public class SituationCallable implements Callable<SituationBase>{
     public SituationBase call() {
         ImageUtil imageUtil = ImageUtil.getInstance();
         ImageBase templateImage = situation.getImage();
-        Mat originMat = imageUtil.interceptImage(PathEnum.IMAGE_OUTER+"main.png", templateImage.getX(), templateImage.getY(), templateImage.getWidth(), templateImage.getHeight());
-        Mat templateMat = Imgcodecs.imread(templateImage.getPath());
-        situation.setRealSimile(BigDecimal.valueOf(imageUtil.getSimile(originMat,templateMat)));
+        Core.MinMaxLocResult maxLocResult = imageUtil.getMaxResult(Imgcodecs.imread(PathEnum.IMAGE_OUTER + "main.png"), Imgcodecs.imread(PathEnum.IMAGE_INNER+templateImage.getName()));
+        //设置相似度最大的位置和相似度
+        situation.getImage().setX((int) maxLocResult.maxLoc.x);
+        situation.getImage().setY((int) maxLocResult.maxLoc.y);
+        situation.setRealSimile(BigDecimal.valueOf(maxLocResult.maxVal));
         return situation;
     }
 }

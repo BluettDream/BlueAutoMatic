@@ -50,7 +50,11 @@ public class SituationBase implements Serializable {
     /**
      * 最大延迟时间
      **/
-    private SimpleDoubleProperty maxDelayTime = new SimpleDoubleProperty(30.0);
+    private SimpleDoubleProperty maxDelayTime = new SimpleDoubleProperty(30000.0);
+    /**
+     * 自定义坐标是否和图片关联
+     **/
+    private SimpleBooleanProperty relation = new SimpleBooleanProperty(false);
     /**
      * 真实相似度
      **/
@@ -69,6 +73,7 @@ public class SituationBase implements Serializable {
         situation.customImage = new SimpleObjectProperty<>(cloneObject.getCustomImage().cloneFor(cloneObject.getCustomImage()));
         situation.maxDelayTime = new SimpleDoubleProperty(cloneObject.getMaxDelayTime());
         situation.realSimile = new SimpleObjectProperty<>(cloneObject.getRealSimile());
+        situation.relation = new SimpleBooleanProperty(cloneObject.isRelation());
         return situation;
     }
 
@@ -77,12 +82,12 @@ public class SituationBase implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SituationBase that = (SituationBase) o;
-        return Objects.equals(name, that.name) && Objects.equals(priority, that.priority) && Objects.equals(image, that.image) && Objects.equals(lowestSimile, that.lowestSimile) && Objects.equals(click, that.click) && Objects.equals(action, that.action) && Objects.equals(custom, that.custom) && Objects.equals(customImage, that.customImage) && Objects.equals(maxDelayTime, that.maxDelayTime) && Objects.equals(realSimile, that.realSimile);
+        return Objects.equals(name, that.name) && Objects.equals(priority, that.priority) && Objects.equals(image, that.image) && Objects.equals(lowestSimile, that.lowestSimile) && Objects.equals(click, that.click) && Objects.equals(action, that.action) && Objects.equals(custom, that.custom) && Objects.equals(customImage, that.customImage) && Objects.equals(maxDelayTime, that.maxDelayTime) && Objects.equals(relation, that.relation) && Objects.equals(realSimile, that.realSimile);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, priority, image, lowestSimile, click, action, custom, customImage, maxDelayTime, realSimile);
+        return Objects.hash(name, priority, image, lowestSimile, click, action, custom, customImage, maxDelayTime, relation, realSimile);
     }
 
     @Override
@@ -97,8 +102,21 @@ public class SituationBase implements Serializable {
                 ", custom=" + custom +
                 ", customImage=" + customImage +
                 ", maxDelayTime=" + maxDelayTime +
+                ", relation=" + relation +
                 ", realSimile=" + realSimile +
                 '}';
+    }
+
+    public boolean isRelation() {
+        return relation.get();
+    }
+
+    public SimpleBooleanProperty relationProperty() {
+        return relation;
+    }
+
+    public void setRelation(boolean relation) {
+        this.relation.set(relation);
     }
 
     public String getName() {

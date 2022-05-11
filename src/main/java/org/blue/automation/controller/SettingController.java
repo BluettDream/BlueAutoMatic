@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
 import org.blue.automation.entities.SituationBase;
 import org.blue.automation.entities.enums.Action;
+import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.factories.UIControlFactory;
 import org.blue.automation.services.SituationService;
 import org.blue.automation.services.impl.SituationServiceImpl;
@@ -47,11 +48,9 @@ public class SettingController implements Initializable {
     @FXML
     private TextField INPUT_LOWEST_SIMILE;
     @FXML
-    private TextField INPUT_X;
-    @FXML
-    private TextField INPUT_Y;
-    @FXML
     private CheckBox CHECK_CUSTOM;
+    @FXML
+    private CheckBox CHECK_RELATION;
     @FXML
     private HBox HBOX_CUSTOM;
     @FXML
@@ -73,10 +72,6 @@ public class SettingController implements Initializable {
      * 情景接口
      **/
     private SituationService situationService;
-    /**
-     * 上一次打开的文件路径
-     **/
-    private String preDirectoryPath;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,9 +87,8 @@ public class SettingController implements Initializable {
      **/
     @FXML
     void chooseImage() {
-        File file = UIControlFactory.createImageFileChooser("选择图片", preDirectoryPath).showOpenDialog(Main.STAGE_MAP.get("settingStage"));
-        if (!StringUtil.isWrong(preDirectoryPath)) preDirectoryPath = new File(file.getAbsolutePath()).getParent();
-        currentSituationProperty.get().getImage().setPath(file.getAbsolutePath());
+        File file = UIControlFactory.createImageFileChooser("选择图片", PathEnum.IMAGE_INNER.getPath()).showOpenDialog(Main.STAGE_MAP.get("settingStage"));
+        if(file != null) currentSituationProperty.get().getImage().setName(file.getName());
     }
 
     /**
@@ -102,8 +96,7 @@ public class SettingController implements Initializable {
      **/
     @FXML
     void captureSituationImage() {
-        // TODO: 2022/4/29 完善记忆上一次打开文件路径功能
-        File file = UIControlFactory.createImageFileChooser("保存图片", preDirectoryPath).showSaveDialog(Main.STAGE_MAP.get("settingStage"));
+        File file = UIControlFactory.createImageFileChooser("保存图片", PathEnum.IMAGE_INNER.getPath()).showSaveDialog(Main.STAGE_MAP.get("settingStage"));
         if (file != null && !StringUtil.isWrong(file.getAbsolutePath())) {
             IndexController.getOperationService().captureAndSave(file.getAbsolutePath());
             new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
@@ -129,13 +122,12 @@ public class SettingController implements Initializable {
      **/
     @FXML
     void saveSituation() {
-        if(StringUtil.isWrong(currentSituationProperty.get().getImage().getPath())){
+        if(StringUtil.isWrong(currentSituationProperty.get().getImage().getName())){
             new Alert(Alert.AlertType.ERROR,"图片路径不符合要求").showAndWait();
             return;
         }
         try {
-            currentSituationProperty.get().getImage().setPath(currentSituationProperty.get().getImage().getPath().replaceAll("\\\\", "/"));
-            BufferedImage image = ImageIO.read(new FileInputStream(currentSituationProperty.get().getImage().getPath()));
+            BufferedImage image = ImageIO.read(new FileInputStream(PathEnum.IMAGE_INNER+currentSituationProperty.get().getImage().getName()));
             currentSituationProperty.get().getImage().setWidth(image.getWidth());
             currentSituationProperty.get().getImage().setHeight(image.getHeight());
         } catch (IOException e) {
@@ -200,29 +192,7 @@ public class SettingController implements Initializable {
                 return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
             }
         });
-        INPUT_IMAGE_PATH.textProperty().bindBidirectional(currentSituationProperty.get().getImage().pathProperty());
-        INPUT_X.textProperty().bindBidirectional(currentSituationProperty.get().getImage().xProperty(), new StringConverter<Number>() {
-            @Override
-            public String toString(Number object) {
-                return String.valueOf(object);
-            }
-
-            @Override
-            public Number fromString(String string) {
-                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
-            }
-        });
-        INPUT_Y.textProperty().bindBidirectional(currentSituationProperty.get().getImage().yProperty(), new StringConverter<Number>() {
-            @Override
-            public String toString(Number object) {
-                return String.valueOf(object);
-            }
-
-            @Override
-            public Number fromString(String string) {
-                return StringUtil.isInteger(string) ? Integer.parseInt(string) : null;
-            }
-        });
+        INPUT_IMAGE_PATH.textProperty().bindBidirectional(currentSituationProperty.get().getImage().nameProperty());
         INPUT_LOWEST_SIMILE.textProperty().bindBidirectional(currentSituationProperty.get().lowestSimileProperty(), new StringConverter<BigDecimal>() {
             @Override
             public String toString(BigDecimal object) {
@@ -297,6 +267,7 @@ public class SettingController implements Initializable {
     private void initCheck() {
         CHECK_CLICK.selectedProperty().bindBidirectional(currentSituationProperty.get().clickProperty());
         CHECK_CUSTOM.selectedProperty().bindBidirectional(currentSituationProperty.get().customProperty());
+        CHECK_RELATION.selectedProperty().bindBidirectional(currentSituationProperty.get().relationProperty());
     }
 
     /**
@@ -318,10 +289,9 @@ public class SettingController implements Initializable {
         currentSituationProperty.get().setAction(newSituation.getAction());
         currentSituationProperty.get().setCustom(newSituation.isCustom());
         currentSituationProperty.get().setMaxDelayTime(newSituation.getMaxDelayTime());
+        currentSituationProperty.get().setRelation(newSituation.isRelation());
         //image
-        currentSituationProperty.get().getImage().setPath(newSituation.getImage().getPath());
-        currentSituationProperty.get().getImage().setX(newSituation.getImage().getX());
-        currentSituationProperty.get().getImage().setY(newSituation.getImage().getY());
+        currentSituationProperty.get().getImage().setName(newSituation.getImage().getName());
         currentSituationProperty.get().getImage().setHeight(newSituation.getImage().getHeight());
         currentSituationProperty.get().getImage().setWidth(newSituation.getImage().getWidth());
         //customImage

@@ -22,6 +22,11 @@
             </items>
           </Menu>
           <Menu mnemonicParsing="false" onAction="#openHelp" text="帮助" />
+            <Menu mnemonicParsing="false" text="获取坐标">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#getPoint" text="启动" />
+               </items>
+            </Menu>
         </menus>
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -29,7 +34,7 @@
       </MenuBar>
       <FlowPane alignment="TOP_CENTER" prefWidth="300.0" prefWrapLength="300.0" vgap="10.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox alignment="CENTER" spacing="15.0">
+            <VBox alignment="CENTER" onMouseMoved="#stopRunning" spacing="15.0">
                <children>
                   <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefWidth="400.0" prefWrapLength="100.0" VBox.vgrow="ALWAYS">
                      <children>
@@ -43,7 +48,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ChoiceBox>
-                        <Button fx:id="BUTTON_CHOOSE_ADB_FILE" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onAction="#chooseAdbFile" text="选择文件" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                        <Button fx:id="BUTTON_CHOOSE_ADB_FILE" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" onAction="#chooseFile" text="选择文件" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                            <font>
                               <Font size="23.0" />
                            </font>
@@ -55,6 +60,11 @@
                   </FlowPane>
                   <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="10.0" prefWidth="250.0" prefWrapLength="100.0" VBox.vgrow="ALWAYS">
                      <children>
+                        <Label fx:id="LABEL_POINT" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" prefWidth="130.0" style="-fx-border-color: black;" text="坐标" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                        </Label>
                         <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" text="模式:" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                            <font>
                               <Font size="23.0" />

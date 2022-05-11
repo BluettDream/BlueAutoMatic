@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.enums.PathEnum;
-import org.blue.automation.entities.Mode;
+import org.blue.automation.entities.ModeBase;
 import org.blue.automation.services.ModeService;
 import org.blue.automation.utils.FileUtil;
 import org.blue.automation.utils.StringUtil;
@@ -33,11 +33,11 @@ public class ModeServiceImpl implements ModeService {
     }
 
     @Override
-    public ArrayList<Mode> selectAllModes() {
+    public ArrayList<ModeBase> selectAllModes() {
         try {
             return objectMapper.readValue(
                     new InputStreamReader(new FileInputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
-                    , new TypeReference<ArrayList<Mode>>() {
+                    , new TypeReference<ArrayList<ModeBase>>() {
                     }
             );
         } catch (IOException e) {
@@ -47,35 +47,35 @@ public class ModeServiceImpl implements ModeService {
     }
 
     @Override
-    public Mode selectModeByName(String name) {
+    public ModeBase selectModeByName(String name) {
         if (StringUtil.isWrong(name)) return null;
-        ArrayList<Mode> modeProperties = selectAllModes();
-        if (modeProperties == null) return null;
-        for (Mode mode : modeProperties) {
-            if (mode.getName().equals(name)) return mode;
+        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
+        if (modeBaseProperties == null) return null;
+        for (ModeBase modeBase : modeBaseProperties) {
+            if (modeBase.getName().equals(name)) return modeBase;
         }
         return null;
     }
 
     @Override
-    public boolean addMode(Mode mode) {
-        if (mode == null || StringUtil.isWrong(mode.getName())) return false;
-        ArrayList<Mode> modeProperties = selectAllModes();
-        if (modeProperties == null || (modeProperties.size() > 0
-                && modeProperties.stream().anyMatch(originMode -> originMode.getName().equals(mode.getName()))))
+    public boolean addMode(ModeBase modeBase) {
+        if (modeBase == null || StringUtil.isWrong(modeBase.getName())) return false;
+        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
+        if (modeBaseProperties == null || (modeBaseProperties.size() > 0
+                && modeBaseProperties.stream().anyMatch(originMode -> originMode.getName().equals(modeBase.getName()))))
             return false;
-        return modeProperties.add(mode) && write(modeProperties);
+        return modeBaseProperties.add(modeBase) && write(modeBaseProperties);
     }
 
     @Override
-    public boolean updateMode(Mode mode) {
-        if (mode == null || StringUtil.isWrong(mode.getName())) return false;
-        ArrayList<Mode> modeProperties = selectAllModes();
-        if(modeProperties == null) return false;
-        for (int i = 0; i < modeProperties.size(); ++i) {
-            if (modeProperties.get(i).getName().equals(mode.getName())) {
-                modeProperties.set(i, mode);
-                return write(modeProperties);
+    public boolean updateMode(ModeBase modeBase) {
+        if (modeBase == null || StringUtil.isWrong(modeBase.getName())) return false;
+        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
+        if(modeBaseProperties == null) return false;
+        for (int i = 0; i < modeBaseProperties.size(); ++i) {
+            if (modeBaseProperties.get(i).getName().equals(modeBase.getName())) {
+                modeBaseProperties.set(i, modeBase);
+                return write(modeBaseProperties);
             }
         }
         return false;
@@ -84,15 +84,15 @@ public class ModeServiceImpl implements ModeService {
     @Override
     public boolean deleteModeByName(String name) {
         if (StringUtil.isWrong(name)) return false;
-        ArrayList<Mode> modeProperties = selectAllModes();
-        return modeProperties != null && modeProperties.removeIf(originMode -> originMode.getName().equals(name)) && write(modeProperties);
+        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
+        return modeBaseProperties != null && modeBaseProperties.removeIf(originMode -> originMode.getName().equals(name)) && write(modeBaseProperties);
     }
 
-    private boolean write(ArrayList<Mode> modeArrayList) {
+    private boolean write(ArrayList<ModeBase> modeBaseArrayList) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(
                     new OutputStreamWriter(new FileOutputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
-                    , modeArrayList);
+                    , modeBaseArrayList);
             return true;
         } catch (IOException e) {
             log.error("模式写入文件异常:", e);

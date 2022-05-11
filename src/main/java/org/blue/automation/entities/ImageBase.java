@@ -14,9 +14,9 @@ public class ImageBase implements Serializable{
     private static final long serialVersionUID = 4959158909659101095L;
 
     /**
-     * 图像路径
+     * 图像名称
      **/
-    private SimpleStringProperty path = new SimpleStringProperty();
+    private SimpleStringProperty name = new SimpleStringProperty();
     /**
      * 左上角x坐标
      **/
@@ -39,7 +39,7 @@ public class ImageBase implements Serializable{
      **/
     public ImageBase cloneFor(ImageBase cloneObject){
         ImageBase imageBase = new ImageBase();
-        imageBase.path = new SimpleStringProperty(cloneObject.getPath());
+        imageBase.name = new SimpleStringProperty(cloneObject.getName());
         imageBase.x = new SimpleIntegerProperty(cloneObject.getX());
         imageBase.y = new SimpleIntegerProperty(cloneObject.getY());
         imageBase.width = new SimpleIntegerProperty(cloneObject.getWidth());
@@ -51,18 +51,18 @@ public class ImageBase implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImageBase that = (ImageBase) o;
-        return Objects.equals(path, that.path) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(width, that.width) && Objects.equals(height, that.height);
+        return Objects.equals(name, that.name) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(width, that.width) && Objects.equals(height, that.height);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(path, x, y, width, height);
+        return Objects.hash(name, x, y, width, height);
     }
 
     @Override
     public String toString() {
         return "ImageProperty{" +
-                "path=" + path +
+                "name=" + name +
                 ", x=" + x +
                 ", y=" + y +
                 ", width=" + width +
@@ -70,16 +70,16 @@ public class ImageBase implements Serializable{
                 '}';
     }
 
-    public String getPath() {
-        return path.get();
+    public String getName() {
+        return name.get();
     }
 
-    public SimpleStringProperty pathProperty() {
-        return path;
+    public SimpleStringProperty nameProperty() {
+        return name;
     }
 
-    public ImageBase setPath(String path) {
-        this.path.set(path);
+    public ImageBase setName(String name) {
+        this.name.set(name);
         return this;
     }
 

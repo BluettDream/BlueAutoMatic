@@ -1,6 +1,6 @@
 package org.blue.automation.services;
 
-import org.blue.automation.entities.Mode;
+import org.blue.automation.entities.ModeBase;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public interface ModeService {
      *
      * @return 模式列表
      **/
-    ArrayList<Mode> selectAllModes();
+    ArrayList<ModeBase> selectAllModes();
 
     /**
      * 根据模式名称查询模式
@@ -30,23 +30,23 @@ public interface ModeService {
      * @param name 模式名称
      * @return 模式
      **/
-    Mode selectModeByName(String name);
+    ModeBase selectModeByName(String name);
 
     /**
      * 添加模式
      *
-     * @param mode 模式
+     * @param modeBase 模式
      * @return 添加成功为true,失败为false
      **/
-    boolean addMode(Mode mode);
+    boolean addMode(ModeBase modeBase);
 
     /**
      * 更新模式
      *
-     * @param mode 模式
+     * @param modeBase 模式
      * @return 更新成功为true,失败为false
      **/
-    boolean updateMode(Mode mode);
+    boolean updateMode(ModeBase modeBase);
 
     /**
      * 根据模式名称删除模式

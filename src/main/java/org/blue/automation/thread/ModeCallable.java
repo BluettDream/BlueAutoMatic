@@ -59,10 +59,10 @@ public class ModeCallable implements Callable<Boolean> {
      **/
     @Override
     public Boolean call() {
-        log.info("{}模式开始运行", IndexController.getCurrentModeProperty().getName());
+        log.info("{}模式开始运行", IndexController.getCurrentModeProperty().get().getName());
         if (situationList == null || situationList.size() <= 0) return false;
         long millis = System.currentTimeMillis();
-        while (!Thread.currentThread().isInterrupted() && runningTime < 60*60*1000) {
+        while (!Thread.currentThread().isInterrupted() && runningTime < IndexController.getCurrentModeProperty().get().getRunTime()) {
             clearEndSituation();
             futureArrayList.clear();
             OPERATION_SERVICE.captureAndSave(PathEnum.IMAGE_OUTER + "main.png");
@@ -85,11 +85,15 @@ public class ModeCallable implements Callable<Boolean> {
             }
             log.info("匹配结果:{},相似度:{}", endSituation.getName(), endSituation.getRealSimile().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
             if (!endSituation.getName().equals("正在匹配")) {
-                Action.operate(OPERATION_SERVICE, endSituation);
+                try {
+                    Action.operate(OPERATION_SERVICE, endSituation);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
             if(!StringUtil.isWrong(preSituation.getName()) && endSituation.getName().equals(preSituation.getName())){
                 equalTimes = System.currentTimeMillis() - initMillis;
-                if(equalTimes > preSituation.getMaxDelayTime()*1000){
+                if(equalTimes > preSituation.getMaxDelayTime()){
                     break;
                 }
             }else{
