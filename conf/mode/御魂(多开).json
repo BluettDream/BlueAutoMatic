@@ -1,0 +1,246 @@
+{
+  "name": "御魂(多开)",
+  "runTime": 3600000,
+  "situationList": [
+    {
+      "name": "点击挑战",
+      "priority": 0,
+      "image": {
+        "name": "1.png",
+        "x": 0,
+        "y": 0,
+        "width": 41,
+        "height": 35
+      },
+      "lowestSimile": 0.9,
+      "click": true,
+      "action": "CLICK",
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "maxDelayTime": 30000.0,
+      "relation": false
+    },
+    {
+      "name": "正在游戏",
+      "priority": 0,
+      "image": {
+        "name": "4.png",
+        "x": 0,
+        "y": 0,
+        "width": 18,
+        "height": 20
+      },
+      "lowestSimile": 0.9,
+      "click": false,
+      "action": "SLIDE",
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 530,
+        "y": 290,
+        "width": 170,
+        "height": 100
+      },
+      "maxDelayTime": 60000.0,
+      "relation": false
+    },
+    {
+      "name": "点击默认邀请队友",
+      "priority": 2,
+      "image": {
+        "name": "7.png",
+        "x": 0,
+        "y": 0,
+        "width": 23,
+        "height": 27
+      },
+      "lowestSimile": 0.9,
+      "click": true,
+      "action": "CLICK",
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "maxDelayTime": 30000.0,
+      "relation": false
+    },
+    {
+      "name": "游戏结束",
+      "priority": 3,
+      "image": {
+        "name": "9.png",
+        "x": 0,
+        "y": 0,
+        "width": 62,
+        "height": 60
+      },
+      "lowestSimile": 0.9,
+      "click": true,
+      "action": "MULTIPLE_CLICKS",
+      "custom": true,
+      "customImage": {
+        "name": null,
+        "x": 266,
+        "y": 221,
+        "width": 206,
+        "height": 125
+      },
+      "maxDelayTime": 30000.0,
+      "relation": true
+    },
+    {
+      "name": "确定邀请队友",
+      "priority": 1,
+      "image": {
+        "name": "5.png",
+        "x": 0,
+        "y": 0,
+        "width": 100,
+        "height": 35
+      },
+      "lowestSimile": 0.9,
+      "click": true,
+      "action": "CLICK",
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "maxDelayTime": 30000.0,
+      "relation": false
+    },
+    {
+      "name": "正在奖励结算",
+      "priority": 3,
+      "image": {
+        "name": "6.png",
+        "x": 0,
+        "y": 0,
+        "width": 92,
+        "height": 60
+      },
+      "lowestSimile": 0.90,
+      "click": true,
+      "action": "MULTIPLE_CLICKS",
+      "custom": true,
+      "customImage": {
+        "name": null,
+        "x": 167,
+        "y": 0,
+        "width": 232,
+        "height": 108
+      },
+      "maxDelayTime": 30000.0,
+      "relation": true
+    },
+    {
+      "name": "确定悬赏封印",
+      "priority": 2,
+      "image": {
+        "name": "10.png",
+        "x": 0,
+        "y": 0,
+        "width": 31,
+        "height": 27
+      },
+      "lowestSimile": 0.90,
+      "click": true,
+      "action": "CLICK",
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "maxDelayTime": 30000.0,
+      "relation": false
+    },
+    {
+      "name": "接受队友邀请(默认)",
+      "priority": 2,
+      "image": {
+        "name": "13.png",
+        "x": 0,
+        "y": 0,
+        "width": 32,
+        "height": 35
+      },
+      "lowestSimile": 0.90,
+      "click": true,
+      "action": "CLICK",
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "maxDelayTime": 30000.0,
+      "relation": false
+    },
+    {
+      "name": "打手等待队友",
+      "priority": 1,
+      "image": {
+        "name": "14.png",
+        "x": 0,
+        "y": 0,
+        "width": 112,
+        "height": 157
+      },
+      "lowestSimile": 0.90,
+      "click": false,
+      "action": null,
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "maxDelayTime": 30000.0,
+      "relation": false
+    },
+    {
+      "name": "司机等待队友",
+      "priority": 1,
+      "image": {
+        "name": "8.png",
+        "x": 0,
+        "y": 0,
+        "width": 137,
+        "height": 152
+      },
+      "lowestSimile": 0.90,
+      "click": false,
+      "action": null,
+      "custom": false,
+      "customImage": {
+        "name": null,
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "maxDelayTime": 30000.0,
+      "relation": false
+    }
+  ]
+}

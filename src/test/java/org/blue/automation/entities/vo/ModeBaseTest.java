@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class ModeBaseTest {
     static final Logger log = LogManager.getLogger(ModeBaseTest.class);
-    ModeService modeService = new ModeServiceImpl("test.json");
+    ModeService modeService = new ModeServiceImpl();
 
     @Test
     void test(){

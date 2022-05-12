@@ -2,10 +2,11 @@ package org.blue.automation.entities.enums;
 
 public enum PathEnum {
     ROOT(System.getProperty("user.dir")),
-    JSON(ROOT+"/conf/"),
+    CONF(ROOT+"/conf/"),
     IMAGE(ROOT+"/images"),
     IMAGE_OUTER(IMAGE+"/outer/"),
-    IMAGE_INNER(IMAGE+"/inner/");
+    IMAGE_INNER(IMAGE+"/inner/"),
+    MODE(CONF+"/mode/");
 
     private String path;
 

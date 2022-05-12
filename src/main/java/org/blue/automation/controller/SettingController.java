@@ -1,6 +1,8 @@
 package org.blue.automation.controller;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -114,7 +116,7 @@ public class SettingController implements Initializable {
         }
         log.info("{}情景删除成功", currentSituationProperty.get().getName());
         CHOICE_SITUATION_LIST.getItems().setAll(situationService.selectAllSituations(IndexController.getCurrentModeProperty().get().getName()));
-        reset();
+        CHOICE_SITUATION_LIST.getSelectionModel().selectLast();
     }
 
     /**
@@ -136,10 +138,16 @@ public class SettingController implements Initializable {
             return;
         }
         if (situationService.addSituation(currentSituationProperty.get())) {
-            new Alert(Alert.AlertType.INFORMATION, currentSituationProperty.get().getName()+"保存成功").showAndWait();
-            log.info("情景保存成功:{}", currentSituationProperty.get());
+            SituationBase situationBase = currentSituationProperty.get();
+            new Alert(Alert.AlertType.INFORMATION, situationBase.getName()+"保存成功").showAndWait();
+            log.info("情景保存成功:{}", situationBase);
             CHOICE_SITUATION_LIST.getItems().setAll(situationService.selectAllSituations(IndexController.getCurrentModeProperty().get().getName()));
-            reset();
+            for (SituationBase item : CHOICE_SITUATION_LIST.getItems()) {
+                if(item.getName().equals(situationBase.getName())){
+                    CHOICE_SITUATION_LIST.getSelectionModel().select(item);
+                    break;
+                }
+            }
             return;
         }
         new Alert(Alert.AlertType.ERROR,"保存失败").showAndWait();
@@ -151,6 +159,10 @@ public class SettingController implements Initializable {
     @FXML
     private void reset() {
         CHOICE_SITUATION_LIST.getSelectionModel().clearSelection();
+        CHECK_CLICK.setSelected(false);
+        CHECK_CUSTOM.setSelected(false);
+        INPUT_SITUATION_NAME.clear();
+        INPUT_IMAGE_PATH.clear();
     }
 
     /**
@@ -171,7 +183,7 @@ public class SettingController implements Initializable {
         CHOICE_SITUATION_LIST.getItems().setAll(situationService.selectAllSituations(IndexController.getCurrentModeProperty().get().getName()));
         CHOICE_SITUATION_LIST.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateSituationProperty(newValue));
         CHOICE_SITUATION_LIST.getSelectionModel().selectFirst();
-        CHOICE_CLICK_TYPE_LIST.setItems(FXCollections.observableArrayList(Action.values()));
+        CHOICE_CLICK_TYPE_LIST.getItems().setAll(Action.values());
         CHOICE_CLICK_TYPE_LIST.valueProperty().bindBidirectional(currentSituationProperty.get().actionProperty());
         CHOICE_CLICK_TYPE_LIST.disableProperty().bind(currentSituationProperty.get().clickProperty().not());
     }
@@ -265,7 +277,20 @@ public class SettingController implements Initializable {
      * 初始化所有单选框
      **/
     private void initCheck() {
+        CHECK_CLICK.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            //如果点击没有被选中,则点击下拉菜单不选择
+            if(!newValue) CHOICE_CLICK_TYPE_LIST.getSelectionModel().clearSelection();
+        });
         CHECK_CLICK.selectedProperty().bindBidirectional(currentSituationProperty.get().clickProperty());
+        CHECK_CUSTOM.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            //如果自定义没有被选中,则自定义有关的选项全部清空
+            if(!newValue) {
+                INPUT_CUSTOM_HEIGHT.clear();
+                INPUT_CUSTOM_WIDTH.clear();
+                INPUT_CUSTOM_X.clear();
+                INPUT_CUSTOM_Y.clear();
+            }
+        });
         CHECK_CUSTOM.selectedProperty().bindBidirectional(currentSituationProperty.get().customProperty());
         CHECK_RELATION.selectedProperty().bindBidirectional(currentSituationProperty.get().relationProperty());
     }
@@ -292,8 +317,6 @@ public class SettingController implements Initializable {
         currentSituationProperty.get().setRelation(newSituation.isRelation());
         //image
         currentSituationProperty.get().getImage().setName(newSituation.getImage().getName());
-        currentSituationProperty.get().getImage().setHeight(newSituation.getImage().getHeight());
-        currentSituationProperty.get().getImage().setWidth(newSituation.getImage().getWidth());
         //customImage
         currentSituationProperty.get().getCustomImage().setX(newSituation.getCustomImage().getX());
         currentSituationProperty.get().getCustomImage().setY(newSituation.getCustomImage().getY());

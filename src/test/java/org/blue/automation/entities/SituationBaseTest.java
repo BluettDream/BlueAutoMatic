@@ -1,6 +1,5 @@
 package org.blue.automation.entities;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,18 +12,17 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 
 class SituationBaseTest {
     static final Logger log = LogManager.getLogger(SituationBaseTest.class);
     private ObjectMapper objectMapper = FileUtil.getInstance().getObjectMapper();
     private SituationBase situationBase = new SituationBase();
-    private SituationService situationService = new SituationServiceImpl(new ModeServiceImpl("main.json"));
+    private SituationService situationService = new SituationServiceImpl(new ModeServiceImpl());
 
     @Test
     void read() throws IOException {
         SituationBase situationBase = objectMapper.readValue(
-                new InputStreamReader(new FileInputStream(PathEnum.JSON + "test.json"), StandardCharsets.UTF_8)
+                new InputStreamReader(new FileInputStream(PathEnum.CONF + "test.json"), StandardCharsets.UTF_8)
                 , SituationBase.class);
         log.debug(situationBase);
     }
@@ -38,7 +36,7 @@ class SituationBaseTest {
         situationBase.setImage(new ImageBase());
         situationBase.setClick(false);
         objectMapper.writerWithDefaultPrettyPrinter().writeValue(
-                new OutputStreamWriter(new FileOutputStream(PathEnum.JSON+"test.json"),StandardCharsets.UTF_8)
+                new OutputStreamWriter(new FileOutputStream(PathEnum.CONF +"test.json"),StandardCharsets.UTF_8)
         , situationBase);
     }
 

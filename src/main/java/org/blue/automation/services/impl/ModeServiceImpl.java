@@ -1,6 +1,5 @@
 package org.blue.automation.services.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,9 +22,7 @@ public class ModeServiceImpl implements ModeService {
     private final ObjectMapper objectMapper = FileUtil.getInstance().getObjectMapper();
 
     private String fileName;
-    public ModeServiceImpl(String fileName) {
-        this.fileName = fileName;
-    }
+
 
     @Override
     public void setFileName(String fileName) {
@@ -34,25 +31,23 @@ public class ModeServiceImpl implements ModeService {
 
     @Override
     public ArrayList<ModeBase> selectAllModes() {
-        try {
-            return objectMapper.readValue(
-                    new InputStreamReader(new FileInputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
-                    , new TypeReference<ArrayList<ModeBase>>() {
-                    }
-            );
-        } catch (IOException e) {
-            log.error("文件读取异常:", e);
+        String[] modeFileList = new File(PathEnum.MODE.getPath()).list();
+        if (modeFileList == null) return null;
+        //遍历模式文件夹中的文件
+        ArrayList<ModeBase> modeBases = new ArrayList<>();
+        for (String modeFile : modeFileList) {
+            modeBases.add(read(modeFile));
         }
-        return null;
+        return modeBases;
     }
 
     @Override
     public ModeBase selectModeByName(String name) {
         if (StringUtil.isWrong(name)) return null;
-        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
-        if (modeBaseProperties == null) return null;
-        for (ModeBase modeBase : modeBaseProperties) {
-            if (modeBase.getName().equals(name)) return modeBase;
+        String[] modeFileList = new File(PathEnum.MODE.getPath()).list();
+        if (modeFileList == null) return null;
+        for (String modeFile : modeFileList) {
+            if (modeFile.equals(name + ".json")) return read(name+".json");
         }
         return null;
     }
@@ -60,23 +55,29 @@ public class ModeServiceImpl implements ModeService {
     @Override
     public boolean addMode(ModeBase modeBase) {
         if (modeBase == null || StringUtil.isWrong(modeBase.getName())) return false;
-        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
-        if (modeBaseProperties == null || (modeBaseProperties.size() > 0
-                && modeBaseProperties.stream().anyMatch(originMode -> originMode.getName().equals(modeBase.getName()))))
-            return false;
-        return modeBaseProperties.add(modeBase) && write(modeBaseProperties);
+        String[] modeFileList = new File(PathEnum.MODE.getPath()).list();
+        if (modeFileList == null) return false;
+        for (String modeFile : modeFileList) {
+            //已经存在则更新模式
+            if (modeFile.equals(modeBase.getName() + ".json")) return updateMode(modeBase);
+        }
+        File file = new File(PathEnum.MODE+modeBase.getName()+".json");
+        boolean result = false;
+        try {
+            result = file.createNewFile();
+        } catch (IOException e) {
+            log.error("创建模式文件异常:",e);
+        }
+        return result && write(modeBase);
     }
 
     @Override
     public boolean updateMode(ModeBase modeBase) {
         if (modeBase == null || StringUtil.isWrong(modeBase.getName())) return false;
-        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
-        if(modeBaseProperties == null) return false;
-        for (int i = 0; i < modeBaseProperties.size(); ++i) {
-            if (modeBaseProperties.get(i).getName().equals(modeBase.getName())) {
-                modeBaseProperties.set(i, modeBase);
-                return write(modeBaseProperties);
-            }
+        String[] modeFileList = new File(PathEnum.MODE.getPath()).list();
+        if (modeFileList == null) return false;
+        for (String modeFile : modeFileList) {
+            if (modeFile.equals(modeBase.getName() + ".json")) return write(modeBase);
         }
         return false;
     }
@@ -84,18 +85,37 @@ public class ModeServiceImpl implements ModeService {
     @Override
     public boolean deleteModeByName(String name) {
         if (StringUtil.isWrong(name)) return false;
-        ArrayList<ModeBase> modeBaseProperties = selectAllModes();
-        return modeBaseProperties != null && modeBaseProperties.removeIf(originMode -> originMode.getName().equals(name)) && write(modeBaseProperties);
+        String[] modeFileList = new File(PathEnum.MODE.getPath()).list();
+        if (modeFileList == null) return true;
+        for (String modeFile : modeFileList) {
+            if (modeFile.equals(name + ".json")) {
+                File file = new File(PathEnum.MODE + name + ".json");
+                if (file.exists()) return file.delete();
+            }
+        }
+        return false;
     }
 
-    private boolean write(ArrayList<ModeBase> modeBaseArrayList) {
+    private ModeBase read(String fileName) {
+        ModeBase modeBase = null;
+        try {
+            modeBase = objectMapper.readValue(
+                    new InputStreamReader(new FileInputStream(PathEnum.MODE + fileName), StandardCharsets.UTF_8)
+                    , ModeBase.class);
+        } catch (IOException e) {
+            log.error("模式文件读取异常:", e);
+        }
+        return modeBase;
+    }
+
+    private boolean write(ModeBase modeBase) {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new OutputStreamWriter(new FileOutputStream(PathEnum.JSON + fileName), StandardCharsets.UTF_8)
-                    , modeBaseArrayList);
+                    new OutputStreamWriter(new FileOutputStream(PathEnum.MODE + modeBase.getName() + ".json"), StandardCharsets.UTF_8)
+                    , modeBase);
             return true;
         } catch (IOException e) {
-            log.error("模式写入文件异常:", e);
+            log.error("模式文件写入异常:", e);
         }
         return false;
     }

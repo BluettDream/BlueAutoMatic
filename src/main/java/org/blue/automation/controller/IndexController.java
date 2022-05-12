@@ -1,11 +1,7 @@
 package org.blue.automation.controller;
 
 import javafx.application.Platform;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,7 +29,6 @@ import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -60,22 +55,15 @@ public class IndexController implements Initializable {
     /**
      * 模式接口
      **/
-    private static final ModeService MODE_SERVICE = new ModeServiceImpl("main.json");
+    private static final ModeService MODE_SERVICE = new ModeServiceImpl();
     /**
      * 操作接口
      **/
     private static OperationService OPERATION_SERVICE;
-    /**
-     * 模式列表
-     **/
-    private final Property<ObservableList<ModeBase>> modeList = new SimpleListProperty<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ArrayList<ModeBase> modeBases = MODE_SERVICE.selectAllModes();
-        modeList.setValue(FXCollections.observableArrayList(modeBases));
-        //模式数组与模式下拉列表控件双向绑定
-        CHOICE_MODE_LIST.itemsProperty().bindBidirectional(modeList);
+        CHOICE_MODE_LIST.getItems().setAll(MODE_SERVICE.selectAllModes());
         CHOICE_MODE_LIST.setConverter(new StringConverter<ModeBase>() {
             @Override
             public String toString(ModeBase object) {
@@ -103,13 +91,18 @@ public class IndexController implements Initializable {
                     break;
             }
         });
-        CHOICE_OPERATION_LIST.getSelectionModel().select("手机");
+        CHOICE_OPERATION_LIST.getSelectionModel().select("电脑");
     }
 
     @FXML
     void chooseFile() {
-        File file = UIControlFactory.createFileChooser("选择json文件", PathEnum.JSON.getPath(), false).showOpenDialog(Main.STAGE_MAP.get("primaryStage"));
-        if (file != null) OPERATION_SERVICE.setFilePath(file.getAbsolutePath());
+        File file = UIControlFactory.createFileChooser("选择json文件", PathEnum.CONF.getPath(), false).showOpenDialog(Main.STAGE_MAP.get("primaryStage"));
+        if (file != null) {
+            OPERATION_SERVICE.setFilePath(file.getAbsolutePath());
+            new Alert(Alert.AlertType.INFORMATION,file.getName()+"文件选择成功").showAndWait();
+        }else{
+            new Alert(Alert.AlertType.ERROR,"文件选择失败").showAndWait();
+        }
     }
 
     /**
@@ -122,8 +115,13 @@ public class IndexController implements Initializable {
         nameText.ifPresent(name -> {
             ModeBase modeBase = new ModeBase().setName(name);
             if (MODE_SERVICE.addMode(modeBase)) {
-                modeList.setValue(FXCollections.observableArrayList(MODE_SERVICE.selectAllModes()));
-                CURRENT_MODE_PROPERTY.set(modeBase);
+                CHOICE_MODE_LIST.getItems().setAll(MODE_SERVICE.selectAllModes());
+                for (ModeBase item : CHOICE_MODE_LIST.getItems()) {
+                    if(item.getName().equals(modeBase.getName())){
+                        CHOICE_MODE_LIST.getSelectionModel().select(item);
+                        break;
+                    }
+                }
                 log.info("{}添加成功", name);
             } else {
                 new Alert(Alert.AlertType.ERROR, "添加失败").showAndWait();
@@ -161,8 +159,8 @@ public class IndexController implements Initializable {
     private void deleteMode() {
         if (MODE_SERVICE.deleteModeByName(CURRENT_MODE_PROPERTY.get().getName())) {
             log.info("{}模式删除成功", CURRENT_MODE_PROPERTY.get().getName());
-            modeList.setValue(FXCollections.observableArrayList(MODE_SERVICE.selectAllModes()));
-            CURRENT_MODE_PROPERTY.set(modeList.getValue().get(0));
+            CHOICE_MODE_LIST.getItems().setAll(MODE_SERVICE.selectAllModes());
+            CHOICE_MODE_LIST.getSelectionModel().selectLast();
         } else {
             log.error("{}模式删除失败", CURRENT_MODE_PROPERTY.get().getName());
         }
@@ -185,6 +183,9 @@ public class IndexController implements Initializable {
         BUTTON_SWITCH.setDisable(false);
     }
 
+    /**
+     * 鼠标悬浮在窗口上停止模式运行
+     **/
     @FXML
     void stopRunning() {
         if (ModeRunningController.getRunningMode() != null && !ModeRunningController.getRunningMode().isCancelled()) {
