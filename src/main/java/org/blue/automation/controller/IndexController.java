@@ -30,6 +30,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -61,6 +62,10 @@ public class IndexController implements Initializable {
      * 操作接口
      **/
     private static OperationService OPERATION_SERVICE;
+    /**
+     * 当前模式文件夹路径
+     **/
+    private String modeDirectory;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -93,6 +98,7 @@ public class IndexController implements Initializable {
             }
         });
         CHOICE_OPERATION_LIST.getSelectionModel().select("电脑");
+        modeDirectory = PathEnum.MODE.getPath();
     }
 
     @FXML
@@ -207,7 +213,25 @@ public class IndexController implements Initializable {
      **/
     @FXML
     public void importFile() {
-
+        File file = UIControlFactory.createFileChooser("导入模式文件", null, false).showOpenDialog(Main.STAGE_MAP.get("primaryStage"));
+        if(file == null) return;
+        String fileName = file.getName();
+        String[] children = new File(modeDirectory).list();
+        if (children != null) {
+            for (String child : children) {
+                if (fileName.equals(child)) {
+                    new Alert(Alert.AlertType.WARNING, "已经存在该文件").showAndWait();
+                    return;
+                }
+            }
+        }
+        if(file.renameTo(new File(modeDirectory + fileName))){
+            CHOICE_MODE_LIST.getItems().setAll(MODE_SERVICE.selectAllModes());
+            CHOICE_MODE_LIST.getSelectionModel().selectFirst();
+            new Alert(Alert.AlertType.INFORMATION,"文件导入成功").showAndWait();
+            return;
+        }
+        new Alert(Alert.AlertType.ERROR,"文件导入失败").showAndWait();
     }
 
     /**
@@ -216,10 +240,12 @@ public class IndexController implements Initializable {
     @FXML
     void setModeDirectory() {
         File directory = UIControlFactory.createDirectoryChooser("选择模式文件夹", PathEnum.CONF.getPath()).showDialog(Main.STAGE_MAP.get("primaryStage"));
+        if(directory == null) return;
         if(directory.isDirectory()){
             MODE_SERVICE.setFileName(directory.getAbsolutePath()+"/");
             CHOICE_MODE_LIST.getItems().setAll(MODE_SERVICE.selectAllModes());
             CHOICE_MODE_LIST.getSelectionModel().selectFirst();
+            modeDirectory = directory.getAbsolutePath()+"/";
             return;
         }
         new Alert(Alert.AlertType.WARNING,"文件夹选择失败").showAndWait();
