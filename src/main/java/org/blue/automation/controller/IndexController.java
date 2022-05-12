@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
@@ -67,7 +68,7 @@ public class IndexController implements Initializable {
         CHOICE_MODE_LIST.setConverter(new StringConverter<ModeBase>() {
             @Override
             public String toString(ModeBase object) {
-                return object.getName();
+                return object == null ? null : object.getName();
             }
 
             @Override
@@ -207,6 +208,21 @@ public class IndexController implements Initializable {
     @FXML
     public void importFile() {
 
+    }
+
+    /**
+     * 选择模式文件夹
+     **/
+    @FXML
+    void setModeDirectory() {
+        File directory = UIControlFactory.createDirectoryChooser("选择模式文件夹", PathEnum.CONF.getPath()).showDialog(Main.STAGE_MAP.get("primaryStage"));
+        if(directory.isDirectory()){
+            MODE_SERVICE.setFileName(directory.getAbsolutePath()+"/");
+            CHOICE_MODE_LIST.getItems().setAll(MODE_SERVICE.selectAllModes());
+            CHOICE_MODE_LIST.getSelectionModel().selectFirst();
+            return;
+        }
+        new Alert(Alert.AlertType.WARNING,"文件夹选择失败").showAndWait();
     }
 
     private final AtomicInteger pointNum = new AtomicInteger(0);

@@ -2,6 +2,7 @@ package org.blue.automation.factories;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.blue.automation.utils.StringUtil;
 
@@ -47,6 +48,14 @@ public class UIControlFactory {
         return createFileChooser(title,preDirectoryPath,true);
     }
 
+    /**
+     * 创建一个文件选择器
+     *
+     * @param title 窗口标题
+     * @param preDirectoryPath 默认打开路径
+     * @param isImage 是否是图片
+     * @return 文件选择器
+     **/
     public static FileChooser createFileChooser(String title,String preDirectoryPath,boolean isImage){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
@@ -66,5 +75,19 @@ public class UIControlFactory {
         }
         if(!StringUtil.isWrong(preDirectoryPath)) fileChooser.setInitialDirectory(new File(preDirectoryPath));
         return fileChooser;
+    }
+
+    /**
+     * 创建一个文件夹选择器
+     *
+     * @param title 窗口标题
+     * @param filePath 初始化文件打开路径
+     * @return 文件夹选择器
+     **/
+    public static DirectoryChooser createDirectoryChooser(String title,String filePath){
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle(title);
+        directoryChooser.setInitialDirectory(new File(filePath));
+        return directoryChooser;
     }
 }

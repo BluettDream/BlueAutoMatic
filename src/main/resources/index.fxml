@@ -17,6 +17,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="文件">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#setModeDirectory" text="选择文件夹" />
               <MenuItem mnemonicParsing="false" onAction="#importFile" text="导入" />
                   <MenuItem mnemonicParsing="false" onAction="#exportFile" text="导出" />
             </items>
