@@ -6,7 +6,8 @@ public enum PathEnum {
     IMAGE(ROOT+"/images"),
     IMAGE_OUTER(IMAGE+"/outer/"),
     IMAGE_INNER(IMAGE+"/inner/"),
-    MODE(CONF+"/mode/");
+    MODE(CONF+"/mode/"),
+    BIN(ROOT+"/bin/");
 
     private String path;
 

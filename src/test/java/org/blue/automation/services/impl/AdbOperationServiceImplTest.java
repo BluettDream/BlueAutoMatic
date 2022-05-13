@@ -7,6 +7,8 @@ import org.blue.automation.services.OperationService;
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Point;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AdbOperationServiceImplTest {
@@ -17,27 +19,27 @@ class AdbOperationServiceImplTest {
     private final Point clickPoint = new Point(new double[]{730,1485});
     private final long delayTime = 1000;
     @Test
-    void click() {
+    void click() throws InterruptedException {
         operationService.click(clickPoint);
     }
 
     @Test
-    void longClick() {
+    void longClick() throws InterruptedException {
         operationService.longClick(clickPoint,delayTime);
     }
 
     @Test
-    void slide() {
+    void slide() throws InterruptedException {
         operationService.slide(startPoint,endPoint);
     }
 
     @Test
-    void longSlide() {
+    void longSlide() throws InterruptedException {
         operationService.longSlide(startPoint,endPoint,delayTime);
     }
 
     @Test
-    void captureAndSave() {
+    void captureAndSave() throws IOException {
         operationService.captureAndSave(PathEnum.IMAGE_OUTER+"main.png");
     }
 }

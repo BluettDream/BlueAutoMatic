@@ -30,74 +30,57 @@ public class PCOperationServiceImpl implements OperationService {
     private int height;
 
     @Override
-    public void click(Point clickPoint) {
-        longClick(clickPoint,0);
+    public void click(Point clickPoint) throws InterruptedException {
+        longClick(clickPoint, 0);
     }
 
     @Override
-    public void longClick(Point clickPoint, long delayTime) {
+    public void longClick(Point clickPoint, long delayTime) throws InterruptedException {
         clickPoint.x += x;
         clickPoint.y += y;
-        try {
-            MouseMotionFactory.getDefault().move((int) clickPoint.x, (int) clickPoint.y);
-        } catch (InterruptedException e) {
-            log.error("移动鼠标异常:",e);
-            Thread.currentThread().interrupt();
-        }
+        MouseMotionFactory.getDefault().move((int) clickPoint.x, (int) clickPoint.y);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.delay((int) delayTime);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     @Override
-    public void multipleClicks(ArrayList<Point> points) {
+    public void multipleClicks(ArrayList<Point> points) throws InterruptedException {
         for (Point point : points) {
-            longClick(point, (long) (Math.random()*150+50));
+            longClick(point, (long) (Math.random() * 150 + 50));
         }
     }
 
     @Override
-    public void slide(Point startPoint, Point endPoint) {
-        longSlide(startPoint,endPoint,0);
+    public void slide(Point startPoint, Point endPoint) throws InterruptedException {
+        longSlide(startPoint, endPoint, 0);
     }
 
     @Override
-    public void longSlide(Point startPoint, Point endPoint, long delayTime) {
-        try {
-            startPoint.x += x;
-            startPoint.y += y;
-            MouseMotionFactory.getDefault().move((int) startPoint.x, (int) startPoint.y);
-            endPoint.x += x;
-            endPoint.y += y;
-            robot.delay((int) delayTime);
-            MouseMotionFactory.getDefault().move((int) endPoint.x, (int) endPoint.y);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void longSlide(Point startPoint, Point endPoint, long delayTime) throws InterruptedException {
+        startPoint.x += x;
+        startPoint.y += y;
+        MouseMotionFactory.getDefault().move((int) startPoint.x, (int) startPoint.y);
+        endPoint.x += x;
+        endPoint.y += y;
+        robot.delay((int) delayTime);
+        MouseMotionFactory.getDefault().move((int) endPoint.x, (int) endPoint.y);
     }
 
     @Override
-    public void captureAndSave(String computerFile) {
+    public void captureAndSave(String computerFile) throws IOException {
         BufferedImage image = robot.createScreenCapture(new Rectangle(x, y, width, height));
-        try {
-            ImageIO.write(image,"png",new FileOutputStream(computerFile));
-        } catch (IOException e) {
-            log.error("电脑写入文件异常:",e);
-        }
+        ImageIO.write(image, "png", new FileOutputStream(computerFile));
     }
 
     @Override
-    public void setFilePath(String filePath) {
+    public void setFilePath(String filePath) throws IOException {
         ObjectMapper objectMapper = FileUtil.getInstance().getObjectMapper();
-        ImageBase imageBase=null;
-        try {
-            imageBase = objectMapper.readValue(
-                    new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)
-                    , ImageBase.class);
-        } catch (IOException e) {
-            log.error("电脑json文件读取异常:",e);
-        }
-        if(imageBase != null){
+        ImageBase imageBase;
+        imageBase = objectMapper.readValue(
+                new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)
+                , ImageBase.class);
+        if (imageBase != null) {
             this.x = imageBase.getX();
             this.y = imageBase.getY();
             this.height = imageBase.getHeight();
@@ -105,7 +88,7 @@ public class PCOperationServiceImpl implements OperationService {
         }
     }
 
-    private Robot getRobot(){
+    private Robot getRobot() {
         Robot robot = null;
         try {
             robot = new Robot();

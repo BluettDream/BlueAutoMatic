@@ -1,9 +1,6 @@
 package org.blue.automation.controller;
 
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -100,9 +97,15 @@ public class SettingController implements Initializable {
     void captureSituationImage() {
         File file = UIControlFactory.createImageFileChooser("保存图片", PathEnum.IMAGE_INNER.getPath()).showSaveDialog(Main.STAGE_MAP.get("settingStage"));
         if (file != null && !StringUtil.isWrong(file.getAbsolutePath())) {
-            IndexController.getOperationService().captureAndSave(file.getAbsolutePath());
-            new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
+            try {
+                IndexController.getOperationService().captureAndSave(file.getAbsolutePath());
+                new Alert(Alert.AlertType.INFORMATION, "截屏保存成功").showAndWait();
+                return;
+            } catch (IOException e) {
+                log.error("设置模式界面截屏异常:",e);
+            }
         }
+        new Alert(Alert.AlertType.ERROR,"截屏失败").showAndWait();
     }
 
     /**

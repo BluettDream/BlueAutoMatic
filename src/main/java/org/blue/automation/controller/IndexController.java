@@ -22,6 +22,7 @@ import org.blue.automation.services.OperationService;
 import org.blue.automation.services.impl.AdbOperationServiceImpl;
 import org.blue.automation.services.impl.ModeServiceImpl;
 import org.blue.automation.services.impl.PCOperationServiceImpl;
+import org.blue.automation.utils.CMDUtil;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -103,11 +104,15 @@ public class IndexController implements Initializable {
     void chooseFile() {
         File file = UIControlFactory.createFileChooser("选择json文件", PathEnum.CONF.getPath(), false).showOpenDialog(Main.STAGE_MAP.get("primaryStage"));
         if (file != null) {
-            OPERATION_SERVICE.setFilePath(file.getAbsolutePath());
-            new Alert(Alert.AlertType.INFORMATION,file.getName()+"文件选择成功").showAndWait();
-        }else{
-            new Alert(Alert.AlertType.ERROR,"文件选择失败").showAndWait();
+            try {
+                OPERATION_SERVICE.setFilePath(file.getAbsolutePath());
+                new Alert(Alert.AlertType.INFORMATION,file.getName()+"文件选择成功").showAndWait();
+                return;
+            } catch (IOException e) {
+                log.error("设置操作文件异常:",e);
+            }
         }
+        new Alert(Alert.AlertType.ERROR,"文件选择失败").showAndWait();
     }
 
     /**

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.AdbDevice;
 import org.blue.automation.entities.AdbProvider;
-import org.blue.automation.services.AdbProviderService;
+import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.CMDUtil;
 import org.opencv.core.Point;
@@ -138,14 +138,14 @@ public class AdbOperationServiceImpl implements OperationService {
 
     private boolean connectToDevice(String ipAddress) throws IOException, InterruptedException {
         String output = CMD_UTIL.executeCMDCommand(
-                "adb" + " " + "connect" + " " +
+                PathEnum.BIN + "adb.exe" + " " + "connect" + " " +
                         ipAddress
         );
         return output.contains("connected");
     }
 
     private ArrayList<AdbDevice> getAllDevices() throws IOException, InterruptedException {
-        String output = CMD_UTIL.executeCMDCommand("adb" + " " + "devices");
+        String output = CMD_UTIL.executeCMDCommand(PathEnum.BIN+"adb.exe" + " " + "devices");
         //分割控制台输出语句
         String[] split = output.split("\n");
         //判断当前语句之后是否为设备列表
@@ -175,7 +175,7 @@ public class AdbOperationServiceImpl implements OperationService {
     }
 
     private StringBuilder getAdb() {
-        return new StringBuilder().append("adb").append(" ")
+        return new StringBuilder().append(PathEnum.BIN).append("adb.exe").append(" ")
                 .append("-s").append(" ")
                 .append(adbProvider.getDeviceNumber()).append(" ");
     }

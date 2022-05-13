@@ -52,7 +52,7 @@
     },
     {
       "name": "游戏结束",
-      "priority": 0,
+      "priority": 3,
       "image": {
         "name": "9.png",
         "x": 0,
@@ -66,17 +66,17 @@
       "custom": true,
       "customImage": {
         "name": null,
-        "x": 534,
-        "y": 293,
-        "width": 172,
-        "height": 93
+        "x": 156,
+        "y": 142,
+        "width": 230,
+        "height": 150
       },
       "maxDelayTime": 30000.0,
-      "relation": false
+      "relation": true
     },
     {
       "name": "正在奖励结算",
-      "priority": 0,
+      "priority": 3,
       "image": {
         "name": "6.png",
         "x": 0,
@@ -90,13 +90,13 @@
       "custom": true,
       "customImage": {
         "name": null,
-        "x": 534,
-        "y": 293,
-        "width": 172,
-        "height": 93
+        "x": 92,
+        "y": 60,
+        "width": 220,
+        "height": 47
       },
       "maxDelayTime": 30000.0,
-      "relation": false
+      "relation": true
     },
     {
       "name": "确定悬赏封印",

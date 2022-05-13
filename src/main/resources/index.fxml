@@ -18,6 +18,7 @@
           <Menu mnemonicParsing="false" text="文件">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#setModeDirectory" text="选择文件夹" />
+                  <MenuItem mnemonicParsing="false" onAction="#getPoint" text="获取坐标" />
               <MenuItem mnemonicParsing="false" onAction="#importFile" text="导入" />
                   <MenuItem mnemonicParsing="false" onAction="#exportFile" text="导出" />
             </items>
@@ -26,11 +27,6 @@
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#openHelp" text="打开" />
                </items></Menu>
-            <Menu mnemonicParsing="false" text="获取坐标">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#getPoint" text="启动" />
-               </items>
-            </Menu>
         </menus>
          <cursor>
             <Cursor fx:constant="HAND" />

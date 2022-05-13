@@ -6,6 +6,8 @@ import org.blue.automation.services.OperationService;
 import org.junit.jupiter.api.Test;
 import org.opencv.core.Point;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PCOperationServiceImplTest {
@@ -17,7 +19,7 @@ class PCOperationServiceImplTest {
     private final long delayTime = 1000;
 
     @Test
-    void click() {
+    void click() throws InterruptedException {
         operationService.click(clickPoint);
     }
 
@@ -38,7 +40,7 @@ class PCOperationServiceImplTest {
     }
 
     @Test
-    void captureAndSave() {
+    void captureAndSave() throws IOException {
         operationService.setFilePath(System.getProperty("user.dir")+"/conf/电脑.json");
         operationService.captureAndSave(System.getProperty("user.dir")+"/images/outer/main.png");
     }

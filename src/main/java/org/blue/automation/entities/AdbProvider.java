@@ -1,5 +1,7 @@
 package org.blue.automation.entities;
 
+import org.blue.automation.services.impl.AdbProviderServiceImpl;
+
 /**
  * name: MengHao Tian
  * date: 2022/5/3 17:52

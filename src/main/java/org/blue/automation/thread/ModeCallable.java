@@ -12,6 +12,7 @@ import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.OperationService;
 import org.blue.automation.utils.StringUtil;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.*;
@@ -65,7 +66,12 @@ public class ModeCallable implements Callable<Boolean> {
         while (!Thread.currentThread().isInterrupted() && runningTime < IndexController.getCurrentModeProperty().get().getRunTime()) {
             clearEndSituation();
             futureArrayList.clear();
-            OPERATION_SERVICE.captureAndSave(PathEnum.IMAGE_OUTER + "main.png");
+            try {
+                OPERATION_SERVICE.captureAndSave(PathEnum.IMAGE_OUTER + "main.png");
+            } catch (IOException e) {
+                log.error("图片截图保存异常:",e);
+                Thread.currentThread().interrupt();
+            }
             situationList.forEach(situation -> futureArrayList.add(completionService.submit(new SituationCallable(situation))));
             for (Future<SituationBase> situationFuture : futureArrayList) {
                 SituationBase temp;
