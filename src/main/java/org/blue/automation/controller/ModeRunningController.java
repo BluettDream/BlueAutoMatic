@@ -35,6 +35,8 @@ public class ModeRunningController implements Initializable {
     private ListView<SituationBase> LISTVIEW_SITUATION;
     @FXML
     private Label LABEL_RESULT_SHOW;
+    @FXML
+    private Label LABEL_TIME;
 
     private static final SimpleStringProperty RESULT = new SimpleStringProperty();
     private static final SimpleDoubleProperty WAIT_TIME = new SimpleDoubleProperty();
@@ -76,11 +78,42 @@ public class ModeRunningController implements Initializable {
         THREAD_POOL.execute(()->{
             try {
                 RUNNING_MODE.get();
-            } catch (Exception e) {
+                RUNNING_MODE.cancel(true);
                 Platform.runLater(()->{
                     PROGRESS_MAX_WAIT_TIME.setProgress(1.0);
                     LABEL_RESULT_SHOW.setText("运行结束");
                 });
+            }catch (Exception e){
+                RUNNING_MODE.cancel(true);
+                Platform.runLater(()->{
+                    PROGRESS_MAX_WAIT_TIME.setProgress(1.0);
+                    LABEL_RESULT_SHOW.setText("运行结束");
+                });
+                Thread.currentThread().interrupt();
+            }
+        });
+        THREAD_POOL.execute(()->{
+            try {
+                String hStr,mStr,sStr;
+                int h, m, s;
+                for (h = 0; h < 12 && !RUNNING_MODE.isDone(); h++) {
+                    for (m = 0; m < 60 && !RUNNING_MODE.isDone(); m++) {
+                        for (s = 0; s < 60 && !RUNNING_MODE.isDone(); s++) {
+                            Thread.sleep(1000);
+                            sStr = String.valueOf(s);
+                            mStr = String.valueOf(m);
+                            hStr = String.valueOf(h);
+                            if(sStr.length() < 2) sStr = "0" + sStr;
+                            if(mStr.length() < 2) mStr = "0" + mStr;
+                            if(hStr.length() < 2) hStr = "0" + hStr;
+                            String finalHStr = hStr;
+                            String finalMStr = mStr;
+                            String finalSStr = sStr;
+                            Platform.runLater(()->LABEL_TIME.setText(finalHStr + ":" + finalMStr + ":" + finalSStr));
+                        }
+                    }
+                }
+            } catch (Exception e) {
                 Thread.currentThread().interrupt();
             }
         });

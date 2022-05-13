@@ -3,6 +3,10 @@ package org.blue.automation;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * name: MengHao Tian
@@ -11,12 +15,7 @@ import java.awt.*;
 public class MainTest {
 
     @Test
-    void test() throws InterruptedException {
-        while (true){
-            Point point = MouseInfo.getPointerInfo().getLocation();
-            System.out.println(point.x+","+point.y);
-            Thread.sleep(1000);
-        }
+    void test() throws Exception {
 
     }
 }

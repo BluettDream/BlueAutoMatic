@@ -58,7 +58,7 @@ public class ModeCallable implements Callable<Boolean> {
      * 或者优先级相同时,比较当前对象的相似度和结果对象的相似度,相似度高者确定最终情景
      **/
     @Override
-    public Boolean call() {
+    public Boolean call(){
         log.info("{}模式开始运行", IndexController.getCurrentModeProperty().get().getName());
         if (situationList == null || situationList.size() <= 0) return false;
         long millis = System.currentTimeMillis();

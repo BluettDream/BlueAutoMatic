@@ -18,6 +18,11 @@
                </font>
             </Label>
             <ProgressBar fx:id="PROGRESS_MAX_WAIT_TIME" prefHeight="30.0" prefWidth="300.0" progress="0.0" HBox.hgrow="ALWAYS" />
+            <Label fx:id="LABEL_TIME" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" prefWidth="95.0" text="00:00:00" textOverrun="CENTER_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
          </children>
       </HBox>
    </top>
