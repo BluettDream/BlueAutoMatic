@@ -2,6 +2,7 @@ package org.blue.automation.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
+import com.github.joonasvali.naturalmouse.util.FactoryTemplates;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.ImageBase;
@@ -38,7 +39,7 @@ public class PCOperationServiceImpl implements OperationService {
     public void longClick(Point clickPoint, long delayTime) throws InterruptedException {
         clickPoint.x += x;
         clickPoint.y += y;
-        MouseMotionFactory.getDefault().move((int) clickPoint.x, (int) clickPoint.y);
+        FactoryTemplates.createFastGamerMotionFactory().move((int) clickPoint.x, (int) clickPoint.y);
         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         robot.delay((int) delayTime);
         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
@@ -60,11 +61,11 @@ public class PCOperationServiceImpl implements OperationService {
     public void longSlide(Point startPoint, Point endPoint, long delayTime) throws InterruptedException {
         startPoint.x += x;
         startPoint.y += y;
-        MouseMotionFactory.getDefault().move((int) startPoint.x, (int) startPoint.y);
+        FactoryTemplates.createFastGamerMotionFactory().move((int) startPoint.x, (int) startPoint.y);
         endPoint.x += x;
         endPoint.y += y;
         robot.delay((int) delayTime);
-        MouseMotionFactory.getDefault().move((int) endPoint.x, (int) endPoint.y);
+        FactoryTemplates.createFastGamerMotionFactory().move((int) endPoint.x, (int) endPoint.y);
     }
 
     @Override

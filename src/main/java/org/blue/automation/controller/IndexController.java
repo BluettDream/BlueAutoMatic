@@ -22,7 +22,6 @@ import org.blue.automation.services.OperationService;
 import org.blue.automation.services.impl.AdbOperationServiceImpl;
 import org.blue.automation.services.impl.ModeServiceImpl;
 import org.blue.automation.services.impl.PCOperationServiceImpl;
-import org.blue.automation.utils.CMDUtil;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -32,6 +31,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -65,6 +65,7 @@ public class IndexController implements Initializable {
      * 当前模式文件夹路径
      **/
     private String modeDirectory;
+    private static Future<Boolean> POINT_FUTURE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -194,16 +195,6 @@ public class IndexController implements Initializable {
     }
 
     /**
-     * 鼠标悬浮在窗口上停止模式运行
-     **/
-    @FXML
-    void stopRunning() {
-        if (ModeRunningController.getRunningMode() != null && !ModeRunningController.getRunningMode().isCancelled()) {
-            ModeRunningController.getRunningMode().cancel(true);
-        }
-    }
-
-    /**
      * 导出配置文件
      **/
     @FXML
@@ -255,14 +246,13 @@ public class IndexController implements Initializable {
     }
 
     private final AtomicInteger pointNum = new AtomicInteger(0);
-    private Thread temp;
 
     @FXML
     void getPoint() {
         if (pointNum.get() == 0) {
-            temp = new Thread(() -> {
+            POINT_FUTURE = Main.THREAD_POOL.submit(() -> {
+                log.info("开始获取坐标");
                 while (!Thread.currentThread().isInterrupted()) {
-                    log.info("获取坐标启动");
                     Point point = MouseInfo.getPointerInfo().getLocation();
                     Platform.runLater(() -> LABEL_POINT.setText(point.x + " " + point.y));
                     try {
@@ -271,16 +261,16 @@ public class IndexController implements Initializable {
                         Thread.currentThread().interrupt();
                     }
                 }
+                log.info("获取坐标线程运行结束");
+                return true;
             });
-            temp.start();
         }
         switch (pointNum.get()) {
             case 0:
                 pointNum.set(1);
                 break;
             case 1:
-                temp.interrupt();
-                temp = null;
+                POINT_FUTURE.cancel(true);
                 pointNum.set(0);
                 break;
         }
@@ -316,5 +306,9 @@ public class IndexController implements Initializable {
 
     public static OperationService getOperationService() {
         return OPERATION_SERVICE;
+    }
+
+    public static Future<Boolean> getPointFuture() {
+        return POINT_FUTURE;
     }
 }

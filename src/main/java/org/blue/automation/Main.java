@@ -7,11 +7,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.blue.automation.controller.IndexController;
 import org.opencv.core.Core;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.function.BiConsumer;
 
 public class Main extends Application {
     private static final Logger log = LogManager.getLogger(Main.class);
@@ -47,6 +49,12 @@ public class Main extends Application {
 
         primaryStage.setOnCloseRequest(event -> {
             log.info("程序运行结束");
+            //关闭其他所有页面
+            STAGE_MAP.forEach((s, stage) -> {
+                if(!stage.equals(primaryStage)) stage.close();
+            });
+            //如果获取坐标线程未关闭则强制关闭
+            if(IndexController.getPointFuture() != null) IndexController.getPointFuture().cancel(true);
             THREAD_POOL.shutdown();
             try {
                 if (THREAD_POOL.awaitTermination(3, TimeUnit.SECONDS)) {
@@ -54,7 +62,7 @@ public class Main extends Application {
                     log.debug("强制关闭的线程为:{}", runnableList);
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("总线程关闭异常:",e);
             }
             log.info("线程池已关闭");
         });

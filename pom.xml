@@ -16,25 +16,39 @@
         <jackson.version>2.13.2.2</jackson.version>
         <commons.lang3.version>3.12.0</commons.lang3.version>
         <mynlp.version>3.2.1</mynlp.version>
+        <system.hook.version>3.8</system.hook.version>
     </properties>
 
     <dependencies>
+        <!--全局监听鼠标键盘事件-->
+        <dependency>
+            <groupId>lc.kra.system</groupId>
+            <artifactId>system-hook</artifactId>
+            <version>${system.hook.version}</version>
+        </dependency>
+        <!--仿真鼠标模拟-->
         <dependency>
             <groupId>com.github.joonasvali.naturalmouse</groupId>
             <artifactId>naturalmouse</artifactId>
-            <version>2.0.3</version>
+            <version>2.0.4-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <!--汉字转拼音库-->
-        <dependency>
-            <groupId>com.mayabot.mynlp</groupId>
-            <artifactId>mynlp</artifactId>
-            <version>${mynlp.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mayabot.mynlp.resource</groupId>
-            <artifactId>mynlp-resource-pinyin</artifactId>
-            <version>1.1.0</version>
-        </dependency>
+        <!--&lt;!&ndash;汉字转拼音库&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--    <groupId>com.mayabot.mynlp</groupId>-->
+        <!--    <artifactId>mynlp</artifactId>-->
+        <!--    <version>${mynlp.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--    <groupId>com.mayabot.mynlp.resource</groupId>-->
+        <!--    <artifactId>mynlp-resource-pinyin</artifactId>-->
+        <!--    <version>1.1.0</version>-->
+        <!--</dependency>-->
         <!--jackson解析库-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

@@ -12,6 +12,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
+import lc.kra.system.keyboard.GlobalKeyboardHook;
+import lc.kra.system.keyboard.event.GlobalKeyAdapter;
+import lc.kra.system.keyboard.event.GlobalKeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.blue.automation.Main;
@@ -41,6 +44,7 @@ public class ModeRunningController implements Initializable {
     private static final SimpleStringProperty RESULT = new SimpleStringProperty();
     private static final SimpleDoubleProperty WAIT_TIME = new SimpleDoubleProperty();
     private static final SimpleListProperty<SituationBase> SITUATION_LIST = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private static GlobalKeyboardHook keyboardHook;
 
     /**
      * 主线程池
@@ -75,22 +79,28 @@ public class ModeRunningController implements Initializable {
                 LABEL_RESULT_SHOW.setText("运行结束");
             }
         });
+        LISTVIEW_SITUATION.itemsProperty().bindBidirectional(SITUATION_LIST);
         THREAD_POOL.execute(()->{
             try {
                 RUNNING_MODE.get();
+                //模式运行完毕自动关闭线程
                 RUNNING_MODE.cancel(true);
                 Platform.runLater(()->{
                     PROGRESS_MAX_WAIT_TIME.setProgress(1.0);
                     LABEL_RESULT_SHOW.setText("运行结束");
                 });
+                //模式取消则关闭全局键盘监听
+                keyboardHook.shutdownHook();
             }catch (Exception e){
                 RUNNING_MODE.cancel(true);
+                keyboardHook.shutdownHook();
                 Platform.runLater(()->{
                     PROGRESS_MAX_WAIT_TIME.setProgress(1.0);
                     LABEL_RESULT_SHOW.setText("运行结束");
                 });
                 Thread.currentThread().interrupt();
             }
+            log.info("设置模式取消线程运行结束,当前全局键盘监听:{}",keyboardHook.isAlive());
         });
         THREAD_POOL.execute(()->{
             try {
@@ -116,8 +126,33 @@ public class ModeRunningController implements Initializable {
             } catch (Exception e) {
                 Thread.currentThread().interrupt();
             }
+            log.info("计时线程运行结束");
         });
-        LISTVIEW_SITUATION.itemsProperty().bindBidirectional(SITUATION_LIST);
+        THREAD_POOL.execute(()->{
+            keyboardHook = new GlobalKeyboardHook(true);
+            //实现tab+s键关闭模式运行
+            keyboardHook.addKeyListener(new GlobalKeyAdapter() {
+                private int pre = 0;
+                @Override
+                public void keyPressed(GlobalKeyEvent event) {
+                    if(pre == 0) pre = event.getVirtualKeyCode();
+                    if(pre != GlobalKeyEvent.VK_TAB){
+                        pre = 0;
+                        return;
+                    }
+                    if(event.getVirtualKeyCode() == GlobalKeyEvent.VK_TAB) return;
+                    if(pre == GlobalKeyEvent.VK_TAB && event.getVirtualKeyCode() == GlobalKeyEvent.VK_S){
+                        RUNNING_MODE.cancel(true);
+                        keyboardHook.shutdownHook();
+                    }
+                    pre = 0;
+                }
+                @Override
+                public void keyReleased(GlobalKeyEvent event) {
+                }
+            });
+            log.info("监听键盘事件线程运行开始,当前全局键盘监听:{}",keyboardHook.isAlive());
+        });
     }
 
     public static SimpleStringProperty resultProperty() {

@@ -1,5 +1,7 @@
 package org.blue.automation.entities.enums;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.blue.automation.entities.ImageBase;
 import org.blue.automation.entities.SituationBase;
 import org.blue.automation.services.OperationService;
@@ -16,6 +18,8 @@ public enum Action{
     SLIDE("滑动"),
     LONG_SLIDE("缓慢滑动");
 
+    private static final Logger log = LogManager.getLogger(Action.class);
+
     /**
      * 情景中具体实现operationService的方法
      * 与operationService接口方法相关联,接口新增方法,此处就需要添加case顾虑.
@@ -26,10 +30,8 @@ public enum Action{
     public static void operate(OperationService operationService, SituationBase situation) throws InterruptedException {
         ImageUtil imageUtil = ImageUtil.getInstance();
         ImageBase temp = situation.getImage().cloneFor(situation.getImage());
-        if(operationService instanceof PCOperationServiceImpl) {
-            Thread.sleep((long) (Math.random()*400+100));
-        }
         if(situation.isCustom()) {
+            log.debug("当前为自定义图片");
             temp = situation.getCustomImage().cloneFor(situation.getCustomImage());
             if(situation.isRelation()){
                 temp.setX(situation.getImage().getX()+temp.getX());
@@ -37,6 +39,7 @@ public enum Action{
             }
         }
         if(!situation.isClick() || situation.getAction() == null) return;
+        log.debug("正在执行操作");
         switch (situation.getAction()){
             case CLICK:
                 operationService.click(imageUtil.getRandomPoint(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));

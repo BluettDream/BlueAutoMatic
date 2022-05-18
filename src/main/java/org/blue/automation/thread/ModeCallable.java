@@ -10,6 +10,7 @@ import org.blue.automation.entities.SituationBase;
 import org.blue.automation.entities.enums.Action;
 import org.blue.automation.entities.enums.PathEnum;
 import org.blue.automation.services.OperationService;
+import org.blue.automation.services.impl.PCOperationServiceImpl;
 import org.blue.automation.utils.StringUtil;
 
 import java.io.IOException;
@@ -94,6 +95,7 @@ public class ModeCallable implements Callable<Boolean> {
                 try {
                     Action.operate(OPERATION_SERVICE, endSituation);
                 } catch (InterruptedException e) {
+                    log.error("模式点击异常:",e);
                     Thread.currentThread().interrupt();
                 }
             }
@@ -107,9 +109,17 @@ public class ModeCallable implements Callable<Boolean> {
             }
             Platform.runLater(()->{
                 ModeRunningController.resultProperty().set("匹配结果: "+endSituation.getName());
-                ModeRunningController.WAIT_TIMEProperty().set(runningTime / (60*60.0*1000));
+                ModeRunningController.WAIT_TIMEProperty().set(((double) runningTime) / (IndexController.getCurrentModeProperty().get().getRunTime()));
                 ModeRunningController.SITUATION_LISTProperty().get().setAll(situationList);
             });
+            if(OPERATION_SERVICE instanceof PCOperationServiceImpl) {
+                try {
+                    Thread.sleep((long) (Math.random()*300+100));
+                } catch (InterruptedException e) {
+                    log.error("电脑延时异常:",e);
+                    Thread.currentThread().interrupt();
+                }
+            }
             preSituation = endSituation.cloneFor(endSituation);
             runningTime = System.currentTimeMillis() - millis;
             log.debug("等待时间:{}ms", equalTimes);

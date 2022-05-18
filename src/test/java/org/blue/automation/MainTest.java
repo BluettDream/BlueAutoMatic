@@ -1,5 +1,8 @@
 package org.blue.automation;
 
+import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
+import com.github.joonasvali.naturalmouse.tools.SystemDiagnosis;
+import com.github.joonasvali.naturalmouse.util.FactoryTemplates;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
