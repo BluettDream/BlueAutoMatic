@@ -1,2 +1,2 @@
 # BlueAutoMatic
-基于opencv实现图像识别自动化
+基于JavaFX的桌面应用程序，使用opencv的Java版本实现图像检测、图像判断、图像识别等功能，并能够在windows平台上进行仿人操作，实现图像识别自动化脚本功能
